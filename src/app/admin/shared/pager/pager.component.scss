@@ -1,0 +1,99 @@
+@import '~styles/admin/variables';
+@import '~styles/admin/mixins';
+
+$icon: 12px;
+$size: 36px;
+$border: #eee;
+
+:host {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	z-index: 100;
+	background: white;
+	left: 0;
+	padding: 10px 40px;
+	border-top: 1px solid $border;
+}
+
+.group--pager {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	font-size: 11px;
+	color: $primary;
+
+	div {
+		flex: 1 1 auto;
+	}
+
+	&>div:first-child,
+	&>div:last-child {
+		flex: 0 0 100px;
+	}
+
+	&>div:last-child {
+		text-align: right;
+	}
+}
+
+.pager__info {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.nav--pager {
+	@extend %nav;
+	justify-content: center;
+
+	&>li {
+		&>a {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: $size;
+			height: $size;
+			border-radius: $size / 2;
+			cursor: pointer;
+
+			color: $primary;
+
+			svg {
+				width: 24px;
+				height: 24px;
+				fill: $primary;
+			}
+
+			&:hover,
+			&.active {
+				background: $primary;
+				color: white;
+
+				svg {
+					fill: white;
+				}
+			}
+
+			&.disabled {
+				opacity: 0.0;
+				pointer-events: none;
+			}
+		}
+	}
+
+	&>li+li {
+		margin-left: 1px;
+	}
+
+	svg {
+		width: $icon;
+		height: $icon;
+		fill: #999;
+	}
+
+}
+
+.group--select {
+	@extend %group-select;
+}

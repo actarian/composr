@@ -1,0 +1,28 @@
+<!-- <core-google-tag-manager (pageView)="onPageView($event)"></core-google-tag-manager> -->
+<div class="page">
+	<!-- NOTIFICATIONS -->
+	<!-- <section-shop-reminder></section-shop-reminder> -->
+	<!-- HEADER -->
+	<!--<header-component></header-component> -->
+	<!-- LOGGER -->
+	<core-logger></core-logger>
+	<!-- PAGE WITH ROUTE ANIMATION -->
+	<!--
+	<div [@routeAnimations]="prepareRoute(outlet)">
+		<router-outlet #outlet="outlet"></router-outlet>
+	</div>
+	-->
+	<!-- PAGE WITHOUT ROUTE ANIMATION -->
+	<router-outlet #outlet="outlet"></router-outlet>
+	<!-- COOKIES -->
+	<!-- <cookie-component></cookie-component> -->
+	<!-- MODALS -->
+	<core-modal-container-component></core-modal-container-component>
+	<!-- PAGE LOADER -->
+	<loader-component></loader-component>
+	<!-- SVG SPRITES -->
+	<sprites-component></sprites-component>
+</div>
+<!--
+<panel-component #editor></panel-component>
+-->

@@ -1,0 +1,190 @@
+<div class="table">
+	<!-- default row -->
+	<ng-template #defaultRow let-context>
+		<div class="table__cell" *ngFor="let col of context.columns">{{getValue(context.row, col)}}</div>
+	</ng-template>
+
+	<!-- headers -->
+	<div class="table__header">
+		<div class="table__cell cell--sm" *ngIf="draggable"></div>
+		<div class="table__cell" *ngFor="let col of columns">
+			<div class="group">
+				<span>{{col.label}}</span>
+				<div (click)="doSort(col)" *ngIf="sortable">
+					<svg *ngIf="col.sort == 0">
+						<use xlink:href="#unsorted"></use>
+					</svg>
+					<svg *ngIf="col.sort == 1">
+						<use xlink:href="#ascending"></use>
+					</svg>
+					<svg *ngIf="col.sort == -1">
+						<use xlink:href="#descending"></use>
+					</svg>
+				</div>
+			</div>
+		</div>
+		<div class="table__cell cell--lg" (click)="toggleCheckAll()" *ngIf="selectable">
+			<svg *ngIf="checkedAll">
+				<use xlink:href="#checked"></use>
+			</svg>
+			<svg *ngIf="!checkedAll">
+				<use xlink:href="#unchecked"></use>
+			</svg>
+			<!--
+			<input type="checkbox" [checked]="checkedAll" (click)="toggleCheckAll()">
+			-->
+		</div>
+		<div class="table__cell cell--lg">
+			<div (clickOutside)="isActionsActive = false" *ngIf="selectable && actionItems">
+				<button type="button" class="btn btn--actions" (click)="isActionsActive = !isActionsActive">
+					<svg>
+						<use xlink:href="#more"></use>
+					</svg>
+				</button>
+				<ul class="nav--dropdown" *ngIf="isActionsActive">
+					<li *ngFor="let item of actionItems"><button type="button" (click)="doClickItem($event, item)" [disabled]="isDisabledItem(item)">{{item.label}}</button></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- filters -->
+	<div class="table__filters" [formGroup]="form" *ngIf="filterable">
+		<div class="table__cell cell--sm" *ngIf="draggable"></div>
+		<div class="table__cell" *ngFor="let col of columns">
+			<ng-container [ngSwitch]="col.filterType">
+				<ng-container *ngSwitchCase="filterTypes.Select">
+					<div class="group--select">
+						<select [formControlName]="col.key">
+							<option *ngFor="let item of col.values" [ngValue]="item?.value">{{item?.label}}</option>
+						</select>
+						<div class="select__arrow">
+							<svg><use xlink:href="#angle-down"></use></svg>
+						</div>
+					</div>
+				</ng-container>
+				<ng-container *ngSwitchDefault><input [formControlName]="col.key" /></ng-container>
+			</ng-container>
+		</div>
+		<div class="table__cell cell--lg">
+			<svg (click)="doClearFilters()">
+				<use xlink:href="#clear"></use>
+			</svg>
+		</div>
+		<div class="table__cell cell--lg" *ngIf="selectable"></div>
+	</div>
+
+	<!-- content -->
+	<div class="table__content" *ngIf="!draggable && !virtualized">
+		<!-- row -->
+		<div class="table__row" *ngFor="let row of visibleRows">
+			<ng-container *ngTemplateOutlet="templateRef || defaultRow; context: { $implicit: getContext(row) }"></ng-container>
+			<!-- <div class="table__cell" *ngFor="let col of columns">{{getValue(row, col)}}</div> -->
+			<div class="table__cell cell--lg" (click)="toggleCheck(row)" *ngIf="selectable">
+				<svg *ngIf="isSelected(row)">
+					<use xlink:href="#checked"></use>
+				</svg>
+				<svg *ngIf="!isSelected(row)">
+					<use xlink:href="#unchecked"></use>
+				</svg>
+			</div>
+			<div class="table__cell cell--lg">
+				<svg (click)="doEditRow(row)" *ngIf="editable">
+					<use xlink:href="#edit"></use>
+				</svg>
+				<svg (click)="doDeleteRow(row)" *ngIf="deletable">
+					<use xlink:href="#delete"></use>
+				</svg>
+				<svg (click)="doCopyRow(row)" *ngIf="duplicable">
+					<use xlink:href="#copy"></use>
+				</svg>
+				<svg (click)="doViewRow(row)" *ngIf="visible">
+					<use xlink:href="#view"></use>
+				</svg>
+			</div>
+		</div>
+	</div>
+
+	<!-- content draggable -->
+	<div class="table__content" cdkDropList (cdkDropListDropped)="onDropRow($event)" *ngIf="draggable">
+		<!-- row -->
+		<div class="table__row" *ngFor="let row of visibleRows" cdkDrag>
+			<div class="drag__placeholder" *cdkDragPlaceholder></div>
+			<div class="table__cell cell--sm">
+				<svg cdkDragHandle>
+					<use xlink:href="#drag"></use>
+				</svg>
+			</div>
+			<ng-container *ngTemplateOutlet="templateRef || defaultRow; context: { $implicit: getContext(row) }"></ng-container>
+			<!-- <div class="table__cell" *ngFor="let col of columns">{{getValue(row, col)}}</div> -->
+			<div class="table__cell cell--lg" (click)="toggleCheck(row)" *ngIf="selectable">
+				<svg *ngIf="isSelected(row)">
+					<use xlink:href="#checked"></use>
+				</svg>
+				<svg *ngIf="!isSelected(row)">
+					<use xlink:href="#unchecked"></use>
+				</svg>
+			</div>
+			<div class="table__cell cell--lg">
+				<svg (click)="doEditRow(row)" *ngIf="editable">
+					<use xlink:href="#edit"></use>
+				</svg>
+				<svg (click)="doDeleteRow(row)" *ngIf="deletable">
+					<use xlink:href="#delete"></use>
+				</svg>
+				<svg (click)="doCopyRow(row)" *ngIf="duplicable">
+					<use xlink:href="#copy"></use>
+				</svg>
+				<svg (click)="doViewRow(row)" *ngIf="visible">
+					<use xlink:href="#view"></use>
+				</svg>
+			</div>
+		</div>
+	</div>
+
+	<!-- content virtual -->
+	<cdk-virtual-scroll-viewport [itemSize]="itemSize" *ngIf="!draggable && virtualized">
+		<!-- row -->
+		<div class="table__row" *cdkVirtualFor="let row of visibleRows">
+			<ng-container *ngTemplateOutlet="templateRef || defaultRow; context: { $implicit: getContext(row) }"></ng-container>
+			<!-- <div class="table__cell" *ngFor="let col of columns">{{getValue(row, col)}}</div> -->
+			<div class="table__cell cell--lg" (click)="toggleCheck(row)" *ngIf="selectable">
+				<svg *ngIf="isSelected(row)">
+					<use xlink:href="#checked"></use>
+				</svg>
+				<svg *ngIf="!isSelected(row)">
+					<use xlink:href="#unchecked"></use>
+				</svg>
+			</div>
+			<div class="table__cell cell--lg">
+				<svg (click)="doEditRow(row)" *ngIf="editable">
+					<use xlink:href="#edit"></use>
+				</svg>
+				<svg (click)="doDeleteRow(row)" *ngIf="deletable">
+					<use xlink:href="#delete"></use>
+				</svg>
+				<svg (click)="doCopyRow(row)" *ngIf="duplicable">
+					<use xlink:href="#copy"></use>
+				</svg>
+				<svg (click)="doViewRow(row)" *ngIf="visible">
+					<use xlink:href="#view"></use>
+				</svg>
+			</div>
+		</div>
+	</cdk-virtual-scroll-viewport>
+
+	<!-- no records -->
+	<div class="table__empty" *ngIf="visibleRows && !visibleRows.length">
+		nessun record trovato.
+		<!-- no record found. -->
+	</div>
+
+	<!-- loading -->
+	<div class="table__empty" *ngIf="!visibleRows">
+		caricamento...
+		<!-- loading... -->
+	</div>
+</div>
+
+<!-- pager -->
+<pager-component class="table__pager" [rows]="rows" (pagedRows)="pagedRows = $event" *ngIf="draggable || !virtualized"></pager-component>

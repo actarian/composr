@@ -1,0 +1,18 @@
+@import '~styles/admin/variables';
+@import '~styles/admin/mixins';
+
+:host {
+	@extend %layout-main;
+}
+
+.headline {
+	@extend %layout-headline;
+}
+
+.content {
+	@extend %layout-content;
+}
+
+.container {
+	@extend %layout-container;
+}

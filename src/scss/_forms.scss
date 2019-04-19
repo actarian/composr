@@ -1,0 +1,265 @@
+@import 'variables';
+
+.form {}
+
+.fieldset {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	appearance: none;
+}
+
+@media (min-width:768px) {
+	.fieldset {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.form-group {
+		width: calc(50% - 10px);
+		flex: 0 0 calc(50% - 10px);
+
+		&:last-child:nth-child(odd) {
+			width: 100%;
+			flex: 1 0 100%;
+		}
+	}
+}
+
+label {
+	color: #55555a;
+	font-weight: 700;
+	font-size: 12px;
+}
+
+.input-group {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.form-control {
+	appearance: none;
+	border-radius: 0;
+	padding: 12px;
+	font-size: 16px;
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 10px 0 10px 0;
+	border: 2px solid #dddddd;
+	background: #ffffff;
+	color: $foreground-secondary;
+
+	&:hover {
+		border-color: #88bef8;
+	}
+
+	&:active,
+	&:focus {
+		background: #e7f4ff;
+		border-color: $primary;
+		color: $primary;
+		outline: none;
+		box-shadow: none;
+	}
+}
+
+control-text-component,
+control-email-component,
+control-password-component,
+control-number-component,
+control-select-component {
+	display: block;
+	width: 100%;
+}
+
+.form-select__select {
+	appearance: none;
+	border-radius: 0;
+	padding: 12px;
+	font-size: 16px;
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 10px 0 10px 0;
+	border: 2px solid #dddddd;
+	background: #ffffff;
+	color: $foreground-secondary;
+
+	&:hover {
+		border-color: #88bef8;
+	}
+
+	&:active,
+	&:focus {
+		background: #e7f4ff;
+		border-color: $primary;
+		color: $primary;
+		outline: none;
+		box-shadow: none;
+	}
+
+	&[disabled] {
+		border-color: #eeeeee;
+		pointer-events: none;
+	}
+}
+
+.form-select {
+	position: relative;
+
+	&:after {
+		content: '';
+		position: absolute;
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 6px 5px 0 5px;
+		border-color: $primary transparent transparent transparent;
+		right: 15px;
+		top: 50px;
+	}
+}
+
+input,
+textarea,
+select {
+	&:-webkit-autofill {
+		background: #e7f4ff !important;
+		border-color: $primary !important;
+		color: $primary !important;
+	}
+}
+
+textarea {
+	&.form-control {
+		resize: none;
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+}
+
+.alert {
+	padding: 5px 10px;
+	margin: 0 0 10px 0;
+	border-radius: 4px;
+	font-size: 13px;
+	font-weight: 700;
+
+	&--danger {
+		color: #ff6d22;
+	}
+
+	&--correct {
+		color: #00ff00;
+	}
+}
+
+/*
+.headline {
+	font-size: 1.5em;
+	padding: 10px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ccc;
+}
+*/
+
+// ricetta elettronica
+.ricetta-elettronica {
+
+	.form {
+
+		.control-components {
+			margin-bottom: 40px;
+
+			&:last-child {
+				margin-bottom: 80px;
+			}
+		}
+
+		.form-label {
+			font-size: 1.05rem;
+			display: block;
+			color: $foreground-secondary;
+		}
+
+		.form-control {
+			font-size: 2.6rem;
+			border-top: 0;
+			border-left: 0;
+			border-right: 0;
+			color: $foreground-secondary;
+			padding: 0 0 10px 0px;
+			background: transparent;
+
+			&:active {
+				background: transparent;
+			}
+
+			&:focus {
+				background: transparent;
+			}
+
+			&:hover {
+				cursor: pointer;
+				border-color: $foreground-secondary;
+			}
+
+			&::placeholder {
+				color: #666;
+			}
+		}
+
+		.ui-inputtext {
+			@extend .form-control;
+
+		}
+
+	}
+}
+
+control-autocomplete-component {
+	display: block;
+	position: relative;
+	width: 100%;
+
+	cdk-virtual-scroll-viewport {
+		position: absolute;
+		width: 100%;
+		height: 40px * 6;
+		top: 100%;
+		z-index: 1000;
+		background: white;
+		box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.5);
+
+		.cdk-virtual-scroll-content-wrapper {
+			width: 100%;
+		}
+
+		& .item {
+			width: 100%;
+			height: 40px;
+			line-height: 40px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			text-transform: lowercase;
+			padding: 0 15px;
+			color: #666;
+			cursor: pointer;
+			transition: ease-in-out color 350ms;
+
+			&:hover {
+				color: #000;
+			}
+		}
+
+		.item+.item {
+			border-top: 1px solid #eee;
+		}
+	}
+
+}

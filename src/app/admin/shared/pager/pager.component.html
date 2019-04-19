@@ -1,0 +1,30 @@
+<div class="group group--pager" *ngIf="rows">
+	<div class="pager__info">{{from}}-{{to}} of {{rows.length}}</div>
+	<div>
+		<ul class="nav--pager">
+			<li>
+				<a (click)="showFirstPage()" [ngClass]="{ disabled: !hasPagesBefore() }"><svg><use xlink:href="#first"></use></svg></a>
+			</li>
+			<li>
+				<a (click)="showPreviousPages()" [ngClass]="{ disabled: !hasPagesBefore() }"><svg><use xlink:href="#previous"></use></svg></a>
+			</li>
+			<li *ngFor="let item of visiblePages"><a (click)="setPage(item)" [ngClass]="{ active: page == item }">{{item + 1}}</a></li>
+			<li>
+				<a (click)="showNextPages()" [ngClass]="{ disabled: !hasPagesAfter() }"><svg><use xlink:href="#next"></use></svg></a>
+			</li>
+			<li>
+				<a (click)="showLastPage()" [ngClass]="{ disabled: !hasPagesAfter() }"><svg><use xlink:href="#last"></use></svg></a>
+			</li>
+		</ul>
+	</div>
+	<div class="pager__perpage">
+		<div class="group--select">
+			<select [(ngModel)]="perpage" (change)="onSetPerPage($event.target.value)">
+				<option *ngFor="let item of perpages" [ngValue]="item">{{item}}</option>
+			</select>
+			<div class="select__arrow">
+				<svg><use xlink:href="#angle-down"></use></svg>
+			</div>
+		</div>
+	</div>
+</div>

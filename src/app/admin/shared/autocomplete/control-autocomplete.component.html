@@ -1,0 +1,16 @@
+<ng-container [formGroup]="form" (blur)="onBlur()" (clickOutside)="onBlur()">
+	<label class="form-label" [attr.for]="option.key">{{ option.label | label }}</label>
+	<input class="form-control" placeholder="{{ option.placeholder | label }}" [id]="option.key" [formControlName]="option.key" type="hidden">
+	<input class="form-control" placeholder="{{ option.placeholder | label }}" type="text" [ngClass]="{ disabled: busy }" [disabled]="busy" (focus)="onFocus()" #query>
+	<!-- content virtual -->
+	<ng-container *ngIf="focus && items.length">
+		<cdk-virtual-scroll-viewport [itemSize]="40">
+			<div class="item" *cdkVirtualFor="let item of items" [title]="item.label" (click)="onSelect(item)">
+				<span [innerHTML]="item.label"></span>
+			</div>
+		</cdk-virtual-scroll-viewport>
+	</ng-container>
+	<div class="alert alert--danger" *ngIf="control.invalid && (control.dirty || control.touched)">
+		<div *ngIf="control.errors.required">{{ 'errors.required' | label }}</div>
+	</div>
+</ng-container>

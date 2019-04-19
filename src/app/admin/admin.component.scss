@@ -1,0 +1,14 @@
+@import '~styles/admin/variables';
+@import '~styles/admin/mixins';
+
+:host {
+	@extend %layout;
+}
+
+.wrapper {
+	@extend %layout-wrapper;
+}
+
+.wrapper__content {
+	@extend %layout-wrapper-content;
+}

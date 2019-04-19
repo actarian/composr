@@ -1,0 +1,51 @@
+<div class="sidebar__primary">
+	<a class="btn--brand" [routerLink]="['/']">
+		<svg><use xlink:href="#websolute"></use></svg>
+	</a>
+	<ul class="nav--sidebar">
+		<li class="nav__item">
+			<a class="btn--sidebar" [routerLink]="['/admin/dashboard']" routerLinkActive="active" (click)="onClickNav($event)"><svg><use xlink:href="#dashboard"></use></svg></a>
+		</li>
+		<li class="nav__item">
+			<a class="btn--sidebar" [routerLink]="['/admin/content']" routerLinkActive="active" (click)="onClickNav($event)"><svg><use xlink:href="#folder"></use></svg></a>
+		</li>
+		<li class="nav__item">
+			<a class="btn--sidebar" [routerLink]="['/admin/user']" routerLinkActive="active" (click)="onClickNav($event)"><svg><use xlink:href="#users"></use></svg></a>
+		</li>
+		<li class="nav__item">
+			<a class="btn--sidebar" [routerLink]="['/admin/setting']" routerLinkActive="active" (click)="onClickNav($event)"><svg><use xlink:href="#settings"></use></svg></a>
+		</li>
+		<!--
+		<li class="nav__item" *ngFor="let item of menu">
+			<a class="nav__link" [routerLink]="[item.slug] | route">{{item.name}}</a>
+		</li>
+		-->
+	</ul>
+	<ul class="nav--sidebar-secondary">
+		<li class="nav__item">
+			<a type="button" class="btn--sidebar-secondary">?</a>
+		</li>
+		<li class="nav__item">
+			<a type="button" class="btn--admin">{{shortName}}</a>
+		</li>
+	</ul>
+</div>
+<div class="sidebar__secondary">
+	<div class="headline">
+		<div class="title">Site Manager</div>
+	</div>
+	<div class="category">Directories</div>
+	<ul class="nav--menu-primary">
+		<li><a class="btn--menu-primary" routerLink="/admin/content/page" routerLinkActive="active">Pages</a></li>
+		<li><a class="btn--menu-primary" routerLink="/admin/content/category" routerLinkActive="active">Categories</a></li>
+	</ul>
+	<div class="category">Page Types</div>
+	<ul class="nav--menu-secondary">
+		<li *ngFor="let item of types">
+			<a class="btn--menu-secondary" [routerLink]="['/admin/content/pagetype/', item.id]" routerLinkActive="active"><svg><use xlink:href="#page"></use></svg> <span>{{item.name}}</span></a>
+		</li>
+		<li>
+			<a class="btn--menu-secondary"><svg><use xlink:href="#add"></use></svg> <span>Add Page</span></a>
+		</li>
+	</ul>
+</div>

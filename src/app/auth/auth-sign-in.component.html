@@ -1,0 +1,15 @@
+<div class="container">
+	<div class="group group--headline">{{ 'signIn.title' | translate }}</div>
+	<div class="group group--form">
+		<form class="form" [ngClass]="{ submitted: submitted }" name="form" [formGroup]="form" (ngSubmit)="form.valid && onSubmit(form.value)" role="form" novalidate autocomplete="off">
+			<controls-component class="fieldset" [options]="options" [form]="form"></controls-component>
+			<div class="alert alert--danger fade show" role="alert" *ngIf="error">
+				<strong [innerHTML]="'signIn.wrong' | translate"></strong>
+			</div>
+			<div class="group group--stack">
+				<button type="submit" class="btn btn--primary" [disabled]="submitted || !form.valid" [ngClass]="{ disabled: submitted, invalid: !form.valid, 'btn--busy': busy }"><span>{{ 'signIn.register' | translate }}</span></button>
+				<button type="button" class="btn btn--secondary" [disabled]="submitted" (click)="onForgotten()" title="{{ 'signIn.passwordForgotten' | translate }}"><span>{{ 'signIn.passwordForgotten' | translate }}</span></button>
+			</div>
+		</form>
+	</div>
+</div>

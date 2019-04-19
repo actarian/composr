@@ -1,0 +1,32 @@
+<div class="container" [hidden]="user">
+	<div class="group group--headline">{{ 'signUp.title' | translate }}</div>
+	<div class="alert alert-info alert-dismissible fade show" role="alert" *ngIf="facebook">
+		<div><img [src]="facebook.picture.data.url" class="rounded-circle" width="32" height="32" /> <strong>Logged in with Facebook as {{facebook.name}}</strong></div>
+		<button type="button" class="btn btn--secondary" data-dismiss="alert" aria-label="Close" (click)="onFacebookLogout()" title="Esci da Facebook">{{ 'signUp.logout' | translate }}</button>
+	</div>
+	<div class="alert alert-info alert-dismissible fade show" role="alert" *ngIf="google">
+		<div><img [src]="google.picture" class="rounded-circle" /> <strong>Logged in with Google as {{google.name}}</strong></div>
+		<button type="button" class="btn btn--secondary" data-dismiss="alert" aria-label="Close" (click)="onGoogleLogout()" title="Esci da Google">{{ 'signUp.logout' | translate }}</button>
+	</div>
+	<div class="group group--form">
+		<form class="form" [ngClass]="{ submitted: submitted }" name="form" [formGroup]="form" (ngSubmit)="form.valid && onSubmit(form.value)" role="form" novalidate autocomplete="off">
+			<controls-component class="fieldset" [options]="options" [form]="form"></controls-component>
+			<div class="alert alert--danger fade show" role="alert" *ngIf="error">
+				<ng-container [ngSwitch]="error.status">
+					<strong *ngSwitchCase="409" [innerHTML]="'signUp.alreadyInUse' | translate"></strong>
+					<strong *ngSwitchDefault [innerHTML]="'signUp.error' | translate"></strong>
+				</ng-container>
+			</div>
+			<div class="group group--stack">
+				<button type="submit" class="btn btn--primary" [disabled]="submitted || !form.valid" [ngClass]="{ disabled: submitted, invalid: !form.valid, 'btn--busy': busy }"><span>{{ 'signUp.register' | translate }}</span></button>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="container" [hidden]="!user">
+	<div class="headline">{{ 'signUp.registered' | translate }}</div>
+	<p>{{ 'signUp.registrationSent' | translate }}</p>
+	<br>
+	<button type="button" class="btn btn btn-block btn-warning" (click)="onSignIn()" title="{{ 'sign.account' | translate }}"><span>{{ 'sign.account' | translate }}</span></button>
+	<br>
+</div>

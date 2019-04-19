@@ -1,0 +1,28 @@
+.group--headline {
+	margin-bottom: 15px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.group--btn {
+	margin-top: 15px;
+}
+
+.group--stack {
+	margin-top: 15px;
+
+	.btn {
+		display: block;
+		width: 100%;
+	}
+
+	.btn {
+		margin-bottom: 15px;
+	}
+}
+
+.group--inline {
+	margin-top: 15px;
+	display: flex;
+	justify-content: space-between;
+}
