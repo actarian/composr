@@ -1,0 +1,53 @@
+@import '~styles/admin/variables';
+@import '~styles/admin/mixins';
+
+:host {
+	@extend %layout-main;
+}
+
+.headline {
+	@extend %layout-headline;
+}
+
+.content {
+	@extend %layout-content;
+}
+
+.container {
+	@extend %layout-container;
+}
+
+.wrapper {
+	padding: 0 20px;
+}
+
+$icon: 18px;
+
+.table__cell {
+	flex: 1 1 80px;
+	padding: 5px 0;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	text-transform: lowercase;
+
+	svg {
+		width: $icon;
+		height: $icon;
+		fill: #999;
+	}
+
+	&.cell--sm {
+		flex: 0 0 32px;
+		text-align: center;
+	}
+
+	&.cell--md {
+		flex: 0 0 64px;
+		text-align: center;
+	}
+}
+
+.table__cell+.table__cell {
+	margin-left: 5px;
+}

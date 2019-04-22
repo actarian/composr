@@ -4,7 +4,6 @@ import { NgModule, Type } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { DisposableComponent } from '@designr/core';
-import { DataService } from '@designr/data';
 import { environment } from '../environments/environment';
 import { AdminModule } from './admin/admin.module';
 import { AppComponent } from './app.component';
@@ -48,7 +47,6 @@ const modules = [
 
 const services = [
 	UserService,
-	DataService,
 ];
 
 const shared: Type<DisposableComponent>[] = [

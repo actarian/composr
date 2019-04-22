@@ -29,13 +29,13 @@ export class TestComponent extends DisposableComponent implements OnInit {
 	}];
 
 	constructor(
-		private dataService: TestService,
+		private storeService: TestService,
 	) {
 		super();
 	}
 
 	ngOnInit() {
-		this.dataService.get(10000).subscribe(items => this.items = items);
+		this.storeService.get(10000).subscribe(items => this.items = items);
 	}
 
 }

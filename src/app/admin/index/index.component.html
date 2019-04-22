@@ -1,0 +1,19 @@
+<ng-container *ngIf="definition">
+	<div class="headline">
+		<span>{{definition.label}}</span>
+	</div>
+	<div class="content">
+		<table-component [items]="items" [columns]="definition.fields" [actionItems]="actionItems" [sortable]="true" [filterable]="true" [selectable]="true" [draggable]="true" [editable]="true" [deletable]="true" [duplicable]="true" [visible]="true" [virtualized]="false" (editRow)="onEditRow($event)">
+			<ng-template #template let-item>
+				<div class="table__cell" *ngFor="let col of item.columns; let i = index">{{item.getValue(item.row, col)}}</div>
+				<!--
+			<div class="table__cell">{{item.getValue(item.row, item.keys.fullname)}}</div>
+			<div class="table__cell">{{item.getValue(item.row, item.keys.name)}}</div>
+			<div class="table__cell">{{item.getValue(item.row, item.keys.surname)}}</div>
+			<div class="table__cell">{{item.getValue(item.row, item.keys.short)}}</div>
+			<div class="table__cell">{{item.getValue(item.row, item.keys.active)}}</div>
+			-->
+			</ng-template>
+		</table-component>
+	</div>
+</ng-container>

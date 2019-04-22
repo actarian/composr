@@ -236,14 +236,17 @@ export class TableComponent extends DisposableComponent implements OnInit {
 		return this.selectedItems_.indexOf(row) !== -1;
 	}
 
-	public doSort(col) {
+	public doSort(col: Column) {
 		const value = col.sort || 0;
 		const values = [1, -1, 0];
 		const index = values.indexOf(value) + 1;
 		col.sort = values[index % values.length];
+		/*
 		const sorts = this.columns.map(col => {
 			return { key: col.key, value: col.sort };
 		}).filter(col => col.value !== 0);
+		*/
+		const sorts = [{ key: col.key, value: col.sort }].filter(col => col.value !== 0);
 		this.sorts$.next(sorts);
 	}
 

@@ -6,13 +6,15 @@ $size: 36px;
 $border: #eee;
 
 :host {
+	/*
 	position: absolute;
 	bottom: 0;
-	width: 100%;
 	z-index: 100;
 	background: white;
+	width: 100%;
 	left: 0;
-	padding: 10px 40px;
+	*/
+	padding: 10px 36px;
 	border-top: 1px solid $border;
 }
 
@@ -96,4 +98,11 @@ $border: #eee;
 
 .group--select {
 	@extend %group-select;
+}
+
+.pager__info,
+.pager__perpage {
+	@media (max-width: 959px) {
+		display: none;
+	}
 }

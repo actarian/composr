@@ -1,8 +1,9 @@
 // import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { AdminService } from '../admin.service';
-import { ReflectionService } from '../core/reflection.service';
+import { StoreService } from '../core/store.service';
 
 @Component({
 	selector: 'sidebar-component',
@@ -35,15 +36,21 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	types: any[] = [];
 
 	constructor(
+		private router: Router,
 		public adminService: AdminService,
-		public reflectionService: ReflectionService,
+		public storeService: StoreService,
 	) {
 		super();
 		this.shortName = this.adminService.admin.firstName.substr(0, 1) + this.adminService.admin.lastName.substr(0, 1);
 	}
 
 	ngOnInit() {
-		this.reflectionService.getPageTypes().subscribe(types => this.types = types);
+		this.storeService.getList('pagetype').subscribe(types => {
+			types.sort((a, b) => {
+				return a.name.localeCompare(b.name, 'en', { sensitivity: 'base' });
+			});
+			this.types = types;
+		});
 	}
 
 	onClickNav(event: MouseEvent) {
@@ -55,6 +62,10 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 			this.expanded = true;
 		}
 		this.expand.emit(this.expanded);
+	}
+
+	onAddType(event: MouseEvent) {
+		this.router.navigate(['/admin/content/definition', 'pagetype', 'add']);
 	}
 
 	onSign(): void {

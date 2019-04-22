@@ -42,10 +42,10 @@
 	<div class="category">Page Types</div>
 	<ul class="nav--menu-secondary">
 		<li *ngFor="let item of types">
-			<a class="btn--menu-secondary" [routerLink]="['/admin/content/pagetype/', item.id]" routerLinkActive="active"><svg><use xlink:href="#page"></use></svg> <span>{{item.name}}</span></a>
+			<a class="btn--menu-secondary" [routerLink]="['/admin/content/definition', 'pagetype', item.id]" routerLinkActive="active"><svg><use xlink:href="#page"></use></svg> <span>{{item.name}}</span></a>
 		</li>
 		<li>
-			<a class="btn--menu-secondary"><svg><use xlink:href="#add"></use></svg> <span>Add Page</span></a>
+			<a class="btn--menu-secondary" (click)="onAddType($event)"><svg><use xlink:href="#add"></use></svg> <span>Add Page</span></a>
 		</li>
 	</ul>
 </div>

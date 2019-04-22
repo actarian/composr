@@ -25,11 +25,10 @@
 		flex: 0 0 288px;
 	}
 
-	transition: all ease-in-out 350ms;
+	// transition: all ease-in-out 350ms;
 }
 
 %layout-wrapper-content {
-	padding-right: 72px;
 	width: calc(100% - 72px);
 	flex: 1 1 calc(100% - 72px);
 
@@ -38,7 +37,15 @@
 		flex: 1 1 calc(100% - 288px);
 	}
 
-	transition: all ease-in-out 350ms;
+	@media (max-width: 959px) {
+		padding-right: 18px;
+	}
+
+	@media (min-width: 960px) {
+		padding-right: 72px;
+	}
+
+	// transition: all ease-in-out 350ms;
 }
 
 %layout-main {
@@ -55,6 +62,10 @@
 	height: 36px;
 	margin-bottom: 16px;
 	padding: 0 0 0 36px;
+
+	&>* {
+		margin-left: 15px;
+	}
 }
 
 %layout-content {

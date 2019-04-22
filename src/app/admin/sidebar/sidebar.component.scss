@@ -165,8 +165,14 @@
 	border-radius: 2px;
 	font-size: 12px;
 	font-weight: normal;
-	color: #7888ae;
 	padding: 10px 10px 10px 32px;
+
+	&,
+	&:active,
+	&:focus,
+	&:visited {
+		color: #7888ae;
+	}
 
 	&.active,
 	&:hover {
@@ -180,9 +186,14 @@
 	border-radius: 2px;
 	font-size: 12px;
 	font-weight: normal;
-	color: #7888ae;
-	padding: 10px 10px 10px 32px;
 	padding: 10px 10px 10px 8px;
+
+	&,
+	&:active,
+	&:focus,
+	&:visited {
+		color: #7888ae;
+	}
 
 	svg {
 		width: 15px;

@@ -20,10 +20,9 @@ export class PagerComponent extends DisposableComponent implements OnInit {
 	@Input('rows') set rows(value: any[]) {
 		this.rows_.next(value);
 	}
-	@Output() pagedRows: EventEmitter<any[]> = new EventEmitter<any[]>(true);
-
 	@Input() perpage: number = this.perpages[0];
 	@Input() maxPages: number = 10;
+	@Output() pagedRows: EventEmitter<any[]> = new EventEmitter<any[]>(true);
 
 	totalPages: number[] = [];
 	visiblePages: number[] = [];
@@ -58,7 +57,7 @@ export class PagerComponent extends DisposableComponent implements OnInit {
 	}
 
 	onSetPerPage(perpage) {
-		console.log('onSetPerPage', perpage);
+		// console.log('onSetPerPage', perpage);
 		this.setPages(this.rows);
 	}
 
@@ -82,7 +81,7 @@ export class PagerComponent extends DisposableComponent implements OnInit {
 		const pagedRows = this.rows.slice(this.page * this.perpage, this.page * this.perpage + this.perpage);
 		// console.log('PagerComponent.setPage', page, pagedRows.length);
 		this.pagedRows.emit(pagedRows);
-		console.log('setPage', page, pagedRows.length);
+		// console.log('setPage', page, pagedRows.length);
 		// this.changeDetector.markForCheck();
 	}
 

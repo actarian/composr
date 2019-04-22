@@ -5,6 +5,10 @@ import { AdminGuard } from './admin.guard';
 import { AdminResolve } from './admin.resolve';
 import { AuthComponent } from './auth/auth.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DefinitionAddComponent } from './definition/definition-add.component';
+import { DefinitionComponent } from './definition/definition.component';
+import { DetailComponent } from './detail/detail.component';
+import { IndexComponent } from './index/index.component';
 import { PageComponent } from './page/page.component';
 import { SettingsComponent } from './setting/settings.component';
 import { TestComponent } from './test/test.component';
@@ -13,6 +17,10 @@ import { UsersComponent } from './users/users.component';
 export const PAGES = [
 	AdminComponent,
 	DashboardComponent,
+	DefinitionAddComponent,
+	DefinitionComponent,
+	DetailComponent,
+	IndexComponent,
 	PageComponent,
 	UsersComponent,
 	SettingsComponent,
@@ -27,21 +35,22 @@ const ROUTES: Routes = [
 	{
 		path: 'admin', component: AdminComponent, children: [
 			{ path: '', redirectTo: 'content', pathMatch: 'full' },
-			{ path: 'dashboard', component: DashboardComponent, resolve: { admin: AdminResolve } },
+			{ path: 'dashboard', component: DashboardComponent },
 			{
 				path: 'content', children: [
 					{ path: '', redirectTo: 'page', pathMatch: 'full' },
-					{ path: 'page', component: PageComponent, resolve: { admin: AdminResolve } },
-					{ path: 'pagetype', component: PageComponent, resolve: { admin: AdminResolve } },
-					{ path: 'pagetype/:pageTypeId', component: PageComponent, resolve: { admin: AdminResolve } },
-					{ path: 'category', component: DashboardComponent, resolve: { admin: AdminResolve } },
-				], canActivate: [AdminGuard]
+					{ path: ':type', component: IndexComponent },
+					{ path: ':type/:id', component: DetailComponent },
+					{ path: 'definition/:type/add', component: DefinitionAddComponent },
+					{ path: 'definition/:type/:id', component: DefinitionComponent },
+					{ path: 'category', component: DashboardComponent },
+				]
 			},
-			{ path: 'user', component: UsersComponent, resolve: { admin: AdminResolve } },
-			{ path: 'setting', component: SettingsComponent, resolve: { admin: AdminResolve } },
+			{ path: 'user', component: UsersComponent },
+			{ path: 'setting', component: SettingsComponent },
 			//
-			{ path: 'test', component: TestComponent, resolve: { admin: AdminResolve } }
-		], canActivate: [AdminGuard]
+			{ path: 'test', component: TestComponent }
+		], canActivate: [AdminGuard], resolve: { admin: AdminResolve }
 	},
 	{ path: 'admin/login', component: AuthComponent },
 	{ path: '', redirectTo: 'admin', pathMatch: 'full' },
