@@ -1,20 +1,71 @@
 <ng-container *ngIf="definition && item">
 	<div class="headline">
-		<span class="area">{{definition.label}}</span> <span class="pill">{{id}}</span> <span>{{item.name}}</span>
+		<div class="title">
+			<span class="area">{{definition.name}}</span> <span class="pill">{{id}}</span> <span>{{item.name}}</span>
+		</div>
+		<div class="actions">
+			<button type="button" class="btn btn--danger" (click)="onDelete()">
+				<span>Delete</span>
+				<svg><use xlink:href="#delete"></use></svg>
+			</button>
+		</div>
 	</div>
 	<div class="content">
 		<div class="container">
-			<form class="form" name="form" [formGroup]="form" (ngSubmit)="form.valid && onSubmit(form.value)" role="form" novalidate autocomplete="off">
-				<!-- <controls-component class="fieldset" [options]="options" [form]="form"></controls-component> -->
-				<div class="fieldset" *ngFor="let option of options">
-					<control-outlet class="form-group" [option]="option" [form]="form"></control-outlet>
-				</div>
-				<div class="group group--inline">
-					<button type="text" class="btn btn--secondary" [disabled]="submitted || !form.valid" (click)="onReset()"><span>Cancel</span></button>
-					<button type="submit" class="btn btn--primary" [disabled]="submitted || !form.valid" [ngClass]="{ 'btn--busy': busy }"><span>Save</span></button>
-				</div>
-			</form>
-			{{definition | json}}
+
+			<ul class="nav--tabs">
+				<li *ngFor="let item of tabs"><a [ngClass]="{ active: tab == item }" (click)="tab = item"><span>{{item.name}}</span></a></li>
+			</ul>
+			<div class="tabs--content">
+
+				<form class="form" name="form" [formGroup]="form" (ngSubmit)="form.valid && onSubmit(form.value)" role="form" novalidate autocomplete="off">
+
+					<div class="fieldsets" *ngIf="tab == tabs[0]">
+						<div class="fieldset" *ngFor="let option of options">
+							<control-outlet class="form-group" [option]="option" [form]="form"></control-outlet>
+						</div>
+					</div>
+
+					<div class="fieldsets" *ngIf="tab == tabs[1]">
+						<div class="definition" *ngFor="let field of reflection.fields">
+							<div class="info">
+								<div class="title">{{field.name}}</div>
+								<div class="type"><svg *ngIf="field.primaryKey"><use xlink:href="#lock"></use></svg> {{field.type}}</div>
+							</div>
+							<button [ngClass]="{ active: field.required }">
+								<span *ngIf="field.required">required</span>
+								<span *ngIf="!field.required"></span>
+							</button>
+							<button [ngClass]="{ active: field.visible }" (click)="field.visible = !field.visible">
+								<span *ngIf="field.visible">visible</span>
+								<span *ngIf="!field.visible">not visible</span>
+							</button>
+							<button [ngClass]="{ active: field.editable }" (click)="field.editable = !field.editable">
+								<span *ngIf="field.editable">editable</span>
+								<span *ngIf="!field.editable">not editable</span>
+							</button>
+							<button [ngClass]="{ active: field.indexable }" (click)="field.indexable = !field.indexable">
+								<span *ngIf="field.indexable">indexable</span>
+								<span *ngIf="!field.indexable">not indexable</span>
+							</button>
+							<input type="text" placeholder="add a note" />
+							<div class="group--select" [ngClass]="{ disabled: field.primaryKey }">
+								<select (input)="onSetControl($event.target.value, field)" [disabled]="field.primaryKey">
+									<option *ngFor="let item of controlTypes" [value]="item.value">{{item.label}}</option>
+								</select>
+								<div class="select__arrow">
+									<svg><use xlink:href="#angle-down"></use></svg>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="nav--inline">
+						<button type="button" class="btn btn--secondary" [disabled]="submitted || !form.valid" (click)="onReset()"><span>Reset</span></button>
+						<button type="submit" class="btn btn--primary" [disabled]="submitted || !form.valid" [ngClass]="{ 'btn--busy': busy }"><span>Save</span></button>
+					</div>
+				</form>
+
+			</div>
 		</div>
 	</div>
 </ng-container>

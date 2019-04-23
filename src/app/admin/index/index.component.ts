@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { Definition } from '../core/definition';
-import { DefinitionService } from '../core/definition.service';
 import { StoreService } from '../core/store.service';
 import { ActionItem, Column } from '../shared/table/table.component';
 
@@ -27,7 +26,6 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
-		private definitionService: DefinitionService,
 		private storeService: StoreService,
 	) {
 		super();
@@ -35,12 +33,23 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 
 	ngOnInit() {
 		this.type = this.route.snapshot.params.type;
-		this.definitionService.getIndexDefinition(this.type).subscribe(definition => this.definition = definition);
-		this.storeService.getIndex(this.type).subscribe(items => this.items = items);
+		this.storeService.getDefinition(this.type).subscribe(definition => {
+			console.log('definition', definition);
+			this.definition = definition;
+			this.columns = definition.fields.filter(x => x.indexable);
+		});
+		this.storeService.getIndex(this.type).subscribe(items => {
+			console.log('items', items.length, items[0]);
+			this.items = items;
+		});
 	}
 
 	onEditRow(item: any) {
 		this.router.navigate(['/admin/content', this.definition.key, item.id]);
+	}
+
+	onClearCache() {
+		console.log('onClearCache', this.type);
 	}
 
 }

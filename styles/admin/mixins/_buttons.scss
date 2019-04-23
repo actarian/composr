@@ -53,9 +53,78 @@
 
 	&:hover {
 		background: #1b35ac; // primary-dark
+		color: white;
 	}
 
 	&[disabled] {}
+}
+
+%btn-secondary {
+	@extend %btn-flex;
+	position: relative;
+	color: #191b22;
+
+	&:before {
+		content: '';
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 3px;
+		left: 0;
+		bottom: 0;
+		background: $primary;
+		border-radius: 3px;
+		transition: height ease-in-out 350ms;
+	}
+
+	&>span {
+		position: relative;
+	}
+
+	&:hover {
+
+		&:before {
+			height: 100%;
+		}
+
+		color: white;
+	}
+
+	&[disabled] {}
+}
+
+%btn-danger {
+	@extend %btn-flex;
+	position: relative;
+	border-radius: 3px;
+	background: #fb6450;
+	color: white;
+
+	&:hover {
+		background: darken(#fb6450, 5%);
+		color: white;
+	}
+
+	&[disabled] {}
+}
+
+%btn-headline {
+	@extend %btn-primary;
+	position: relative;
+	padding: 13px 20px;
+	font-size: 13px;
+	font-weight: bold;
+
+	svg {
+		width: 16px;
+		height: 16px;
+		fill: white;
+	}
+
+	&>span+svg,
+	&>svg+span {
+		margin-left: 12px;
+	}
 }
 
 %appearance {
@@ -64,4 +133,13 @@
 	border: none;
 	outline: none;
 	box-shadow: none;
+}
+
+%pill {
+	background: $primary;
+	color: white;
+	padding: 4px 8px;
+	border-radius: 5px;
+	font-size: 12px;
+	line-height: 1;
 }

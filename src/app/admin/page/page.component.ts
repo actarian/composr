@@ -13,18 +13,18 @@ export class PageComponent extends DisposableComponent implements OnInit {
 	items: any[] = [];
 
 	columns: Column[] = [
-		// { key: 'fullname', label: 'Fullname', getter: (row: any, col: Column) => `${row.name} ${row.surname}` },
-		{ key: 'id', label: 'Id' },
-		{ key: 'title', label: 'Title' },
-		{ key: 'pageType', label: 'Page Type' },
-		{ key: 'template', label: 'Template' },
+		// { key: 'fullname', name: 'Fullname', getter: (row: any, col: Column) => `${row.name} ${row.surname}` },
+		{ key: 'id', name: 'Id' },
+		{ key: 'title', name: 'Title' },
+		{ key: 'pageType', name: 'Page Type' },
+		{ key: 'template', name: 'Template' },
 		/*
-		{ key: 'category', label: 'Category' },
-		{ key: 'market', label: 'Market' },
+		{ key: 'category', name: 'Category' },
+		{ key: 'market', name: 'Market' },
 		*/
-		{ key: 'active', label: 'Active', filterType: FilterTypeEnum.Select },
-		// { key: 'visible', label: 'Visible', filterType: FilterTypeEnum.Select },
-		// { key: 'order', label: 'Order' }
+		{ key: 'active', name: 'Active', filterType: FilterTypeEnum.Select },
+		// { key: 'visible', name: 'Visible', filterType: FilterTypeEnum.Select },
+		// { key: 'order', name: 'Order' }
 	];
 
 	actionItems: ActionItem[] = [{

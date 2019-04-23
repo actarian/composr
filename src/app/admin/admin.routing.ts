@@ -41,8 +41,8 @@ const ROUTES: Routes = [
 					{ path: '', redirectTo: 'page', pathMatch: 'full' },
 					{ path: ':type', component: IndexComponent },
 					{ path: ':type/:id', component: DetailComponent },
-					{ path: 'definition/:type/add', component: DefinitionAddComponent },
-					{ path: 'definition/:type/:id', component: DefinitionComponent },
+					{ path: ':type/definition/add', component: DefinitionAddComponent },
+					{ path: ':type/definition/:id', component: DefinitionComponent },
 					{ path: 'category', component: DashboardComponent },
 				]
 			},

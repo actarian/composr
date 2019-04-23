@@ -13,12 +13,12 @@ export class TestComponent extends DisposableComponent implements OnInit {
 	items: Item[] = [];
 
 	columns: Column[] = [
-		{ key: 'name', label: 'Name' },
-		{ key: 'surname', label: 'Surname' },
-		{ key: 'short', label: 'Short' },
-		{ key: 'active', label: 'Active', filterType: FilterTypeEnum.Select },
-		// { key: 'visible', label: 'Visible', filterType: FilterTypeEnum.Select },
-		// { key: 'order', label: 'Order' }
+		{ key: 'name', name: 'Name' },
+		{ key: 'surname', name: 'Surname' },
+		{ key: 'short', name: 'Short' },
+		{ key: 'active', name: 'Active', filterType: FilterTypeEnum.Select },
+		// { key: 'visible', name: 'Visible', filterType: FilterTypeEnum.Select },
+		// { key: 'order', name: 'Order' }
 	];
 
 	actionItems: ActionItem[] = [{

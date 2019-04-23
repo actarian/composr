@@ -5,7 +5,7 @@ export interface PageType {
 	isIndex: boolean;
 }
 
-export const DATA: { [key: string]: any[] } = {
+export const DATAS: { [key: string]: any[] } = {
 	pagetype: [
 		{ id: 1, isIndex: true, name: 'Homepage' },
 		{ id: 2, isIndex: false, name: 'Products' },

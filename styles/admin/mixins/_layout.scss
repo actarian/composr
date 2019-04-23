@@ -58,14 +58,50 @@
 %layout-headline {
 	flex: 0 0 36px;
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
 	height: 36px;
 	margin-bottom: 16px;
 	padding: 0 0 0 36px;
 
-	&>* {
-		margin-left: 15px;
+	.title {
+		&>*+* {
+			margin-left: 15px;
+		}
 	}
+
+	.area {
+		color: rgba(white, 0.5);
+	}
+
+	.pill {
+		@extend %pill;
+	}
+
+	.btn--headline {
+		@extend %btn-headline;
+	}
+
+	.btn--danger {
+		@extend %btn-danger;
+
+		position: relative;
+		padding: 13px 20px;
+		font-size: 13px;
+		font-weight: bold;
+
+		svg {
+			width: 16px;
+			height: 16px;
+			fill: white;
+		}
+
+		&>span+svg,
+		&>svg+span {
+			margin-left: 12px;
+		}
+	}
+
 }
 
 %layout-content {
@@ -75,11 +111,12 @@
 	flex: 1 1 calc(100% - 52px);
 	overflow-y: auto;
 	overflow-x: hidden;
-	border-radius: 8px;
+	border-radius: 3px;
 	background: $background-secondary;
 	color: $foreground-secondary;
 }
 
 %layout-container {
+	height: 100%;
 	padding: 20px 36px;
 }

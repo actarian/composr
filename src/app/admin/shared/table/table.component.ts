@@ -18,7 +18,7 @@ export interface Option {
 
 export interface Column {
 	key: string;
-	label: any;
+	name: any;
 	getter?: (row: any, col: Column) => any;
 	filterType?: FilterTypeEnum;
 	filter?: any;

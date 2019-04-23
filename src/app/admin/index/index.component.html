@@ -1,9 +1,16 @@
 <ng-container *ngIf="definition">
 	<div class="headline">
-		<span>{{definition.label}}</span>
+		<div class="title">
+			<span>{{definition.name}}</span>
+		</div>
+		<div class="actions">
+			<button type="button" class="btn--headline" (click)="onClearCache()">
+				<span>Clear Page Cache</span> <svg><use xlink:href="#respawn"></use></svg>
+			</button>
+		</div>
 	</div>
 	<div class="content">
-		<table-component [items]="items" [columns]="definition.fields" [actionItems]="actionItems" [sortable]="true" [filterable]="true" [selectable]="true" [draggable]="true" [editable]="true" [deletable]="true" [duplicable]="true" [visible]="true" [virtualized]="false" (editRow)="onEditRow($event)">
+		<table-component [items]="items" [columns]="columns" [actionItems]="actionItems" [sortable]="true" [filterable]="true" [selectable]="true" [draggable]="true" [editable]="true" [deletable]="true" [duplicable]="true" [visible]="true" [virtualized]="false" (editRow)="onEditRow($event)">
 			<ng-template #template let-item>
 				<div class="table__cell" *ngFor="let col of item.columns; let i = index">{{item.getValue(item.row, col)}}</div>
 				<!--

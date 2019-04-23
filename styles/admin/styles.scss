@@ -1,0 +1,82 @@
+@import 'variables';
+@import 'mixins';
+
+.admin {
+	@extend %layout;
+
+	--color-background: #01091b;
+	--color-background-secondary: #ffffff; // #f8f9fc;
+	--color-foreground: #ffffff;
+	--color-foreground-secondary: #585a61;
+	--color-primary: #2440c3;
+	--color-facebook: #3B5998;
+	--color-google: #dd4b39;
+	--font-primary: 'Roboto', sans-serif;
+	--font-secondary: 'MaisonNeue', sans-serif;
+	--font-size: 16px;
+	--btn-radius: 20px;
+	--card-radius: 30px;
+	--bullet-size: 12px;
+
+	.wrapper {
+		@extend %layout-wrapper;
+	}
+
+	.wrapper__content {
+		@extend %layout-wrapper-content;
+
+		&>:not(router-outlet) {
+			@extend %layout-main;
+		}
+
+		.headline {
+			@extend %layout-headline;
+		}
+
+		.content {
+			@extend %layout-content;
+		}
+
+		.container {
+			@extend %layout-container;
+		}
+
+		.nav--tabs {
+			@extend %nav-tabs;
+		}
+
+		.nav--inline {
+			@extend %nav-inline;
+		}
+
+		.tabs--content {
+			height: calc(100% - 40px);
+		}
+
+		.form {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+
+			.fieldsets {
+				flex: 1 1 auto;
+				overflow-x: hidden;
+				overflow-y: auto;
+			}
+
+			.nav--inline {
+				flex: 0 0 50px;
+			}
+		}
+
+		.fieldset {
+			@extend %fieldset;
+		}
+
+		.definition {
+			@extend %definition;
+		}
+
+	}
+
+}

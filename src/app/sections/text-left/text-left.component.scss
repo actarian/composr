@@ -1,4 +1,4 @@
-@import '../../../scss/mixins';
+@import '~styles/main/mixins';
 
 .container {
 	@include aspect-grid(2, 1);

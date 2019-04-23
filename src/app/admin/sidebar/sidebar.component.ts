@@ -1,7 +1,7 @@
 // import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { DisposableComponent } from '@designr/core';
+import { DisposableComponent, LocalStorageService } from '@designr/core';
 import { AdminService } from '../admin.service';
 import { StoreService } from '../core/store.service';
 
@@ -29,7 +29,7 @@ import { StoreService } from '../core/store.service';
 export class SidebarComponent extends DisposableComponent implements OnInit {
 
 	expanded: boolean = false;
-	@Output() expand: EventEmitter<boolean> = new EventEmitter<boolean>();
+	@Output() expand: EventEmitter<boolean> = new EventEmitter<boolean>(true);
 
 	shortName: string;
 
@@ -37,6 +37,7 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 
 	constructor(
 		private router: Router,
+		private storage: LocalStorageService,
 		public adminService: AdminService,
 		public storeService: StoreService,
 	) {
@@ -45,7 +46,9 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.storeService.getList('pagetype').subscribe(types => {
+		this.expanded = this.storage.get('expanded') || false;
+		this.expand.emit(this.expanded);
+		this.storeService.getList('definition').subscribe(types => {
 			types.sort((a, b) => {
 				return a.name.localeCompare(b.name, 'en', { sensitivity: 'base' });
 			});
@@ -61,11 +64,12 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 		} else {
 			this.expanded = true;
 		}
+		this.storage.set('expanded', this.expanded);
 		this.expand.emit(this.expanded);
 	}
 
 	onAddType(event: MouseEvent) {
-		this.router.navigate(['/admin/content/definition', 'pagetype', 'add']);
+		this.router.navigate(['/admin/content', 'page', 'definition', 'add']);
 	}
 
 	onSign(): void {

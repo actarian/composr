@@ -5,7 +5,6 @@ import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
 import { takeUntil } from 'rxjs/operators';
 import { Definition } from '../core/definition';
-import { DefinitionService } from '../core/definition.service';
 import { StoreService } from '../core/store.service';
 
 @Component({
@@ -27,7 +26,6 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 		private router: Router,
 		private route: ActivatedRoute,
 		private formService: FormService,
-		private definitionService: DefinitionService,
 		private storeService: StoreService,
 	) {
 		super();
@@ -38,7 +36,7 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 			takeUntil(this.unsubscribe),
 		).subscribe(data => {
 			this.type = data.type;
-			this.definitionService.getDetailDefinition(this.type).subscribe(definition => {
+			this.storeService.getDefinition('definition').subscribe(definition => {
 				this.definition = definition;
 				this.onInitOptions();
 			});
@@ -49,7 +47,7 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 		this.options = this.formService.getOptions(this.definition.fields.filter(x => !x.primaryKey).map(x => {
 			return {
 				key: x.key,
-				schema: this.definitionService.getControlWithType(x.type),
+				schema: this.storeService.getControlWithType(x.type),
 				label: x.key,
 				placeholder: x.key,
 			};
@@ -65,7 +63,7 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 		console.log('onSubmit', model);
 		this.storeService.addType(this.type, model).subscribe(
 			item => {
-				this.router.navigate(['/admin/content/definition', this.type, item.id]);
+				this.router.navigate(['/admin/content', this.type, 'definition', item.id]);
 			}
 		);
 	}

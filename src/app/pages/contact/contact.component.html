@@ -13,7 +13,7 @@
 					</div>
 					-->
 					<div class="group group--inline">
-						<button type="text" class="btn btn--secondary" [disabled]="submitted || !group.valid" (click)="onReset()"><span>Cancel</span></button>
+						<button type="button" class="btn btn--secondary" [disabled]="submitted || !group.valid" (click)="onReset()"><span>Cancel</span></button>
 						<button type="submit" class="btn btn--primary" [disabled]="submitted || !group.valid" [ngClass]="{ 'btn--busy': busy }"><span>Save</span></button>
 					</div>
 				</form>

@@ -2,11 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
-import { DisposableComponent } from '@designr/core';
+import { DisposableComponent, MenuItem } from '@designr/core';
 import { takeUntil } from 'rxjs/operators';
 import { Definition } from '../core/definition';
-import { DefinitionService } from '../core/definition.service';
 import { StoreService } from '../core/store.service';
+
+export const TABS: MenuItem[] = [
+	{ id: 1, name: 'Detail' },
+	{ id: 2, name: 'Meta' },
+	{ id: 3, name: 'Contents' },
+	{ id: 4, name: 'Media' },
+	{ id: 5, name: 'Features' },
+	{ id: 6, name: 'Taxonomies' },
+	{ id: 7, name: 'Related' },
+];
 
 @Component({
 	selector: 'detail-component',
@@ -14,6 +23,9 @@ import { StoreService } from '../core/store.service';
 	styleUrls: ['detail.component.scss'],
 })
 export class DetailComponent extends DisposableComponent implements OnInit {
+
+	tabs: MenuItem[] = TABS;
+	tab: MenuItem = this.tabs[0];
 
 	type: string;
 	id: number;
@@ -28,7 +40,6 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 	constructor(
 		private route: ActivatedRoute,
 		private formService: FormService,
-		private definitionService: DefinitionService,
 		private storeService: StoreService,
 	) {
 		super();
@@ -40,25 +51,24 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 		).subscribe(data => {
 			this.type = data.type;
 			this.id = parseInt(data.id, 0);
-			this.definitionService.getDetailDefinition(this.type).subscribe(definition => {
+			this.storeService.getDefinition(this.type).subscribe(definition => {
 				this.definition = definition;
-				this.onInitOptions();
+				this.options = this.formService.getOptions(definition.fields.filter(x => x.visible && this.storeService.isScalar(x)).map(x => {
+					return {
+						key: x.key,
+						schema: this.storeService.getControlWithType(x.type),
+						label: x.key,
+						placeholder: x.key,
+						disabled: !x.editable,
+						required: x.required,
+					};
+				}));
+				this.form = this.formService.getFormGroup(this.options);
+				this.storeService.getDetail(this.type, this.id).subscribe(item => {
+					this.item = item;
+					this.form.patchValue(item);
+				});
 			});
-			this.storeService.getDetail(this.type, this.id).subscribe(item => this.item = item);
-		});
-	}
-
-	onInitOptions() {
-		this.definitionService.getReflection('page').subscribe(schema => {
-			this.options = this.formService.getOptions(schema.map(x => {
-				return {
-					key: x.key,
-					schema: this.definitionService.getControlWithType(x.type),
-					label: x.key,
-					placeholder: x.key,
-				};
-			}));
-			this.form = this.formService.getFormGroup(this.options);
 		});
 	}
 
@@ -118,6 +128,10 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 
 	onSubmit(model: any) {
 		console.log('onSubmit', model, this.id);
+	}
+
+	onPreview() {
+		console.log('onPreview', this.type, this.id);
 	}
 
 }

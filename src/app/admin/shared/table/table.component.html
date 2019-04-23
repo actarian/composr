@@ -9,7 +9,7 @@
 		<div class="table__cell cell--drag" *ngIf="draggable"></div>
 		<div class="table__cell" *ngFor="let col of columns">
 			<div class="group">
-				<span>{{col.label}}</span>
+				<span>{{col.name}}</span>
 				<div (click)="doSort(col)" *ngIf="sortable">
 					<svg *ngIf="col.sort == 0">
 						<use xlink:href="#unsorted"></use>

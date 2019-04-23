@@ -19,7 +19,7 @@
 						"polyfills": "src/polyfills.ts",
 						"tsConfig": "src/tsconfig.browser.json",
 						"assets": ["src/favicon.ico", "src/assets"],
-						"styles": ["src/scss/styles.scss"],
+						"styles": ["styles/main/styles.scss", "styles/admin/styles.scss"],
 						"extractCss": true,
 						"statsJson": true,
 						"es5BrowserSupport": true,
@@ -123,7 +123,7 @@
 						"polyfills": "src/polyfills.ts",
 						"tsConfig": "src/tsconfig.spec.json",
 						"karmaConfig": "src/karma.conf.js",
-						"styles": ["src/scss/styles.scss"],
+						"styles": ["styles/main/styles.scss", "styles/admin/styles.scss"],
 						"scripts": [],
 						"assets": ["src/favicon.ico", "src/assets"]
 					}
