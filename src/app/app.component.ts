@@ -30,12 +30,12 @@ export class AppComponent extends DisposableComponent implements DoCheck {
 		this.slugService.observe$().pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe((keys) => {
-			console.log('AppComponent.slugService.collect', keys);
+			// console.log('AppComponent.slugService.collect', keys);
 		});
 		this.labelService.observe$().pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe((keys) => {
-			console.log('AppComponent.labelService.collect', keys);
+			// console.log('AppComponent.labelService.collect', keys);
 		});
 	}
 

@@ -43,7 +43,15 @@ const ROUTES: Routes = [
 					{ path: ':type/:id', component: DetailComponent },
 					{ path: ':type/definition/add', component: DefinitionAddComponent },
 					{ path: ':type/definition/:id', component: DefinitionComponent },
-					{ path: 'category', component: DashboardComponent },
+				]
+			},
+			{
+				path: 'models', children: [
+					{ path: '', redirectTo: 'page', pathMatch: 'full' },
+					{ path: ':type', component: IndexComponent },
+					{ path: ':type/:id', component: DetailComponent },
+					{ path: ':type/definition/add', component: DefinitionAddComponent },
+					{ path: ':type/definition/:id', component: DefinitionComponent },
 				]
 			},
 			{ path: 'user', component: UsersComponent },

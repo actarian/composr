@@ -1,0 +1,107 @@
+.modal {
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 10000;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity ease-in-out 250ms;
+
+	&.active {
+		opacity: 1;
+		pointer-events: all;
+	}
+}
+
+.modal__background {
+	position: fixed;
+	z-index: 0;
+	background: #00000099;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.modal__page {
+	position: relative;
+	z-index: 1;
+	max-height: 90vh;
+	max-width: 90vw;
+	overflow-x: hidden;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	background: white;
+	border-radius: 6px;
+	box-shadow: 0 30px 30px -5px rgba(0, 0, 0, 0.15);
+
+	@media (max-width: 500px) {
+		max-height: calc(100% - 80px);
+		margin-top: 40px;
+		width: 90%;
+		max-width: none;
+	}
+}
+
+.modal__header {
+	@extend %nav;
+	min-height: 60px;
+	padding: 10px 40px;
+	border-bottom: 1px solid #eee;
+
+	.btn--close {
+		@extend %btn-icon;
+		margin-left: auto;
+
+		svg {
+			width: 24px;
+			height: 24px;
+		}
+	}
+}
+
+.modal__content {
+
+	.fieldset {
+		@extend %fieldset;
+	}
+
+	.nav--inline {
+		@extend %nav-inline;
+	}
+
+	.btn--secondary {
+		@extend %btn-secondary;
+		padding: 13px 20px;
+		font-size: 13px;
+		font-weight: bold;
+	}
+
+	.btn--primary {
+		@extend %btn-primary;
+		position: relative;
+		padding: 13px 20px;
+		font-size: 13px;
+		font-weight: bold;
+
+		svg {
+			width: 16px;
+			height: 16px;
+			fill: white;
+		}
+
+		&>span+svg,
+		&>svg+span {
+			margin-left: 12px;
+		}
+	}
+
+}

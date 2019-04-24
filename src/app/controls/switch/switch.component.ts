@@ -23,13 +23,13 @@ export class SwitchComponent extends ControlAccessor<boolean> {
 	innerValue: boolean;
 
 	protected formatValue(value: boolean): string {
-		console.log('formatValue', value);
+		// console.log('formatValue', value);
 		this.innerValue = value;
 		return value ? 'true' : 'false';
 	}
 
 	protected parseValue(value: any): boolean {
-		console.log('parseValue', value);
+		// console.log('parseValue', value);
 		this.innerValue = Boolean(value);
 		return this.innerValue;
 	}

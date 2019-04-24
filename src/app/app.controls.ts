@@ -6,6 +6,9 @@ import { CoreModule } from '@designr/core';
 import { ControlCustom } from './controls/custom/control-custom';
 import { ControlCustomComponent } from './controls/custom/control-custom.component';
 import { CustomAccessorDirective } from './controls/custom/custom.accessor';
+import { ControlSwitch } from './controls/switch/control-switch';
+import { ControlSwitchComponent } from './controls/switch/control-switch.component';
+import { SwitchComponent } from './controls/switch/switch.component';
 
 export const directives = [
 	CustomAccessorDirective,
@@ -13,10 +16,13 @@ export const directives = [
 
 export const controls = [
 	ControlCustomComponent,
+	ControlSwitchComponent,
+	SwitchComponent,
 ];
 
 export const CONTROLS: Controls = {
 	'custom': { component: ControlCustomComponent, model: ControlCustom },
+	'switch': { component: ControlSwitchComponent, model: ControlSwitch },
 };
 
 @NgModule({

@@ -4,7 +4,7 @@ import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateR
 import { FormControl, FormGroup } from '@angular/forms';
 import { DisposableComponent } from '@designr/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
+import { debounceTime, map, takeUntil } from 'rxjs/operators';
 
 export enum FilterTypeEnum {
 	Search = 0,
@@ -115,7 +115,6 @@ export class TableComponent extends DisposableComponent implements OnInit {
 
 	protected itemsAndColumns$(): Observable<any> {
 		return combineLatest(this.items$, this.columns$).pipe(
-			filter(x => x[0] !== undefined && x[1] !== undefined),
 			// tap(x => console.log(x)),
 			map(x => this.mapItemsAndColumns_(...x)),
 		);
@@ -123,7 +122,8 @@ export class TableComponent extends DisposableComponent implements OnInit {
 
 	protected rows$(): Observable<any[]> {
 		return combineLatest(this.items$, this.columns$, this.filters$, this.sorts$).pipe(
-			filter(x => x[0] !== undefined && x[1] !== undefined),
+			// tap(x => console.log(x)),
+			// filter(x => x[0] !== undefined && x[1] !== undefined),
 			// tap(x => console.log(x)),
 			map(x => this.filterAndSortRows_(...x)),
 		);
@@ -184,8 +184,10 @@ export class TableComponent extends DisposableComponent implements OnInit {
 				let has = true;
 				filters.forEach(x => {
 					const value = this.getValue(item, this.keys[x.key]); // item[x.key];
-					if (typeof value === 'number' || typeof value === 'boolean') {
-						has = has && value === x.value;
+					if (typeof value === 'number') {
+						has = has && value === Number(x.value);
+					} else if (typeof value === 'boolean') {
+						has = has && value === Boolean(x.value);
 					} else {
 						has = has && value && value.toString().toLowerCase().indexOf(x.value.toLowerCase()) !== -1;
 					}
@@ -206,7 +208,7 @@ export class TableComponent extends DisposableComponent implements OnInit {
 							s = ('' + av).localeCompare(bv) * x.value;
 						}
 					}
-				})
+				});
 				return s;
 			});
 		}

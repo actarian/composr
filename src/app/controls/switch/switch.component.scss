@@ -1,4 +1,4 @@
-@import '~styles/main/variables';
+@import '~styles/admin/variables';
 
 .switch__knob {
 	width: 30px;
@@ -9,9 +9,7 @@
 	top: 50%;
 	margin-top: -15px;
 	margin-left: 5px;
-
 	transition: all ease-in-out 350ms;
-
 }
 
 .switch {
@@ -22,7 +20,6 @@
 	position: relative;
 	margin-top: 10px;
 	cursor: pointer;
-
 
 	&.active {
 		&>.switch__knob {

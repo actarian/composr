@@ -49,14 +49,14 @@ export class AdminService extends EntityService<Admin> {
 		if (isPlatformBrowser(this.platformId)) {
 			this.accessToken = this.storage.get('accessToken') || null;
 			this.admin = this.storage.get('admin') || null;
-			console.log('AdminService', this.accessToken);
+			// console.log('AdminService', this.accessToken);
 		}
 	}
 
 	public signin(admin: AdminAuth): Observable<AdminAuth> {
 		return this.post(`/signin`, admin).pipe(
 			map((data: { id: string }) => {
-				console.log('AdminService.signin', data);
+				// console.log('AdminService.signin', data);
 				if (data && data.id) {
 					const accessToken = { accessToken: data.id };
 					this.accessToken = accessToken;
@@ -97,7 +97,7 @@ export class AdminService extends EntityService<Admin> {
 	}
 
 	public isAuthenticated(): boolean {
-		console.log('AdminService.isAuthenticated', this.accessToken);
+		// console.log('AdminService.isAuthenticated', this.accessToken);
 		return this.accessToken !== null;
 	}
 

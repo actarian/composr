@@ -64,30 +64,7 @@
 	border-top: 1px solid #d8d8dd;
 	padding-top: 10px;
 
-	.btn--secondary {
-		@extend %btn-secondary;
-		padding: 13px 20px;
-		font-size: 13px;
-		font-weight: bold;
+	&>:last-child {
+		margin-left: auto;
 	}
-
-	.btn--primary {
-		@extend %btn-primary;
-		position: relative;
-		padding: 13px 20px;
-		font-size: 13px;
-		font-weight: bold;
-
-		svg {
-			width: 16px;
-			height: 16px;
-			fill: white;
-		}
-
-		&>span+svg,
-		&>svg+span {
-			margin-left: 12px;
-		}
-	}
-
 }

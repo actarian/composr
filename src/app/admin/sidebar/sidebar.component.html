@@ -10,6 +10,9 @@
 			<a class="btn--sidebar" [routerLink]="['/admin/content']" routerLinkActive="active" (click)="onClickNav($event)"><svg><use xlink:href="#folder"></use></svg></a>
 		</li>
 		<li class="nav__item">
+			<a class="btn--sidebar" [routerLink]="['/admin/models']" routerLinkActive="active" (click)="onClickNav($event)"><svg><use xlink:href="#model"></use></svg></a>
+		</li>
+		<li class="nav__item">
 			<a class="btn--sidebar" [routerLink]="['/admin/user']" routerLinkActive="active" (click)="onClickNav($event)"><svg><use xlink:href="#users"></use></svg></a>
 		</li>
 		<li class="nav__item">
@@ -42,6 +45,9 @@
 				<svg (click)="onEditType($event, { id:2, name: 'Page' })"><use xlink:href="#edit"></use></svg>
 			</a>
 		</li>
+		<li>
+			<a class="btn--menu-secondary" (click)="onAddItem($event)"><svg><use xlink:href="#add"></use></svg> <span>Add Page</span></a>
+		</li>
 		<!--
 		<li>
 			<a class="btn--menu-primary" routerLink="/admin/content/category" routerLinkActive="active">
@@ -55,13 +61,13 @@
 	<ul class="nav--menu-secondary">
 		<li *ngFor="let item of types">
 			<a class="btn--menu-secondary" [routerLink]="['/admin/content/', item.key]" routerLinkActive="active">
-				<svg><use xlink:href="#page"></use></svg>
+				<svg><use xlink:href="#document"></use></svg>
 				<span>{{item.name}}</span>
 				<svg (click)="onEditType($event, item)"><use xlink:href="#edit"></use></svg>
 			</a>
 		</li>
 		<li>
-			<a class="btn--menu-secondary" (click)="onAddType($event)"><svg><use xlink:href="#add"></use></svg> <span>Add Page</span></a>
+			<a class="btn--menu-secondary" (click)="onAddType($event)"><svg><use xlink:href="#add"></use></svg> <span>Add Page Type</span></a>
 		</li>
 	</ul>
 </div>

@@ -14,8 +14,9 @@ import { AdminResolve } from './admin.resolve';
 import { AdminRouting, PAGES } from './admin.routing';
 import { AdminService } from './admin.service';
 import { AuthSigninComponent } from './auth/auth-signin.component';
+import { DefinitionEditComponent } from './definition/definition-edit.component';
+import { DetailAddComponent } from './detail/detail-add.component';
 import { PagerComponent } from './shared/pager/pager.component';
-import { SwitchComponent } from './shared/switch/switch.component';
 import { TableComponent } from './shared/table/table.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { TestComponent } from './test/test.component';
@@ -43,6 +44,8 @@ const services = [
 
 const entryComponents: Type<DisposableComponent>[] = [
 	AuthSigninComponent,
+	DefinitionEditComponent,
+	DetailAddComponent,
 	TableComponent,
 	TestComponent,
 ];
@@ -89,11 +92,9 @@ const interceptors = [{
 		...directives,
 		...pipes,
 		...validators,
-		SwitchComponent,
 	],
 	entryComponents: [
 		...entryComponents,
-		SwitchComponent,
 	],
 	exports: [
 	]

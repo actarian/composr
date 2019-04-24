@@ -10,7 +10,7 @@
 		</div>
 	</div>
 	<div class="content">
-		<table-component [items]="items" [columns]="columns" [actionItems]="actionItems" [sortable]="true" [filterable]="true" [selectable]="true" [draggable]="true" [editable]="true" [deletable]="true" [duplicable]="true" [visible]="true" [virtualized]="false" (editRow)="onEditRow($event)">
+		<table-component [items]="items" [columns]="columns" [actionItems]="actionItems" [sortable]="true" [filterable]="true" [selectable]="false" [draggable]="false" [editable]="true" [deletable]="true" [duplicable]="true" [visible]="true" [virtualized]="false" (editRow)="onEditRow($event)">
 			<ng-template #template let-item>
 				<div class="table__cell" *ngFor="let col of item.columns; let i = index">{{item.getValue(item.row, col)}}</div>
 				<!--

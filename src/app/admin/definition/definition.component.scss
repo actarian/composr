@@ -1,2 +1,52 @@
 @import '~styles/admin/variables';
 @import '~styles/admin/mixins';
+
+.definition {
+	@extend %definition;
+
+	&>.drag__handle {
+		flex: 0 0 15px;
+		display: flex;
+		align-items: center;
+		cursor: move;
+
+		&>svg {
+			width: 15px;
+			height: 15px;
+			fill: $primary;
+		}
+	}
+
+	&.cdk-drag-disabled {
+		&>.drag__handle {
+
+			&>svg {
+				fill: #ddd;
+			}
+		}
+	}
+}
+
+.drag__placeholder {
+	min-height: 76px;
+	background: #fefefe;
+	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-preview {
+	background: white;
+	box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+cdk-virtual-scroll-viewport {
+	height: 100%; // calc(100% - 70px);
+	-webkit-overflow-scrolling: touch;
+
+	/*
+.table__row {
+	height: 30px;
+	overflow: hidden;
+	// background: white;
+}
+*/
+}

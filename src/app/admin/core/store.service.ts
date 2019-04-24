@@ -1,10 +1,12 @@
 
 
 import { Injectable } from '@angular/core';
-import { LocalStorageService } from '@designr/core';
+import { ControlOption } from '@designr/control';
+import { Identity, LocalStorageService } from '@designr/core';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { CONTROL_MAP, Definition, DEFINITIONS, REFLECTIONS } from './definition';
+import { getIpsum } from './ipsum';
 
 let UID = 100;
 
@@ -13,6 +15,7 @@ let UID = 100;
 })
 export class StoreService {
 
+	// store as observable?
 	store: { [key: string]: any };
 
 	constructor(
@@ -30,7 +33,8 @@ export class StoreService {
 			switchMap(definition => {
 				if (definition) {
 					return of(this.store[type].map(x => {
-						const item = {};
+						const item: any = {};
+						item.model = x.model;
 						definition.fields.forEach(field => {
 							if (field.primaryKey || field.indexable) {
 								item[field.key] = x[field.key];
@@ -50,17 +54,20 @@ export class StoreService {
 		return of(this.store[type].find(x => x.id === id));
 	}
 
+	patchDetail(type: string, model: Identity): Observable<any> {
+		// console.log(type, id, this.store[type]);
+		const item = this.store[type].find(x => x.id === model.id);
+		Object.assign(item, model);
+		this.storage.set('store', this.store);
+		return of(item);
+	}
+
 	getReflection(type: string): Observable<Definition> {
 		return of(this.store.reflection.find(x => this.toCamelCase(x.model) === type));
 	}
 
 	getDefinition(type: string): Observable<Definition> {
 		return of(this.store.definition.find(x => this.toCamelCase(x.model) === type));
-	}
-
-	getControlWithType(type: string): string {
-		const schema = CONTROL_MAP[this.toCamelCase(type)];
-		return schema || 'text';
 	}
 
 	addType(type: string, model: any): Observable<any> {
@@ -70,11 +77,11 @@ export class StoreService {
 
 	isScalar(item: Definition) {
 		// console.log(item);
-		return ['boolean', 'number', 'string', 'date'].indexOf(item.type) !== -1;
+		return ['boolean', 'number', 'string', 'date'].indexOf(item.type) !== -1 || ['select'].indexOf(item.control) !== -1;
 	}
 
 	isTypeOf(item: Definition, type: string): boolean {
-		return this.toCamelCase(item.extend) === type; // this.toCamelCase(item.model) === type ||
+		return this.toCamelCase(item.extend) === type || this.toCamelCase(item.model) === type;
 	}
 
 	toCamelCase(text: string): string {
@@ -95,12 +102,95 @@ export class StoreService {
 		});
 	}
 
+	getFields(fields: Definition[], ...names: string[]): Definition[] {
+		return fields.filter(x => names.indexOf(x.key) !== -1);
+	}
+
+	getScalarFields(fields: Definition[]): Definition[] {
+		return fields.filter(x => x.visible && this.isScalar(x));
+	}
+
+	getNonScalarFields(fields: Definition[]): Definition[] {
+		return fields.filter(x => x.visible && !this.isScalar(x));
+	}
+
+	getCreationFields(fields: Definition[]): Definition[] {
+		return fields.filter(x => !x.primaryKey && x.required).map(x => {
+			const field = Object.assign({}, x);
+			field.editable = true;
+			return field;
+		});
+	}
+
+	mapSchema(field: Definition): string {
+		const schema = CONTROL_MAP[this.toCamelCase(field.type)];
+		return schema || 'text';
+	}
+
+	mapOptions(fields: Definition[]): ControlOption<any>[] {
+		console.log('mapOptions', fields);
+		const options = fields.map(x => {
+			const schema = this.mapSchema(x);
+			const option: any = {
+				key: x.key,
+				schema: x.control || schema,
+				label: x.key,
+				placeholder: x.key,
+				disabled: !x.editable || x.primaryKey,
+				required: x.required,
+			};
+			switch (schema) {
+				case 'select':
+					console.log(x);
+					const options = this.getSync('definition', 'page').map(x => {
+						return { value: x.id, label: x.name };
+					});
+					console.log(options);
+					option.options = options;
+					break;
+			}
+			return option;
+		});
+		return options;
+	}
+
 	//
+
+	getChangedValues(original: any, patched: any): any {
+		if (patched) {
+			const originalType = Array.isArray(original) ? 'array' : typeof original;
+			const patchedType = Array.isArray(patched) ? 'array' : typeof patched;
+			if (patchedType !== originalType) {
+				return patched;
+			} else if (originalType === 'array') {
+				let didChange = false;
+				if (patched.length !== original.length) {
+					didChange = true;
+				} else {
+					didChange = patched.reduce((p, c, i) => {
+						return p || (this.getChangedValues(original[i], patched[i]) || false);
+					}, false);
+				}
+				return didChange ? patched : null; // ???
+			} else if (originalType === 'object') {
+				const values = {};
+				Object.keys(patched).forEach(x => {
+					const value = this.getChangedValues(original[x], patched[x]);
+					if (value) {
+						values[x] = value;
+					}
+				});
+				return Object.keys(values).length ? values : null;
+			} else {
+				return patched !== original ? patched : null;
+			}
+		}
+	}
 
 	getSync(type: string, ofType?: string): any[] {
 		// console.log('getSync', type, ofType);
 		const items = this.store[type].filter(x => {
-			return ofType ? this.isTypeOf(x, 'page') : x;
+			return ofType ? this.isTypeOf(x, ofType) : x;
 		});
 		items.sort((a, b) => {
 			return a.name.localeCompare(b.name, 'en', { sensitivity: 'base' });
@@ -147,7 +237,7 @@ export class StoreService {
 				if (x.model !== 'Page') {
 					const key = this.toCamelCase(x.model);
 					// console.log(key, x.id);
-					store[key] = store.page.filter(x => this.toCamelCase(x.type) === key);
+					store[key] = store.page.filter(x => this.toCamelCase(x.type) === key).map(x => Object.assign({}, x));
 				}
 			});
 			this.storage.set('store', store);
@@ -160,16 +250,31 @@ export class StoreService {
 		return new Array(count).fill(null).map((x, i) => {
 			const id = UID++;
 			const pageType = pageTypes[Math.floor(Math.random() * pageTypes.length)];
-			const title = pageType.name + (pageType.name.indexOf('Detail') !== -1 ? ` ${id}` : ``);
-			const name = title.toLowerCase().replace(/\s/g, '-');
+			const isDetail = pageType.name.indexOf('Detail') !== -1;
+			if (!isDetail) {
+				pageTypes.splice(pageTypes.indexOf(pageType), 1);
+			}
+			let name = pageType.name + (isDetail ? ` ${id}` : ``);
+			name = name.toLowerCase().replace(/\s/g, '-');
+			const title = getIpsum(5);
+			const abstract = getIpsum(12);
+			const description = getIpsum(50);
+			const component = this.toTitleCase(pageType.name) + 'Component';
+			const model = this.toCamelCase(pageType.name);
 			return {
 				id,
 				name,
 				title,
+				abstract,
+				description,
+				component,
+				model,
 				//
-				type: pageType.model,
-				pageType: pageType.name,
-				pageTypeId: pageType.id,
+				typeId: pageType.id,
+				type: pageType.name,
+				//
+				// type: pageType.model,
+				// pageTypeId: pageType.id,
 				//
 				template: pageType.name,
 				templateId: 100 + pageType.id,

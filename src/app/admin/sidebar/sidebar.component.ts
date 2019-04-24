@@ -2,8 +2,11 @@
 import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { DisposableComponent, LocalStorageService, MenuItem } from '@designr/core';
+import { ModalCompleteEvent, ModalService } from '@designr/ui';
+import { first } from 'rxjs/operators';
 import { AdminService } from '../admin.service';
 import { StoreService } from '../core/store.service';
+import { DetailAddComponent } from '../detail/detail-add.component';
 
 @Component({
 	selector: 'sidebar-component',
@@ -38,6 +41,7 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private storage: LocalStorageService,
+		private modalService: ModalService,
 		public adminService: AdminService,
 		public storeService: StoreService,
 	) {
@@ -66,6 +70,17 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 		event.preventDefault();
 		event.stopPropagation();
 		this.router.navigate(['/admin/content', 'page', 'definition', item.id]);
+	}
+
+	onAddItem(event: MouseEvent) {
+		// this.router.navigate(['/admin/content', 'page', 'add']);
+		this.modalService.open({ component: DetailAddComponent, data: 'page' }).pipe(
+			first()
+		).subscribe(e => {
+			if (e instanceof ModalCompleteEvent) {
+				console.log('onAddItem.ModalCompleteEvent', e.data);
+			}
+		});
 	}
 
 	onAddType(event: MouseEvent) {
