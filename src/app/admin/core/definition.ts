@@ -1,13 +1,6 @@
 
-export const CONTROL_MAP: { [key: string]: string } = {
-	'boolean': 'checkbox',
-	'string': 'text',
-	'object': 'select',
-	'array': 'text', // list
-};
-
 export interface Definition {
-	id?: number;
+	id?: number | string;
 	name: string;
 	key: string;
 	type: string;
@@ -23,11 +16,20 @@ export interface Definition {
 	indexable?: boolean;
 }
 
+export const CONTROL_MAP: { [key: string]: string } = {
+	'boolean': 'checkbox',
+	'string': 'text',
+	'object': 'select',
+	'array': 'text', // list
+};
+
 export const REFLECTIONS: Definition[] = [{
+	id: 'page',
 	name: 'Page',
 	key: 'page',
 	type: 'object',
 	model: 'Page',
+	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
 		{ name: 'Type', key: 'type', type: 'number', required: true },
@@ -45,20 +47,24 @@ export const REFLECTIONS: Definition[] = [{
 		{ name: 'Taxonomies', key: 'taxonomies', type: 'array', model: 'taxonomy' }
 	]
 }, {
+	id: 'definition',
 	name: 'Definition',
 	key: 'definition',
 	type: 'object',
 	model: 'Definition',
+	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
 		{ name: 'Name', key: 'name', type: 'string', required: true },
 		{ name: 'Fields', key: 'fields', type: 'array', model: 'field' }
 	]
 }, {
+	id: 'meta',
 	name: 'Meta',
 	key: 'meta',
 	type: 'object',
 	model: 'Meta',
+	extend: 'Entity',
 	fields: [
 		{ name: 'Title', key: 'title', type: 'string' },
 		{ name: 'Description', key: 'description', type: 'string' },
@@ -66,10 +72,12 @@ export const REFLECTIONS: Definition[] = [{
 		{ name: 'Robots', key: 'robots', type: 'string' }
 	]
 }, {
+	id: 'image',
 	name: 'Image',
 	key: 'image',
 	type: 'object',
 	model: 'Image',
+	extend: 'Entity',
 	fields: [
 		{ name: 'Title', key: 'title', type: 'string' },
 		{ name: 'Description', key: 'description', type: 'string' },
@@ -78,15 +86,29 @@ export const REFLECTIONS: Definition[] = [{
 	]
 }];
 
+['Homepage', 'Products', 'Product Detail', 'About Us', 'Contact', 'Store Locator', 'Store Detail', 'Magazine', 'News Detail', 'Faq']
+	.forEach(x => {
+		const page = REFLECTIONS.find(x => x.model === 'Page');
+		const item = Object.assign({}, page);
+		item.extend = item.model;
+		item.id = x.toLowerCase();
+		item.name = x;
+		item.model = x;
+		item.key = x.toLowerCase();
+		REFLECTIONS.push(item);
+	});
+
 export const DEFINITIONS: Definition[] = [{
 	id: 1,
 	name: 'Definition',
 	key: 'definition',
 	type: 'object',
 	model: 'Definition',
+	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true },
 		{ name: 'Model', key: 'model', type: 'string', required: true, visible: true, indexable: true },
+		{ name: 'Extend', key: 'extend', type: 'string', required: true, visible: true, indexable: true },
 		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
 	]
 }, {
@@ -95,6 +117,7 @@ export const DEFINITIONS: Definition[] = [{
 	key: 'page',
 	type: 'object',
 	model: 'Page',
+	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true },
 		{ name: 'Type', key: 'type', type: 'number', required: true, visible: true, editable: true, indexable: true },

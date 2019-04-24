@@ -61,11 +61,9 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 
 	onSubmit(model: any) {
 		console.log('onSubmit', model);
-		this.storeService.addType(this.type, model).subscribe(
-			item => {
-				this.router.navigate(['/admin/content', this.type, 'definition', item.id]);
-			}
-		);
+		this.storeService.addType(this.type, model).subscribe(item => {
+			this.router.navigate(['/admin/content', this.type, 'definition', item.id]);
+		});
 	}
 
 }

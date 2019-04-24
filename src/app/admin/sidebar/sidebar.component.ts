@@ -1,7 +1,7 @@
 // import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { DisposableComponent, LocalStorageService } from '@designr/core';
+import { DisposableComponent, LocalStorageService, MenuItem } from '@designr/core';
 import { AdminService } from '../admin.service';
 import { StoreService } from '../core/store.service';
 
@@ -48,17 +48,11 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	ngOnInit() {
 		this.expanded = this.storage.get('expanded') || false;
 		this.expand.emit(this.expanded);
-		this.storeService.getList('definition').subscribe(types => {
-			types.sort((a, b) => {
-				return a.name.localeCompare(b.name, 'en', { sensitivity: 'base' });
-			});
-			this.types = types;
-		});
+		this.storeService.getList('definition', 'page').subscribe(types => this.types = types);
 	}
 
 	onClickNav(event: MouseEvent) {
 		const node = event.target as HTMLElement;
-		console.log(node, node.classList);
 		if (node.classList.contains('active')) {
 			this.expanded = !this.expanded;
 		} else {
@@ -66,6 +60,12 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 		}
 		this.storage.set('expanded', this.expanded);
 		this.expand.emit(this.expanded);
+	}
+
+	onEditType(event: MouseEvent, item: MenuItem) {
+		event.preventDefault();
+		event.stopPropagation();
+		this.router.navigate(['/admin/content', 'page', 'definition', item.id]);
 	}
 
 	onAddType(event: MouseEvent) {

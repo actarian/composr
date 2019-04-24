@@ -166,6 +166,20 @@
 	font-size: 12px;
 	font-weight: normal;
 	padding: 10px 10px 10px 32px;
+	justify-content: space-between;
+
+	span {
+		flex: 1 1 auto;
+	}
+
+	svg {
+		width: 15px;
+		height: 15px;
+		transition: fill ease-in-out 350ms;
+		margin-right: 11px;
+		pointer-events: all;
+		fill: #7888ae;
+	}
 
 	&,
 	&:active,
@@ -178,6 +192,10 @@
 	&:hover {
 		background: #2440c3;
 		color: white;
+
+		svg {
+			fill: #ffffff;
+		}
 	}
 }
 
@@ -187,20 +205,26 @@
 	font-size: 12px;
 	font-weight: normal;
 	padding: 10px 10px 10px 8px;
+	justify-content: space-between;
+
+	span {
+		flex: 1 1 auto;
+	}
+
+	svg {
+		width: 15px;
+		height: 15px;
+		transition: fill ease-in-out 350ms;
+		margin-right: 11px;
+		pointer-events: all;
+		fill: #7888ae;
+	}
 
 	&,
 	&:active,
 	&:focus,
 	&:visited {
 		color: #7888ae;
-	}
-
-	svg {
-		width: 15px;
-		height: 15px;
-		fill: #7888ae;
-		transition: fill ease-in-out 350ms;
-		margin-right: 11px;
 	}
 
 	&.active,

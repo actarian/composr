@@ -12,20 +12,16 @@
 	</div>
 	<div class="content">
 		<div class="container">
-
 			<ul class="nav--tabs">
 				<li *ngFor="let item of tabs"><a [ngClass]="{ active: tab == item }" (click)="tab = item"><span>{{item.name}}</span></a></li>
 			</ul>
 			<div class="tabs--content">
-
 				<form class="form" name="form" [formGroup]="form" (ngSubmit)="form.valid && onSubmit(form.value)" role="form" novalidate autocomplete="off">
-
 					<div class="fieldsets" *ngIf="tab == tabs[0]">
 						<div class="fieldset" *ngFor="let option of options">
 							<control-outlet class="form-group" [option]="option" [form]="form"></control-outlet>
 						</div>
 					</div>
-
 					<div class="fieldsets" *ngIf="tab == tabs[1]">
 						<div class="definition" *ngFor="let field of reflection.fields">
 							<div class="info">
@@ -64,7 +60,6 @@
 						<button type="submit" class="btn btn--primary" [disabled]="submitted || !form.valid" [ngClass]="{ 'btn--busy': busy }"><span>Save</span></button>
 					</div>
 				</form>
-
 			</div>
 		</div>
 	</div>

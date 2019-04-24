@@ -15,11 +15,10 @@
 					</div>
 				</div>
 				<div class="nav--inline">
+					<div></div>
 					<button type="submit" class="btn btn--primary" [disabled]="submitted || !form.valid" [ngClass]="{ 'btn--busy': busy }"><span>Create</span></button>
 				</div>
 			</form>
-			{{type}}
-			{{definition | json}}
 		</div>
 	</div>
 </ng-container>

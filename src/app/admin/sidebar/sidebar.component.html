@@ -36,13 +36,29 @@
 	</div>
 	<div class="category">Directories</div>
 	<ul class="nav--menu-primary">
-		<li><a class="btn--menu-primary" routerLink="/admin/content/page" routerLinkActive="active">Pages</a></li>
-		<li><a class="btn--menu-primary" routerLink="/admin/content/category" routerLinkActive="active">Categories</a></li>
+		<li>
+			<a class="btn--menu-primary" routerLink="/admin/content/page" routerLinkActive="active">
+				<span>Pages</span>
+				<svg (click)="onEditType($event, { id:2, name: 'Page' })"><use xlink:href="#edit"></use></svg>
+			</a>
+		</li>
+		<!--
+		<li>
+			<a class="btn--menu-primary" routerLink="/admin/content/category" routerLinkActive="active">
+				<span>Categories</span>
+				<svg (click)="onEditItem($event, item)"><use xlink:href="#edit"></use></svg>
+			</a>
+		</li>
+		-->
 	</ul>
 	<div class="category">Page Types</div>
 	<ul class="nav--menu-secondary">
 		<li *ngFor="let item of types">
-			<a class="btn--menu-secondary" [routerLink]="['/admin/content/', 'page', 'definition', item.id]" routerLinkActive="active"><svg><use xlink:href="#page"></use></svg> <span>{{item.name}}</span></a>
+			<a class="btn--menu-secondary" [routerLink]="['/admin/content/', item.key]" routerLinkActive="active">
+				<svg><use xlink:href="#page"></use></svg>
+				<span>{{item.name}}</span>
+				<svg (click)="onEditType($event, item)"><use xlink:href="#edit"></use></svg>
+			</a>
 		</li>
 		<li>
 			<a class="btn--menu-secondary" (click)="onAddType($event)"><svg><use xlink:href="#add"></use></svg> <span>Add Page</span></a>
