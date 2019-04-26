@@ -57,8 +57,9 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 
 	onSubmit(model: any) {
 		console.log('onSubmit', model);
-		this.storeService.addType(this.type, model).subscribe(item => {
-			this.router.navigate(['/admin/content', this.type, item.id]);
+		this.storeService.addItem(this.type, model).subscribe(item => {
+			console.log('onSubmit.success', item);
+			// this.router.navigate(['/admin/content', this.type, item.id]);
 		});
 	}
 

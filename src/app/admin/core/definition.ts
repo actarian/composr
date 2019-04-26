@@ -2,6 +2,7 @@
 export interface Definition {
 	id?: number | string;
 	name: string;
+	description?: string;
 	key: string;
 	type: string;
 	model?: string;
@@ -86,10 +87,10 @@ export const REFLECTIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'Type', key: 'type', type: 'number', required: true },
+		{ name: 'Type', key: 'typeId', type: 'number', required: true },
+		{ name: 'Component', key: 'componentId', type: 'number' },
 		{ name: 'Name', key: 'name', type: 'string', required: true },
 		{ name: 'Slug', key: 'slug', type: 'string', required: true },
-		{ name: 'Component', key: 'component', type: 'string' },
 		{ name: 'Title', key: 'title', type: 'string' },
 		{ name: 'Abstract', key: 'abstract', type: 'string' },
 		{ name: 'Description', key: 'description', type: 'string' },
@@ -125,7 +126,24 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
 		{ name: 'Model', key: 'model', type: 'string', required: true, visible: true, indexable: true },
 		{ name: 'Extend', key: 'extend', type: 'string', required: true, visible: true, indexable: true },
-		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
+		{ name: 'Name', key: 'name', type: 'string', control: 'text', required: true, visible: true, editable: true, indexable: true },
+		/*
+		{ name: 'Description', key: 'description', type: 'string', control: 'textarea', visible: true, editable: true },
+		{ name: 'Required', key: 'required', type: 'boolean', control: 'switch', visible: true, editable: true },
+		{ name: 'Visible', key: 'visible', type: 'boolean', control: 'switch', visible: true, editable: true },
+		{ name: 'Editable', key: 'editable', type: 'boolean', control: 'switch', visible: true, editable: true },
+		{ name: 'Indexable', key: 'indexable', type: 'boolean', control: 'switch', visible: true, editable: true },
+		{ name: 'Control', key: 'control', type: 'number', control: 'select', model: 'Control', visible: true, editable: true },
+		*/
+		{ name: 'Fields', key: 'fields', type: 'array', model: 'Definition', control: 'tab', visible: true, editable: true },
+		/*
+		description?: string;
+		control?: string;
+		required?: boolean;
+		visible?: boolean;
+		editable?: boolean;
+		indexable?: boolean;
+		*/
 	]
 }, {
 	id: 2,
@@ -136,8 +154,8 @@ export const DEFINITIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
-		{ name: 'Type', key: 'typeId', type: 'number', control: 'select', model: 'PageType', required: true, visible: true, indexable: true },
-		{ name: 'Component', key: 'component', type: 'object', model: 'Component', control: 'select', visible: true, editable: true, indexable: true }, // special scalar relation type with pageType
+		{ name: 'Type', key: 'typeId', type: 'number', control: 'select', model: 'Definition', required: true, visible: true, indexable: true },
+		{ name: 'Component', key: 'componentId', type: 'number', control: 'select', model: 'Component', visible: true, editable: true, indexable: true }, // special scalar relation type with pageType
 		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
 		{ name: 'Title', key: 'title', type: 'string', visible: true, editable: true, indexable: true },
 		{ name: 'Abstract', key: 'abstract', type: 'string', control: 'textarea', visible: true, editable: true },
@@ -145,9 +163,9 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Slug', key: 'slug', type: 'string', required: true, visible: true, editable: true },
 		{ name: 'Active', key: 'active', type: 'boolean', control: 'switch', visible: true, editable: true },
 		{ name: 'Meta', key: 'meta', type: 'object', model: 'Meta', control: 'tab', visible: true },
-		{ name: 'Images', key: 'images', type: 'array', model: 'Image', visible: true },
-		{ name: 'Related', key: 'related', type: 'array', model: 'Page', visible: true },
-		{ name: 'Features', key: 'features', type: 'array', model: 'Feature', visible: true },
+		{ name: 'Images', key: 'images', type: 'array', model: 'Image', control: 'tab', visible: true },
+		{ name: 'Related', key: 'related', type: 'array', model: 'Page', control: 'tab', visible: true },
+		{ name: 'Features', key: 'features', type: 'array', model: 'Feature', control: 'tab', visible: true },
 		{ name: 'Taxonomies', key: 'taxonomies', type: 'array', model: 'Taxonomy', visible: true }
 	]
 }];

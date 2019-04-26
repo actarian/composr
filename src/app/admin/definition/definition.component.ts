@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent, MenuItem } from '@designr/core';
@@ -22,13 +22,14 @@ export const TABS: MenuItem[] = [
 })
 export class DefinitionComponent extends DisposableComponent implements OnInit {
 
-	tabs: MenuItem[] = TABS;
-	tab: MenuItem = this.tabs[0];
+	tabFields: Definition[];
+	tabIndex: number = -1;
 
 	type: string;
 	id: number;
 	definition: Definition;
 	fields: Definition[];
+	fieldOptions: ControlOption<any>[][];
 	item: any;
 
 	options: ControlOption<any>[];
@@ -38,6 +39,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 
 	constructor(
 		private route: ActivatedRoute,
+		private formBuilder: FormBuilder,
 		private formService: FormService,
 		private modalService: ModalService,
 		private storeService: StoreService,
@@ -60,14 +62,44 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 						this.storeService.getScalarFields(this.definition.fields)
 					)
 				);
+				/*
+				this.options.push({
+					products: this.formBuilder.array([])
+				});
+				*/
 				this.form = this.formService.getFormGroup(this.options);
 				this.storeService.getDetail('definition', this.id).subscribe(item => {
 					// console.log('item', item);
 					this.item = item;
 					this.sortFields(this.item.fields);
 					this.fields = this.item.fields.slice().map(x => Object.assign({}, x));
+					const fieldOptions = this.fields.map(x => {
+						return [{
+							key: 'visible',
+							schema: 'switch',
+							label: 'Visible',
+						}, {
+							key: 'editable',
+							schema: 'switch',
+							label: 'Editable',
+						}, {
+							key: 'required',
+							schema: 'switch',
+							label: 'Required',
+						}];
+						return this.formService.getOptions(
+							this.storeService.mapOptions(
+								this.storeService.getScalarFields(x.fields)
+							)
+						);
+					});
+					this.form.addControl('fields', this.formBuilder.array(
+						fieldOptions.map(x => this.formService.getFormGroup(x))
+					));
+					this.fieldOptions = fieldOptions;
 					this.form.patchValue(item);
 				});
+				this.tabFields = this.storeService.getTabFields(this.definition.fields);
 			});
 			/*
 			this.storeService.getDefinition(this.type).subscribe(definition => {

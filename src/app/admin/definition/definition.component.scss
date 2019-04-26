@@ -27,6 +27,25 @@
 	}
 }
 
+.btn--primary {
+	@extend %btn-primary;
+	position: relative;
+	padding: 13px 20px;
+	font-size: 13px;
+	font-weight: bold;
+
+	svg {
+		width: 16px;
+		height: 16px;
+		fill: white;
+	}
+
+	&>span+svg,
+	&>svg+span {
+		margin-left: 12px;
+	}
+}
+
 .drag__placeholder {
 	min-height: 76px;
 	background: #fefefe;

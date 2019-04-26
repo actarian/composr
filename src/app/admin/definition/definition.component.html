@@ -13,64 +13,79 @@
 	<div class="content">
 		<div class="container">
 			<ul class="nav--tabs">
-				<li *ngFor="let item of tabs"><a [ngClass]="{ active: tab == item }" (click)="tab = item"><span>{{item.name}}</span></a></li>
+				<li><a [ngClass]="{ active: tabIndex == -1 }" (click)="tabIndex = -1"><span>Detail</span></a></li>
+				<li *ngFor="let item of tabFields; let i = index;"><a [ngClass]="{ active: tabIndex == i }" (click)="tabIndex = i"><span>{{item.name}}</span></a></li>
 			</ul>
 			<div class="tabs--content">
 				<form class="form" name="form" [formGroup]="form" role="form" novalidate autocomplete="off">
-					<div class="fieldsets" *ngIf="tab == tabs[0]">
-						<div class="fieldset" *ngFor="let option of options">
-							<control-outlet class="form-group" [option]="option" [form]="form"></control-outlet>
-						</div>
-					</div>
-					<div class="fieldsets" *ngIf="tab == tabs[1]" cdkDropList (cdkDropListDropped)="onDropField($event)">
-						<div class="definition" [ngClass]="{ required: field.required }" *ngFor="let field of fields" cdkDrag [cdkDragDisabled]="field.primaryKey || field.required">
-							<div class="drag__placeholder" *cdkDragPlaceholder></div>
-							<div class="drag__handle" cdkDragHandle>
-								<svg><use xlink:href="#drag"></use></svg>
+					<div class="fieldsets">
+						<ng-container *ngIf="tabIndex == -1">
+							<!-- <controls-component class="fieldset" [options]="options" [form]="form"></controls-component> -->
+							<div class="fieldset" *ngFor="let option of options">
+								<control-outlet class="form-group" [option]="option" [form]="form"></control-outlet>
 							</div>
-							<div class="info">
-								<div class="title">{{field.name}}</div>
-								<div class="type"><svg *ngIf="field.primaryKey"><use xlink:href="#lock"></use></svg> {{field.type}}</div>
-							</div>
-							<!--
-							<button class="btn--toggle" [ngClass]="{ active: field.required }">
-								<span *ngIf="field.required">required</span>
-								<span *ngIf="!field.required"></span>
-							</button>
-							-->
-							<button class="btn--toggle" [ngClass]="{ active: field.visible }" (click)="field.visible = !field.visible">
-								<span *ngIf="field.visible">visible</span>
-								<span *ngIf="!field.visible">not visible</span>
-							</button>
-							<button class="btn--toggle" [ngClass]="{ active: field.editable }" (click)="field.editable = !field.editable">
-								<span *ngIf="field.editable">editable</span>
-								<span *ngIf="!field.editable">not editable</span>
-							</button>
-							<button class="btn--toggle" [ngClass]="{ active: field.indexable }" (click)="field.indexable = !field.indexable">
-								<span *ngIf="field.indexable">indexable</span>
-								<span *ngIf="!field.indexable">not indexable</span>
-							</button>
-							<button class="btn--toggle" [ngClass]="{ active: field.control }" (click)="onEditField($event, field)">
-								<span>{{field.control}}</span>
-								<!--<svg><use xlink:href="#edit"></use></svg>-->
-							</button>
-							<div class="group--actions">
-								<button class="btn--icon" (click)="onEditField($event, field)">
-									<svg><use xlink:href="#edit"></use></svg>
-								</button>
-							</div>
-							<!--
-							<input type="text" placeholder="add a note" />
-							<div class="group--select" [ngClass]="{ disabled: field.primaryKey }">
-								<select (input)="onSetControl($event.target.value, field)" [disabled]="field.primaryKey">
-									<option *ngFor="let item of controlTypes" [value]="item.value">{{item.label}}</option>
-								</select>
-								<div class="select__arrow">
-									<svg><use xlink:href="#angle-down"></use></svg>
+						</ng-container>
+						<ng-container *ngFor="let item of tabFields; let i = index;">
+							<ng-container *ngIf="tabIndex == i">
+								<div cdkDropList (cdkDropListDropped)="onDropField($event)">
+									<div class="definition" [ngClass]="{ required: field.required }" [formGroup]="form" *ngFor="let field of fields; let n = index" cdkDrag [cdkDragDisabled]="field.primaryKey || field.required">
+										<div class="drag__placeholder" *cdkDragPlaceholder></div>
+										<div class="drag__handle" cdkDragHandle>
+											<svg><use xlink:href="#drag"></use></svg>
+										</div>
+										<div class="info">
+											<div class="title">{{field.name}}</div>
+											<div class="type"><svg *ngIf="field.primaryKey"><use xlink:href="#lock"></use></svg> {{field.type}}</div>
+										</div>
+										<!--
+										<button class="btn--toggle" [ngClass]="{ active: field.required }">
+											<span *ngIf="field.required">required</span>
+											<span *ngIf="!field.required"></span>
+										</button>
+										-->
+										<control-outlet [option]="fieldOptions[n][0]" [form]="form"></control-outlet>
+										<button class="btn--toggle" [ngClass]="{ active: field.visible }" (click)="field.visible = !field.visible">
+											<span *ngIf="field.visible">visible</span>
+											<span *ngIf="!field.visible">not visible</span>
+										</button>
+										<button class="btn--toggle" [ngClass]="{ active: field.editable }" (click)="field.editable = !field.editable">
+											<span *ngIf="field.editable">editable</span>
+											<span *ngIf="!field.editable">not editable</span>
+										</button>
+										<button class="btn--toggle" [ngClass]="{ active: field.indexable }" (click)="field.indexable = !field.indexable">
+											<span *ngIf="field.indexable">indexable</span>
+											<span *ngIf="!field.indexable">not indexable</span>
+										</button>
+										<button class="btn--toggle" [ngClass]="{ active: field.control }" (click)="onEditField($event, field)">
+											<span>{{field.control}}</span>
+											<!--<svg><use xlink:href="#edit"></use></svg>-->
+										</button>
+										<div class="group--actions">
+											<button class="btn--primary" [ngClass]="{ active: field.control }" (click)="onEditField($event, field)">
+												<span>Edit</span>
+												<svg><use xlink:href="#edit"></use></svg>
+											</button>
+											<!--
+									<button class="btn--icon" (click)="onEditField($event, field)">
+										<svg><use xlink:href="#edit"></use></svg>
+									</button>
+									-->
+										</div>
+										<!--
+								<input type="text" placeholder="add a note" />
+								<div class="group--select" [ngClass]="{ disabled: field.primaryKey }">
+									<select (input)="onSetControl($event.target.value, field)" [disabled]="field.primaryKey">
+										<option *ngFor="let item of controlTypes" [value]="item.value">{{item.label}}</option>
+									</select>
+									<div class="select__arrow">
+										<svg><use xlink:href="#angle-down"></use></svg>
+									</div>
 								</div>
-							</div>
-							-->
-						</div>
+								-->
+									</div>
+								</div>
+							</ng-container>
+						</ng-container>
 					</div>
 					<div class="nav--inline">
 						<button type="button" class="btn btn--secondary" [disabled]="submitted || !form.valid" (click)="onReset()"><span>Reset</span></button>

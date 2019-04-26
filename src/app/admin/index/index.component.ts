@@ -50,7 +50,7 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 	}
 
 	onEditRow(item: any) {
-		this.router.navigate(['/admin/content', item.model, item.id]);
+		this.router.navigate(['/admin/content', this.storeService.toCamelCase(item.model), item.id]);
 	}
 
 	onClearCache() {

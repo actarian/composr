@@ -8,11 +8,12 @@ import { StoreService } from '../core/store.service';
 // import { ControlOption } from '../../core/forms';
 
 export const CONTROL_TYPES: any[] = [
-	{ label: 'None', value: null },
+	{ label: 'select', value: null },
 	// { value: 'checkbox', label: 'Checkbox' },
 	{ label: 'Number', value: 'number' },
 	{ label: 'Select', value: 'select' },
 	{ label: 'Switch', value: 'switch' },
+	{ label: 'Tab', value: 'tab' },
 	{ label: 'Text', value: 'text' },
 	{ label: 'Textarea', value: 'textarea' },
 ];

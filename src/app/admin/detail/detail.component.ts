@@ -14,7 +14,7 @@ import { StoreService } from '../core/store.service';
 })
 export class DetailComponent extends DisposableComponent implements OnInit {
 
-	nonScalarFields: Definition[];
+	tabFields: Definition[];
 	tabIndex: number = -1;
 
 	type: string;
@@ -53,7 +53,7 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 					this.item = item;
 					this.form.patchValue(item);
 				});
-				this.nonScalarFields = this.storeService.getNonScalarFields(this.definition.fields);
+				this.tabFields = this.storeService.getTabFields(this.definition.fields);
 			});
 		});
 	}

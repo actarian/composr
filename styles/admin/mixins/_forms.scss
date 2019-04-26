@@ -34,9 +34,10 @@
 	}
 
 	&.disabled {
+
+		color: #585a61;
 		background: #eff0f3;
 		border-color: #eff0f3;
-		color: #585a61;
 
 		select {
 			color: #585a61;
@@ -219,12 +220,12 @@
 	}
 
 	.info {
+		flex: 0 0 150px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: flex-end;
 		position: relative;
-		flex: 0 0 180px;
 		padding-right: 20px;
 		margin-right: 20px;
 		text-align: right;
@@ -272,7 +273,7 @@
 	}
 
 	.btn--toggle {
-		flex: 0 0 100px;
+		flex: 0 0 10%;
 		@extend %btn-flex;
 		justify-content: center;
 		font-weight: bold;
@@ -282,6 +283,13 @@
 		color: $primary;
 		padding: 12px;
 		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+
+		span {
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
 
 		svg {
 			width: 16px;
