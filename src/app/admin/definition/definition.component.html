@@ -43,7 +43,7 @@
 											<span *ngIf="!field.required"></span>
 										</button>
 										-->
-										<control-outlet [option]="fieldOptions[n][0]" [form]="form"></control-outlet>
+										<!-- <control-outlet [option]="fieldOptions[n][0]" [form]="form"></control-outlet> -->
 										<button class="btn--toggle" [ngClass]="{ active: field.visible }" (click)="field.visible = !field.visible">
 											<span *ngIf="field.visible">visible</span>
 											<span *ngIf="!field.visible">not visible</span>

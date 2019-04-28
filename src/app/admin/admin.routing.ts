@@ -41,7 +41,6 @@ const ROUTES: Routes = [
 					{ path: '', redirectTo: 'page', pathMatch: 'full' },
 					{ path: ':type', component: IndexComponent },
 					{ path: ':type/:id', component: DetailComponent },
-					{ path: ':type/definition/add', component: DefinitionAddComponent },
 					{ path: ':type/definition/:id', component: DefinitionComponent },
 				]
 			},
@@ -50,7 +49,6 @@ const ROUTES: Routes = [
 					{ path: '', redirectTo: 'page', pathMatch: 'full' },
 					{ path: ':type', component: IndexComponent },
 					{ path: ':type/:id', component: DetailComponent },
-					{ path: ':type/definition/add', component: DefinitionAddComponent },
 					{ path: ':type/definition/:id', component: DefinitionComponent },
 				]
 			},

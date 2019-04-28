@@ -6,6 +6,7 @@ import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first } from 'rxjs/operators';
 import { AdminService } from '../admin.service';
 import { StoreService } from '../core/store.service';
+import { DefinitionAddComponent } from '../definition/definition-add.component';
 import { DetailAddComponent } from '../detail/detail-add.component';
 
 @Component({
@@ -52,7 +53,7 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	ngOnInit() {
 		this.expanded = this.storage.get('expanded') || false;
 		this.expand.emit(this.expanded);
-		this.storeService.getList('definition', 'page').subscribe(types => this.types = types);
+		this.storeService.getTypes('definition', 'page').subscribe(types => this.types = types);
 	}
 
 	onClickNav(event: MouseEvent) {
@@ -84,7 +85,14 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	}
 
 	onAddType(event: MouseEvent) {
-		this.router.navigate(['/admin/content', 'page', 'definition', 'add']);
+		// this.router.navigate(['/admin/content', 'page', 'definition', 'add']);
+		this.modalService.open({ component: DefinitionAddComponent, data: 'page' }).pipe(
+			first()
+		).subscribe(e => {
+			if (e instanceof ModalCompleteEvent) {
+				console.log('onAddType.ModalCompleteEvent', e.data);
+			}
+		});
 	}
 
 	onSign(): void {

@@ -12,13 +12,14 @@ export enum FilterTypeEnum {
 }
 
 export interface Option {
-	value: any;
-	label: string;
+	id: any;
+	name: string;
 }
 
 export interface Column {
 	key: string;
 	name: any;
+	type?: string;
 	getter?: (row: any, col: Column) => any;
 	filterType?: FilterTypeEnum;
 	filter?: any;
@@ -137,10 +138,10 @@ export class TableComponent extends DisposableComponent implements OnInit {
 				const options = {};
 				items.forEach(x => options[x[column.key]] = x[column.key]);
 				const values = Object.keys(options).map(x => {
-					return { value: options[x], label: x.toString() };
+					return { id: options[x], name: x.toString() };
 				});
-				column.values = [{ value: undefined, label: 'All' }, ...values];
-				values[column.key] = column.values[0].value;
+				column.values = [{ id: undefined, name: 'All' }, ...values];
+				values[column.key] = column.values[0].id;
 			} else {
 				column.values = null;
 			}
@@ -300,7 +301,7 @@ export class TableComponent extends DisposableComponent implements OnInit {
 		if (typeof col.getter === 'function') {
 			return col.getter(row, col);
 		} else {
-			return row[col.key];
+			return col.type === 'object' ? (row[col.key] ? row[col.key].name : null) : row[col.key];
 		}
 	}
 

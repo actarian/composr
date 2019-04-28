@@ -59,7 +59,7 @@
 	padding: 20px 0;
 	border-bottom: 1px solid #e7e7eb;
 
-	.form-group>*,
+	.form-input,
 	.form-select {
 		display: flex;
 		align-items: stretch;
@@ -90,8 +90,16 @@
 				top: 0;
 				right: -1px;
 				background: $primary;
-				opacity: 1;
+				opacity: 0;
 				transition: opacity ease-in-out 350ms;
+			}
+		}
+
+		&.required {
+			&>label {
+				&:after {
+					opacity: 1;
+				}
 			}
 		}
 	}
@@ -135,6 +143,16 @@
 
 	.form-select__select {
 		@extend %group-select;
+
+		select {
+			font-size: 15px;
+			line-height: 1;
+
+			&[disabled] {
+				background: #eff0f3;
+				color: #585a61;
+			}
+		}
 	}
 
 	/*

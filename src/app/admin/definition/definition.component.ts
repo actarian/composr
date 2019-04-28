@@ -69,7 +69,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 				*/
 				this.form = this.formService.getFormGroup(this.options);
 				this.storeService.getDetail('definition', this.id).subscribe(item => {
-					// console.log('item', item);
+					console.log('getDetail', 'definition', this.id, item);
 					this.item = item;
 					this.sortFields(this.item.fields);
 					this.fields = this.item.fields.slice().map(x => Object.assign({}, x));

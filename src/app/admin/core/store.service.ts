@@ -1,11 +1,10 @@
 
-
 import { Injectable } from '@angular/core';
 import { ControlOption } from '@designr/control';
 import { Identity, LocalStorageService } from '@designr/core';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { CONTROL_MAP, Definition, DEFINITIONS, REFLECTIONS } from './definition';
+import { CONTROL_MAP, Definition, DEFINITIONS, REFLECTIONS, toCamelCase, toTitleCase } from './definition';
 import { getIpsum } from './ipsum';
 
 let UID = 100;
@@ -22,6 +21,16 @@ export class StoreService {
 		private storage: LocalStorageService,
 	) {
 		this.createStore();
+	}
+
+	getTypes(type: string, ofType?: string): Observable<any[]> {
+		return of(this.getSync(type, ofType).map(x => {
+			return {
+				id: x.id,
+				name: x.name,
+				key: toCamelCase(x.model),
+			};
+		}));
 	}
 
 	getList(type: string, ofType?: string): Observable<any[]> {
@@ -63,11 +72,11 @@ export class StoreService {
 	}
 
 	getReflection(type: string): Observable<Definition> {
-		return of(this.store.reflection.find(x => this.toCamelCase(x.model) === type));
+		return of(this.store.reflection.find(x => toCamelCase(x.model) === type));
 	}
 
 	getDefinition(type: string): Observable<Definition> {
-		return of(this.store.definition.find(x => this.toCamelCase(x.model) === type));
+		return of(this.store.definition.find(x => toCamelCase(x.model) === type));
 	}
 
 	addItem(type: string, model: any): Observable<any> {
@@ -86,25 +95,7 @@ export class StoreService {
 	}
 
 	isTypeOf(item: Definition, type: string): boolean {
-		return this.toCamelCase(item.extend) === type || this.toCamelCase(item.model) === type;
-	}
-
-	toCamelCase(text: string): string {
-		return text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
-			if (+match === 0) {
-				return ''; // or if (/\s+/.test(match)) for white spaces
-			}
-			return index === 0 ? match.toLowerCase() : match.toUpperCase();
-		});
-	}
-
-	toTitleCase(text: string): string {
-		return text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
-			if (+match === 0) {
-				return ''; // or if (/\s+/.test(match)) for white spaces
-			}
-			return match.toUpperCase();
-		});
+		return toCamelCase(item.extend) === type || toCamelCase(item.model) === type;
 	}
 
 	getFields(fields: Definition[], ...names: string[]): Definition[] {
@@ -132,12 +123,11 @@ export class StoreService {
 	}
 
 	mapSchema(field: Definition): string {
-		const schema = CONTROL_MAP[this.toCamelCase(field.type)];
+		const schema = CONTROL_MAP[toCamelCase(field.type)];
 		return schema || 'text';
 	}
 
 	mapOptions(fields: Definition[]): ControlOption<any>[] {
-		console.log('mapOptions', fields);
 		const options = fields.map(x => {
 			const schema = x.control || this.mapSchema(x);
 			const option: any = {
@@ -150,15 +140,13 @@ export class StoreService {
 			};
 			switch (schema) {
 				case 'select':
-					console.log(x.model);
-					const options = this.getSync(this.toCamelCase(x.model)).map(x => {
-						return { value: x.id, label: x.name };
-					});
+					const options = this.getListSync(toCamelCase(x.model));
+					console.log(x.model, options);
 					options.unshift(
-						{ value: null, label: 'select' }
+						{ id: null, name: 'select' }
 					);
-					console.log(options);
 					option.options = options;
+					option.asObject = x.type === 'object';
 					break;
 			}
 			return option;
@@ -219,7 +207,6 @@ export class StoreService {
 			return {
 				id: x.id,
 				name: x.name,
-				key: this.toCamelCase(x.model),
 			};
 		});
 	}
@@ -234,31 +221,37 @@ export class StoreService {
 			store.reflection = REFLECTIONS.map(x => Object.assign({}, x));
 			store.definition = DEFINITIONS.map(x => Object.assign({}, x));
 			store.component = [];
-			const pageDefinition = store.definition.find(x => this.toCamelCase(x.model) === 'page');
+			const pageDefinition = store.definition.find(x => toCamelCase(x.model) === 'page');
 			const pageReflections = this.getSync('reflection', 'page');
 			pageReflections.forEach(x => {
 				const definition = Object.assign({}, pageDefinition);
 				// console.log(definition);
 				if (x.model !== 'Page') {
 					definition.id = UID++;
-					definition.key = this.toCamelCase(x.model);
+					definition.key = toCamelCase(x.model);
 					definition.name = x.model;
 					definition.model = x.model;
 					definition.extend = 'Page';
 					definition.fields = pageDefinition.fields.slice().map(x => Object.assign({}, x));
 					store.definition.push(definition);
 				}
-				const component = this.toTitleCase(x.model) + 'Component';
+				const component = toTitleCase(x.model) + 'Component';
 				store.component.push(
 					{ id: definition.id, name: component, path: component.toLowerCase() + '.cshtml' }
 				);
 			});
+			store.pageType = store.definition.filter(x => x.model === 'Page' || x.extend === 'Page').map(x => Object.assign({}, x));
 			store.page = this.createPages(1000);
 			pageReflections.forEach((x, i) => {
 				if (x.model !== 'Page') {
-					const key = this.toCamelCase(x.model);
+					const key = toCamelCase(x.model);
 					// console.log(key, x.id);
-					store[key] = store.page.filter(x => this.toCamelCase(x.type) === key).map(x => Object.assign({}, x));
+					store[key] = store.page.filter(x => toCamelCase(x.pageType.name) === key).map(x => {
+						x = Object.assign({}, x);
+						x.pageType = Object.assign({}, x.pageType);
+						x.component = Object.assign({}, x.component);
+						return x;
+					});
 				}
 			});
 			this.storage.set('store', store);
@@ -280,45 +273,29 @@ export class StoreService {
 			const title = getIpsum(5);
 			const abstract = getIpsum(12);
 			const description = getIpsum(50);
-			const component = this.toTitleCase(pageType.name) + 'Component';
-			const componentId = this.store.component.find(x => x.name === component).id;
-			const model = this.toCamelCase(pageType.name);
+			const componentName = toTitleCase(pageType.name) + 'Component';
+			const component = this.store.component.find(x => x.name === componentName);
+			const model = toCamelCase(pageType.name);
 			return {
 				id,
 				name,
 				title,
 				abstract,
 				description,
-				component,
-				componentId,
+				pageType: Object.assign({}, pageType),
+				component: Object.assign({}, component),
 				model,
-				//
-				typeId: pageType.id,
-				type: pageType.name,
-				//
-				// type: pageType.model,
-				// pageTypeId: pageType.id,
-				//
-				template: pageType.name,
-				templateId: 100 + pageType.id,
-				//
-				category: pageType.name,
-				categoryId: 200 + pageType.id,
-				//
-				market: 'en',
-				marketId: 1,
-				//
+				market: { id: 1, name: 'en' },
 				active: Math.random() > 0.5,
 				visible: Math.random() > 0.5,
 				order: Math.floor(Math.random() * 100000),
-				actions: [],
 			};
 		});
 	}
 
 	createType(type: string, model: any): any {
 		const definitions = this.store.definitions;
-		const pageDefinition = definitions.find(x => this.toCamelCase(x.model) === 'page');
+		const pageDefinition = definitions.find(x => toCamelCase(x.model) === 'page');
 		const definition = Object.assign({}, pageDefinition);
 		definition.id = UID++;
 		definition.key = model.name.toLowerCase();
@@ -331,7 +308,7 @@ export class StoreService {
 	}
 
 	createItem(type: string, model: any): any {
-		// const definition = this.store.definition.find(x => this.toCamelCase(x.model) === type);
+		// const definition = this.store.definition.find(x => toCamelCase(x.model) === type);
 		const definition = this.store.definition.find(x => x.id === model.typeId);
 		const items = this.store[definition.model.toLowerCase()];
 		const item = Object.assign({}, model);

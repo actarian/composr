@@ -87,8 +87,8 @@ export const REFLECTIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'Type', key: 'typeId', type: 'number', required: true },
-		{ name: 'Component', key: 'componentId', type: 'number' },
+		{ name: 'PageType', key: 'pageType', type: 'object', model: 'PageType', required: true },
+		{ name: 'Component', key: 'component', type: 'object', model: 'Component' },
 		{ name: 'Name', key: 'name', type: 'string', required: true },
 		{ name: 'Slug', key: 'slug', type: 'string', required: true },
 		{ name: 'Title', key: 'title', type: 'string' },
@@ -108,10 +108,10 @@ export const REFLECTIONS: Definition[] = [{
 		const page = REFLECTIONS.find(x => x.model === 'Page');
 		const item = Object.assign({}, page);
 		item.extend = item.model;
-		item.id = x.toLowerCase();
-		item.name = x;
-		item.model = x;
-		item.key = x.toLowerCase();
+		item.id = toTitleCase(x);
+		item.name = toTitleCase(x);
+		item.model = toTitleCase(x);
+		item.key = toCamelCase(x);
 		REFLECTIONS.push(item);
 	});
 
@@ -124,8 +124,8 @@ export const DEFINITIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
-		{ name: 'Model', key: 'model', type: 'string', required: true, visible: true, indexable: true },
-		{ name: 'Extend', key: 'extend', type: 'string', required: true, visible: true, indexable: true },
+		{ name: 'Model', key: 'model', type: 'string', model: 'Reflection', control: 'select', required: true, visible: true, indexable: true },
+		// { name: 'Extend', key: 'extend', type: 'string', required: true, visible: true, indexable: true },
 		{ name: 'Name', key: 'name', type: 'string', control: 'text', required: true, visible: true, editable: true, indexable: true },
 		/*
 		{ name: 'Description', key: 'description', type: 'string', control: 'textarea', visible: true, editable: true },
@@ -154,8 +154,8 @@ export const DEFINITIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
-		{ name: 'Type', key: 'typeId', type: 'number', control: 'select', model: 'Definition', required: true, visible: true, indexable: true },
-		{ name: 'Component', key: 'componentId', type: 'number', control: 'select', model: 'Component', visible: true, editable: true, indexable: true }, // special scalar relation type with pageType
+		{ name: 'PageType', key: 'pageType', type: 'object', model: 'PageType', control: 'select', required: true, visible: true, indexable: true },
+		{ name: 'Component', key: 'component', type: 'object', model: 'Component', control: 'select', visible: true, editable: true, indexable: true }, // special scalar relation type with pageType
 		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
 		{ name: 'Title', key: 'title', type: 'string', visible: true, editable: true, indexable: true },
 		{ name: 'Abstract', key: 'abstract', type: 'string', control: 'textarea', visible: true, editable: true },
@@ -169,3 +169,21 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Taxonomies', key: 'taxonomies', type: 'array', model: 'Taxonomy', visible: true }
 	]
 }];
+
+export function toCamelCase(text: string): string {
+	return text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
+		if (+match === 0) {
+			return ''; // or if (/\s+/.test(match)) for white spaces
+		}
+		return index === 0 ? match.toLowerCase() : match.toUpperCase();
+	});
+}
+
+export function toTitleCase(text: string): string {
+	return text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
+		if (+match === 0) {
+			return ''; // or if (/\s+/.test(match)) for white spaces
+		}
+		return match.toUpperCase();
+	});
+}

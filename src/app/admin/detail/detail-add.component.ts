@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
 import { ModalData, ModalService } from '@designr/ui';
-import { takeUntil } from 'rxjs/operators';
 import { Definition } from '../core/definition';
 import { StoreService } from '../core/store.service';
 
@@ -35,20 +34,26 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.type = this.modalData as string;
+		this.storeService.getDefinition(this.type).subscribe(definition => {
+			this.definition = definition;
+			this.options = this.formService.getOptions(
+				this.storeService.mapOptions(
+					this.storeService.getCreationFields(this.definition.fields)
+				)
+			);
+			this.form = this.formService.getFormGroup(this.options);
+			this.form.reset({
+				pageType: { id: null },
+			});
+		});
+		/*
 		this.route.params.pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe(data => {
 			this.type = data.type;
-			this.storeService.getDefinition('page').subscribe(definition => {
-				this.definition = definition;
-				this.options = this.formService.getOptions(
-					this.storeService.mapOptions(
-						this.storeService.getCreationFields(this.definition.fields)
-					)
-				);
-				this.form = this.formService.getFormGroup(this.options);
-			});
 		});
+		*/
 	}
 
 	onReset() {
@@ -59,6 +64,7 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 		console.log('onSubmit', model);
 		this.storeService.addItem(this.type, model).subscribe(item => {
 			console.log('onSubmit.success', item);
+			this.modalService.close(null, item);
 			// this.router.navigate(['/admin/content', this.type, item.id]);
 		});
 	}

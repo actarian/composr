@@ -38,7 +38,7 @@ export class AuthForgottenComponent extends DisposableComponent implements OnIni
 			placeholder: 'signIn.email',
 			required: true,
 			order: 1
-		},]);
+		}]);
 		this.form = this.formService.getFormGroup(this.options);
 	}
 

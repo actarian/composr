@@ -1,21 +1,22 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ControlOption, FormService } from '@designr/control';
+import { ControlSelectOption } from '@designr/control/lib/control/select/control-select';
 import { DisposableComponent } from '@designr/core';
 import { ModalData, ModalService } from '@designr/ui';
 import { Definition } from '../core/definition';
 import { StoreService } from '../core/store.service';
 // import { ControlOption } from '../../core/forms';
 
-export const CONTROL_TYPES: any[] = [
-	{ label: 'select', value: null },
-	// { value: 'checkbox', label: 'Checkbox' },
-	{ label: 'Number', value: 'number' },
-	{ label: 'Select', value: 'select' },
-	{ label: 'Switch', value: 'switch' },
-	{ label: 'Tab', value: 'tab' },
-	{ label: 'Text', value: 'text' },
-	{ label: 'Textarea', value: 'textarea' },
+export const CONTROL_TYPES: ControlSelectOption[] = [
+	{ name: 'select', id: null },
+	// { name: 'checkbox', id: 'Checkbox' },
+	{ name: 'Number', id: 'number' },
+	{ name: 'Select', id: 'select' },
+	{ name: 'Switch', id: 'switch' },
+	{ name: 'Tab', id: 'tab' },
+	{ name: 'Text', id: 'text' },
+	{ name: 'Textarea', id: 'textarea' },
 ];
 
 @Component({

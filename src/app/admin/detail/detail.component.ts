@@ -50,6 +50,7 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 				);
 				this.form = this.formService.getFormGroup(this.options);
 				this.storeService.getDetail(this.type, this.id).subscribe(item => {
+					console.log('getDetail', this.type, this.id, item);
 					this.item = item;
 					this.form.patchValue(item);
 				});

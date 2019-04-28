@@ -52,14 +52,14 @@ export class ContactComponent extends PageComponent implements OnInit {
 			schema: 'select',
 			label: 'contact.type',
 			options: [{
-				label: 'Any',
-				value: null,
+				id: null,
+				name: 'Any',
 			}, {
-				label: 'Yes',
-				value: true,
+				id: true,
+				name: 'Yes',
 			}, {
-				label: 'No',
-				value: false,
+				id: false,
+				name: 'No',
 			}],
 			order: 3
 		}, {

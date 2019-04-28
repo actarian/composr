@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
-import { takeUntil } from 'rxjs/operators';
+import { ModalData, ModalService } from '@designr/ui';
 import { Definition } from '../core/definition';
 import { StoreService } from '../core/store.service';
 
@@ -26,26 +26,31 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 		private router: Router,
 		private route: ActivatedRoute,
 		private formService: FormService,
+		private modalService: ModalService,
+		private modalData: ModalData,
 		private storeService: StoreService,
 	) {
 		super();
 	}
 
 	ngOnInit() {
+		this.type = this.modalData as string;
+		this.storeService.getDefinition('definition').subscribe(definition => {
+			this.definition = definition;
+			this.options = this.formService.getOptions(
+				this.storeService.mapOptions(
+					this.storeService.getCreationFields(this.definition.fields)
+				)
+			);
+			this.form = this.formService.getFormGroup(this.options);
+		});
+		/*
 		this.route.params.pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe(data => {
 			this.type = data.type;
-			this.storeService.getDefinition('definition').subscribe(definition => {
-				this.definition = definition;
-				this.options = this.formService.getOptions(
-					this.storeService.mapOptions(
-						this.storeService.getCreationFields(this.definition.fields)
-					)
-				);
-				this.form = this.formService.getFormGroup(this.options);
-			});
 		});
+		*/
 	}
 
 	onReset() {
@@ -55,7 +60,9 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 	onSubmit(model: any) {
 		console.log('onSubmit', model);
 		this.storeService.addType(this.type, model).subscribe(item => {
-			this.router.navigate(['/admin/content', this.type, 'definition', item.id]);
+			console.log('onSubmit.success', item);
+			this.modalService.close(null, item);
+			// this.router.navigate(['/admin/content', this.type, 'definition', item.id]);
 		});
 	}
 
