@@ -40,7 +40,7 @@
 	<div class="category">Directories</div>
 	<ul class="nav--menu-primary">
 		<li>
-			<a class="btn--menu-primary" routerLink="/admin/content/page" routerLinkActive="active">
+			<a class="btn--menu-primary" [routerLink]="['/admin/content/data', 'page']" routerLinkActive="active">
 				<span>Pages</span>
 				<svg (click)="onEditType($event, { id:2, name: 'Page' })"><use xlink:href="#edit"></use></svg>
 			</a>
@@ -60,7 +60,7 @@
 	<div class="category">Page Types</div>
 	<ul class="nav--menu-secondary">
 		<li *ngFor="let item of types">
-			<a class="btn--menu-secondary" [routerLink]="['/admin/content/', item.key]" routerLinkActive="active">
+			<a class="btn--menu-secondary" [routerLink]="['/admin/content/data', item.key]" routerLinkActive="active">
 				<svg><use xlink:href="#document"></use></svg>
 				<span>{{item.name}}</span>
 				<svg (click)="onEditType($event, item)"><use xlink:href="#edit"></use></svg>

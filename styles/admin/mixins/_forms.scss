@@ -37,7 +37,7 @@
 
 		color: #585a61;
 		background: #eff0f3;
-		border-color: #eff0f3;
+		border-color: $border;
 
 		select {
 			color: #585a61;
@@ -57,7 +57,7 @@
 
 %fieldset {
 	padding: 20px 0;
-	border-bottom: 1px solid #e7e7eb;
+	border-bottom: 1px solid $border; // #e7e7eb;
 
 	.form-input,
 	.form-select {
@@ -112,7 +112,7 @@
 		font-size: 15px;
 		line-height: 1;
 		color: #585a61;
-		border: 1px solid #a9aeb8;
+		border: 1px solid $border; // #a9aeb8;
 		border-radius: 2px;
 		padding: 10px;
 		box-sizing: border-box;
@@ -131,12 +131,12 @@
 
 		&[disabled] {
 			background: #eff0f3;
-			border-color: #eff0f3;
+			border-color: $border; // #eff0f3;
 		}
 
 		&:-webkit-autofill {
 			background: #ffffff !important;
-			border-color: #a9aeb8 !important;
+			border-color: $border !important; // #a9aeb8 !important;
 			color: #585a61 !important;
 		}
 	}
@@ -229,7 +229,7 @@
 
 %definition {
 	padding: 20px 0;
-	border-bottom: 1px solid #e7e7eb;
+	border-bottom: 1px solid $border; // #e7e7eb;
 	display: flex;
 	align-items: stretch;
 
@@ -358,7 +358,7 @@
 		font-size: 15px;
 		line-height: 1;
 		color: #585a61;
-		border: 1px solid #a9aeb8;
+		border: 1px solid $border; // #a9aeb8;
 		border-radius: 2px;
 		padding: 10px;
 		box-sizing: border-box;
@@ -372,7 +372,7 @@
 
 		&[disabled] {
 			background: #eff0f3;
-			border-color: #eff0f3;
+			border-color: $border;
 		}
 
 	}

@@ -11,6 +11,12 @@ import { DetailComponent } from './detail/detail.component';
 import { IndexComponent } from './index/index.component';
 import { PageComponent } from './page/page.component';
 import { SettingsComponent } from './setting/settings.component';
+import { TabAssetComponent } from './tabs/tab-asset.component';
+import { TabContentComponent } from './tabs/tab-content.component';
+import { TabDetailComponent } from './tabs/tab-detail.component';
+import { TabFieldsComponent } from './tabs/tab-fields.component';
+import { TabObjectComponent } from './tabs/tab-object.component';
+import { TabRelationComponent } from './tabs/tab-relation.component';
 import { TestComponent } from './test/test.component';
 import { UsersComponent } from './users/users.component';
 
@@ -26,6 +32,12 @@ export const PAGES = [
 	SettingsComponent,
 	//
 	AuthComponent,
+	TabAssetComponent,
+	TabContentComponent,
+	TabDetailComponent,
+	TabFieldsComponent,
+	TabObjectComponent,
+	TabRelationComponent,
 	//
 	TestComponent,
 	//
@@ -38,20 +50,31 @@ const ROUTES: Routes = [
 			{ path: 'dashboard', component: DashboardComponent },
 			{
 				path: 'content', children: [
-					{ path: '', redirectTo: 'page', pathMatch: 'full' },
-					{ path: ':type', component: IndexComponent },
-					{ path: ':type/:id', component: DetailComponent },
-					{ path: ':type/definition/:id', component: DefinitionComponent },
+					{ path: '', redirectTo: 'data/page', pathMatch: 'full' },
+					{ path: 'data/:type', component: IndexComponent },
+					{
+						path: 'data/:type/:id', component: DetailComponent, children: [
+							{ path: '', redirectTo: 'detail', pathMatch: 'full' },
+							{ path: 'detail', component: TabDetailComponent },
+							{ path: 'meta', component: TabObjectComponent },
+							{ path: 'contents', component: TabContentComponent },
+							{ path: 'assets', component: TabAssetComponent },
+							{ path: 'related', component: TabRelationComponent },
+							{ path: 'features', component: TabRelationComponent },
+							{ path: 'taxonomies', component: TabRelationComponent },
+							{ path: ':key', component: TabObjectComponent },
+						]
+					},
+					{
+						path: 'definition/:type/:id', component: DefinitionComponent, children: [
+							{ path: '', redirectTo: 'detail', pathMatch: 'full' },
+							{ path: 'detail', component: TabDetailComponent },
+							{ path: 'fields', component: TabFieldsComponent },
+						]
+					}
 				]
 			},
-			{
-				path: 'models', children: [
-					{ path: '', redirectTo: 'page', pathMatch: 'full' },
-					{ path: ':type', component: IndexComponent },
-					{ path: ':type/:id', component: DetailComponent },
-					{ path: ':type/definition/:id', component: DefinitionComponent },
-				]
-			},
+			{ path: 'models', component: DashboardComponent },
 			{ path: 'user', component: UsersComponent },
 			{ path: 'setting', component: SettingsComponent },
 			//

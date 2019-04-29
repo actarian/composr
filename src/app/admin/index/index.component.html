@@ -21,6 +21,21 @@
 			<div class="table__cell">{{item.getValue(item.row, item.keys.active)}}</div>
 			-->
 			</ng-template>
+			<ng-template #templateAction let-item>
+				<div class="table__cell cell--lg">
+					<button class="btn--action" (click)="onEditRow(item.row)">
+						<svg><use xlink:href="#edit"></use></svg>
+					</button>
+					<button class="btn--action" (click)="onDeleteRow(item.row)">
+						<svg><use xlink:href="#delete"></use></svg>
+					</button>
+					<!--
+					<svg (click)="doDeleteRow(item.row)"><use xlink:href="#delete"></use></svg>
+					<svg (click)="doCopyRow(item.row)"><use xlink:href="#copy"></use></svg>
+					<svg (click)="doViewRow(item.row)"><use xlink:href="#view"></use></svg>
+					-->
+				</div>
+			</ng-template>
 		</table-component>
 	</div>
 </ng-container>

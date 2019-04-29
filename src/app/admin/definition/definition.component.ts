@@ -1,19 +1,12 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
-import { DisposableComponent, MenuItem } from '@designr/core';
-import { ModalCompleteEvent, ModalService } from '@designr/ui';
-import { first, takeUntil } from 'rxjs/operators';
+import { DisposableComponent } from '@designr/core';
+import { takeUntil } from 'rxjs/operators';
 import { Definition } from '../core/definition';
 import { StoreService } from '../core/store.service';
-import { DefinitionEditComponent } from './definition-edit.component';
-
-export const TABS: MenuItem[] = [
-	{ id: 1, name: 'Detail' },
-	{ id: 2, name: 'Fields' },
-];
+import { TabItem, TabService } from '../tabs/tab.serice';
 
 @Component({
 	selector: 'definition-component',
@@ -22,7 +15,7 @@ export const TABS: MenuItem[] = [
 })
 export class DefinitionComponent extends DisposableComponent implements OnInit {
 
-	tabFields: Definition[];
+	tabFields: TabItem[];
 	tabIndex: number = -1;
 
 	type: string;
@@ -41,8 +34,8 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 		private route: ActivatedRoute,
 		private formBuilder: FormBuilder,
 		private formService: FormService,
-		private modalService: ModalService,
 		private storeService: StoreService,
+		private tabService: TabService,
 	) {
 		super();
 	}
@@ -53,7 +46,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 		).subscribe(data => {
 			this.type = data.type;
 			this.id = parseInt(data.id, 0);
-			// console.log(this.type, this.id);
+			console.log('definition', this.type, this.id);
 			this.storeService.getDefinition('definition').subscribe(definition => {
 				// console.log('definition', definition);
 				this.definition = definition;
@@ -68,10 +61,10 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 				});
 				*/
 				this.form = this.formService.getFormGroup(this.options);
+				this.tabFields = this.tabService.getTabs(this.definition);
 				this.storeService.getDetail('definition', this.id).subscribe(item => {
 					console.log('getDetail', 'definition', this.id, item);
 					this.item = item;
-					this.sortFields(this.item.fields);
 					this.fields = this.item.fields.slice().map(x => Object.assign({}, x));
 					const fieldOptions = this.fields.map(x => {
 						return [{
@@ -98,8 +91,18 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 					));
 					this.fieldOptions = fieldOptions;
 					this.form.patchValue(item);
+					this.tabService.setTab({
+						tabFields: this.tabFields,
+						type: this.type,
+						id: this.id,
+						definition: this.definition,
+						fields: this.fields,
+						fieldOptions: this.fieldOptions,
+						item: this.item,
+						options: this.options,
+						form: this.form,
+					});
 				});
-				this.tabFields = this.storeService.getTabFields(this.definition.fields);
 			});
 			/*
 			this.storeService.getDefinition(this.type).subscribe(definition => {
@@ -112,50 +115,18 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 		});
 	}
 
-	onSetControl(value, field: Definition) {
-		console.log('onDelete', value, field);
-	}
-
-	onEditField(event: MouseEvent, field: Definition) {
-		console.log('onEditField', event, field);
-		this.modalService.open({ component: DefinitionEditComponent, data: field }).pipe(
-			first()
-		).subscribe(e => {
-			if (e instanceof ModalCompleteEvent) {
-				console.log('onEditField.ModalCompleteEvent', e.data);
-			}
-		});
-	}
-
-	onDropField(event: CdkDragDrop<string[]>) {
-		moveItemInArray(this.fields, event.previousIndex, event.currentIndex);
-		console.log('DefinitionComponent.onDropField', event.previousIndex, event.currentIndex);
-		this.sortFields(this.fields);
-		// this.dropField.emit(this.fields);
-	}
-
-	sortFields(fields: Definition[]) {
-		fields.sort((a, b) => {
-			if (a.primaryKey || b.primaryKey) {
-				return (a.primaryKey && !b.primaryKey) ? -1 : 1;
-			} else if (a.required || b.required) {
-				return (a.required && !b.required) ? -1 : 1;
-			} else {
-				return 0;
-			}
-		});
-		fields.forEach((x, i) => x.order = i * 10);
-	}
-
 	onDelete() {
-		console.log('onDelete', this.id);
+		console.log('DefinitionComponent.onDelete', this.type, this.id);
 	}
 
 	onReset() {
+		console.log('DefinitionComponent.onReset', this.type, this.id);
 		this.form.reset(this.item);
 	}
 
 	onSubmit(model: any) {
+		console.log('DefinitionComponent.onSubmit', this.type, this.id, model);
+		return;
 		model.fields = this.fields;
 		const changedItem = this.storeService.getChangedValues(this.item, model);
 		console.log('onSubmit.changedItem', changedItem ? Object.assign({}, changedItem) : changedItem);

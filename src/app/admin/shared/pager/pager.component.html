@@ -1,7 +1,7 @@
 <div class="group group--pager" *ngIf="rows">
 	<div class="pager__info">{{from}}-{{to}} of {{rows.length}}</div>
 	<div>
-		<ul class="nav--pager">
+		<ul class="nav--pager" *ngIf="rows.length > perpage">
 			<li>
 				<a (click)="showFirstPage()" [ngClass]="{ disabled: !hasPagesBefore() }"><svg><use xlink:href="#first"></use></svg></a>
 			</li>
@@ -18,7 +18,7 @@
 		</ul>
 	</div>
 	<div class="pager__perpage">
-		<div class="group--select">
+		<div class="group--select" *ngIf="rows.length > perpages[0]">
 			<select [(ngModel)]="perpage" (change)="onSetPerPage($event.target.value)">
 				<option *ngFor="let item of perpages" [ngValue]="item">{{item}}</option>
 			</select>

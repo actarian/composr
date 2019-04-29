@@ -1,6 +1,13 @@
 @import 'variables';
 @import 'mixins';
 
+// reset
+a {
+	text-decoration: none;
+}
+
+// reset
+
 .admin {
 	@extend %layout;
 
@@ -9,6 +16,7 @@
 	--color-foreground: #ffffff;
 	--color-foreground-secondary: #585a61;
 	--color-primary: #2440c3;
+	--color-border: #e2e6f8;
 	--color-facebook: #3B5998;
 	--color-google: #dd4b39;
 	--font-primary: 'Roboto', sans-serif;

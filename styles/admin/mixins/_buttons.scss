@@ -44,6 +44,31 @@
 	justify-content: center;
 }
 
+%btn-action {
+	@extend %btn-icon;
+	justify-content: center;
+
+	width: 36px;
+	height: 36px;
+	border-radius: 18px;
+	background: #e2e6f6;
+
+	svg {
+		width: 15px;
+		height: 15px;
+		fill: $primary;
+	}
+
+	&:hover {
+		background: #1b35ac; // primary-dark
+
+		svg {
+			fill: white;
+		}
+	}
+
+}
+
 %btn-primary {
 	@extend %btn-flex;
 	position: relative;
@@ -136,10 +161,10 @@
 }
 
 %pill {
-	background: $primary;
-	color: white;
 	padding: 4px 8px;
 	border-radius: 5px;
 	font-size: 12px;
 	line-height: 1;
+	background: $primary;
+	color: white;
 }

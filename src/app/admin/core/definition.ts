@@ -1,3 +1,4 @@
+import { toCamelCase, toTitleCase } from "./utils";
 
 export interface Definition {
 	id?: number | string;
@@ -20,6 +21,72 @@ export interface Definition {
 	indexable?: boolean;
 }
 
+export interface PageType {
+	id: number | string;
+	name: string;
+	model: string;
+}
+
+export interface ContentType {
+	id: number | string;
+	name: string;
+	model: string;
+}
+
+export interface AssetType {
+	id: number | string;
+	name: string;
+	model: string;
+}
+
+export interface Component {
+	id: number | string;
+	name: string;
+}
+
+export interface Meta {
+	title: string;
+	description: string;
+	keywords: string;
+	robots: string;
+}
+
+export interface Content {
+	id: number | string;
+	name: string;
+	contentType: ContentType;
+}
+
+export interface Asset {
+	id: number | string;
+	assetType: AssetType;
+	src: string;
+	name?: string;
+	extension?: string;
+	width?: number;
+	height?: number;
+	title?: string;
+	abstract?: string;
+}
+
+export interface Page {
+	id: number | string;
+	pageType: PageType;
+	component: Component;
+	name: string;
+	title?: string;
+	abstract?: string;
+	description?: string;
+	meta?: Meta;
+	slug?: string;
+	active?: boolean;
+	contents?: Content[];
+	assets?: Asset[];
+	related?: Page[];
+	features?: any[];
+	taxonomies?: any[];
+}
+
 export const CONTROL_MAP: { [key: string]: string } = {
 	'boolean': 'switch',
 	'string': 'text',
@@ -28,7 +95,7 @@ export const CONTROL_MAP: { [key: string]: string } = {
 };
 
 export const REFLECTIONS: Definition[] = [{
-	id: 'definition',
+	id: 'Definition',
 	name: 'Definition',
 	key: 'definition',
 	type: 'object',
@@ -40,7 +107,46 @@ export const REFLECTIONS: Definition[] = [{
 		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field' }
 	]
 }, {
-	id: 'component',
+	id: 'AssetType',
+	name: 'AssetType',
+	key: 'assetType',
+	type: 'object',
+	model: 'AssetType',
+	extend: 'Definition',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
+		{ name: 'Name', key: 'name', type: 'string', required: true },
+		{ name: 'Model', key: 'model', type: 'string', required: true },
+		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field' }
+	]
+}, {
+	id: 'ContentType',
+	name: 'ContentType',
+	key: 'contentType',
+	type: 'object',
+	model: 'ContentType',
+	extend: 'Definition',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
+		{ name: 'Name', key: 'name', type: 'string', required: true },
+		{ name: 'Model', key: 'model', type: 'string', required: true },
+		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field' }
+	]
+}, {
+	id: 'PageType',
+	name: 'PageType',
+	key: 'pageType',
+	type: 'object',
+	model: 'PageType',
+	extend: 'Definition',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
+		{ name: 'Name', key: 'name', type: 'string', required: true },
+		{ name: 'Model', key: 'model', type: 'string', required: true },
+		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field' }
+	]
+}, {
+	id: 'Component',
 	name: 'Component',
 	key: 'component',
 	type: 'object',
@@ -49,11 +155,11 @@ export const REFLECTIONS: Definition[] = [{
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
 		{ name: 'Name', key: 'name', type: 'string', required: true },
-		{ name: 'Path', key: 'path', type: 'string', required: true },
+		{ name: 'Path', key: 'path', type: 'string' },
 		{ name: 'Types', key: 'types', type: 'array', model: 'PageType' }
 	]
 }, {
-	id: 'meta',
+	id: 'Meta',
 	name: 'Meta',
 	key: 'meta',
 	type: 'object',
@@ -66,20 +172,54 @@ export const REFLECTIONS: Definition[] = [{
 		{ name: 'Robots', key: 'robots', type: 'string' }
 	]
 }, {
-	id: 'image',
+	id: 'Asset',
+	name: 'asset',
+	key: 'asset',
+	type: 'object',
+	model: 'Asset',
+	extend: 'Entity',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
+		{ name: 'AssetType', key: 'src', type: 'string', required: true },
+		{ name: 'Src', key: 'src', type: 'string', required: true },
+		{ name: 'Name', key: 'name', type: 'string' },
+		{ name: 'Extension', key: 'extension', type: 'string' },
+		{ name: 'Width', key: 'width', type: 'number' },
+		{ name: 'Height', key: 'height', type: 'number' },
+		{ name: 'Title', key: 'title', type: 'string' },
+		{ name: 'Abstract', key: 'description', type: 'string' },
+	]
+}, {
+	id: 'Image',
 	name: 'Image',
 	key: 'image',
 	type: 'object',
 	model: 'Image',
 	extend: 'Entity',
 	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
+		{ name: 'AssetType', key: 'src', type: 'string', required: true },
+		{ name: 'Src', key: 'src', type: 'string', required: true },
+		{ name: 'Extension', key: 'extension', type: 'string' },
+		{ name: 'Width', key: 'width', type: 'number' },
+		{ name: 'Height', key: 'height', type: 'number' },
 		{ name: 'Title', key: 'title', type: 'string' },
-		{ name: 'Description', key: 'description', type: 'string' },
-		{ name: 'Keywords', key: 'keywords', type: 'string' },
-		{ name: 'Robots', key: 'robots', type: 'string' }
+		{ name: 'Abstract', key: 'description', type: 'string' },
 	]
 }, {
-	id: 'page',
+	id: 'Content',
+	name: 'Content',
+	key: 'content',
+	type: 'object',
+	model: 'Content',
+	extend: 'Entity',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
+		{ name: 'ContentType', key: 'contentType', type: 'object', model: 'ContentType', required: true },
+		{ name: 'Name', key: 'name', type: 'string', required: true }
+	]
+}, {
+	id: 'Page',
 	name: 'Page',
 	key: 'page',
 	type: 'object',
@@ -90,13 +230,14 @@ export const REFLECTIONS: Definition[] = [{
 		{ name: 'PageType', key: 'pageType', type: 'object', model: 'PageType', required: true },
 		{ name: 'Component', key: 'component', type: 'object', model: 'Component' },
 		{ name: 'Name', key: 'name', type: 'string', required: true },
-		{ name: 'Slug', key: 'slug', type: 'string', required: true },
+		{ name: 'Slug', key: 'slug', type: 'string' },
 		{ name: 'Title', key: 'title', type: 'string' },
 		{ name: 'Abstract', key: 'abstract', type: 'string' },
 		{ name: 'Description', key: 'description', type: 'string' },
 		{ name: 'Active', key: 'active', type: 'boolean' },
 		{ name: 'Meta', key: 'meta', type: 'object', model: 'Meta' },
-		{ name: 'Images', key: 'images', type: 'array', model: 'Image' },
+		{ name: 'Contents', key: 'contents', type: 'array', model: 'Content' },
+		{ name: 'Assets', key: 'assets', type: 'array', model: 'Asset' },
 		{ name: 'Related', key: 'related', type: 'array', model: 'Page' },
 		{ name: 'Features', key: 'features', type: 'array', model: 'Feature' },
 		{ name: 'Taxonomies', key: 'taxonomies', type: 'array', model: 'Taxonomy' }
@@ -147,6 +288,19 @@ export const DEFINITIONS: Definition[] = [{
 	]
 }, {
 	id: 2,
+	name: 'Meta',
+	key: 'meta',
+	type: 'object',
+	model: 'Meta',
+	extend: 'Identity',
+	fields: [
+		{ name: 'Title', key: 'title', type: 'string', visible: true, editable: true },
+		{ name: 'Description', key: 'description', type: 'string', control: 'textarea', visible: true, editable: true },
+		{ name: 'Keywords', key: 'keywords', type: 'string', visible: true, editable: true },
+		{ name: 'Robots', key: 'robots', type: 'string', visible: true, editable: true }
+	]
+}, {
+	id: 3,
 	name: 'Page',
 	key: 'page',
 	type: 'object',
@@ -160,30 +314,13 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Title', key: 'title', type: 'string', visible: true, editable: true, indexable: true },
 		{ name: 'Abstract', key: 'abstract', type: 'string', control: 'textarea', visible: true, editable: true },
 		{ name: 'Description', key: 'description', type: 'string', control: 'textarea', visible: true, editable: true },
-		{ name: 'Slug', key: 'slug', type: 'string', required: true, visible: true, editable: true },
+		{ name: 'Slug', key: 'slug', type: 'string', visible: true, editable: true },
 		{ name: 'Active', key: 'active', type: 'boolean', control: 'switch', visible: true, editable: true },
 		{ name: 'Meta', key: 'meta', type: 'object', model: 'Meta', control: 'tab', visible: true },
-		{ name: 'Images', key: 'images', type: 'array', model: 'Image', control: 'tab', visible: true },
+		{ name: 'Contents', key: 'contents', type: 'array', model: 'Content', control: 'tab', visible: true },
+		{ name: 'Assets', key: 'assets', type: 'array', model: 'Asset', control: 'tab', visible: true },
 		{ name: 'Related', key: 'related', type: 'array', model: 'Page', control: 'tab', visible: true },
 		{ name: 'Features', key: 'features', type: 'array', model: 'Feature', control: 'tab', visible: true },
 		{ name: 'Taxonomies', key: 'taxonomies', type: 'array', model: 'Taxonomy', visible: true }
 	]
 }];
-
-export function toCamelCase(text: string): string {
-	return text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
-		if (+match === 0) {
-			return ''; // or if (/\s+/.test(match)) for white spaces
-		}
-		return index === 0 ? match.toLowerCase() : match.toUpperCase();
-	});
-}
-
-export function toTitleCase(text: string): string {
-	return text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
-		if (+match === 0) {
-			return ''; // or if (/\s+/.test(match)) for white spaces
-		}
-		return match.toUpperCase();
-	});
-}

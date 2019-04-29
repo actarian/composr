@@ -14,12 +14,6 @@ $icon: 18px;
 	text-overflow: ellipsis;
 	overflow: hidden;
 
-	svg {
-		width: $icon;
-		height: $icon;
-		fill: #999;
-	}
-
 	&.cell--sm {
 		flex: 0 0 32px;
 		text-align: center;
@@ -31,6 +25,29 @@ $icon: 18px;
 	}
 }
 
+/*
 .table__cell+.table__cell {
 	margin-left: 5px;
+}
+*/
+
+.table__cell:not(:first-child) {
+	margin-left: 10px;
+}
+
+.cell--lg {
+	display: flex;
+
+	.btn--action+.btn--action {
+		margin-left: 1px;
+	}
+}
+
+.btn--action {
+	@extend %btn-action;
+	transition: none;
+
+	svg {
+		transition: none;
+	}
 }

@@ -50,6 +50,7 @@ export interface ActionItem {
 export class TableComponent extends DisposableComponent implements OnInit {
 
 	@ContentChild(TemplateRef) templateRef: TemplateRef<NgForOfContext<RowContext>>;
+	@ContentChild('templateAction') templateActionRef: TemplateRef<NgForOfContext<RowContext>>;
 
 	@Input('items') set items(items: any[]) {
 		this.items$.next(items);

@@ -1,0 +1,59 @@
+<ng-container [formGroup]="state.form" *ngIf="state && state.form">
+	<div cdkDropList (cdkDropListDropped)="onDropField($event)">
+		<div class="definition" [ngClass]="{ required: field.required }" [formGroup]="state.form" *ngFor="let field of state.fields; let n = index" cdkDrag [cdkDragDisabled]="field.primaryKey || field.required">
+			<div class="drag__placeholder" *cdkDragPlaceholder></div>
+			<div class="drag__handle" cdkDragHandle>
+				<svg><use xlink:href="#drag"></use></svg>
+			</div>
+			<div class="info">
+				<div class="title">{{field.name}}</div>
+				<div class="type"><svg *ngIf="field.primaryKey"><use xlink:href="#lock"></use></svg> {{field.type}}</div>
+			</div>
+			<!--
+			<button class="btn--toggle" [ngClass]="{ active: field.required }">
+				<span *ngIf="field.required">required</span>
+				<span *ngIf="!field.required"></span>
+			</button>
+			-->
+			<!-- <control-outlet [option]="fieldOptions[n][0]" [form]="form"></control-outlet> -->
+			<button class="btn--toggle" [ngClass]="{ active: field.visible }" (click)="field.visible = !field.visible">
+				<span *ngIf="field.visible">visible</span>
+				<span *ngIf="!field.visible">not visible</span>
+			</button>
+			<button class="btn--toggle" [ngClass]="{ active: field.editable }" (click)="field.editable = !field.editable">
+				<span *ngIf="field.editable">editable</span>
+				<span *ngIf="!field.editable">not editable</span>
+			</button>
+			<button class="btn--toggle" [ngClass]="{ active: field.indexable }" (click)="field.indexable = !field.indexable">
+				<span *ngIf="field.indexable">indexable</span>
+				<span *ngIf="!field.indexable">not indexable</span>
+			</button>
+			<button class="btn--toggle" [ngClass]="{ active: field.control }" (click)="onEditField($event, field)">
+				<span>{{field.control}}</span>
+				<!--<svg><use xlink:href="#edit"></use></svg>-->
+			</button>
+			<div class="group--actions">
+				<button class="btn--primary" [ngClass]="{ active: field.control }" (click)="onEditField($event, field)">
+					<span>Edit</span>
+					<svg><use xlink:href="#edit"></use></svg>
+				</button>
+				<!--
+				<button class="btn--icon" (click)="onEditField($event, field)">
+					<svg><use xlink:href="#edit"></use></svg>
+				</button>
+				-->
+			</div>
+			<!--
+			<input type="text" placeholder="add a note" />
+			<div class="group--select" [ngClass]="{ disabled: field.primaryKey }">
+				<select (input)="onSetControl($event.target.value, field)" [disabled]="field.primaryKey">
+					<option *ngFor="let item of controlTypes" [value]="item.value">{{item.label}}</option>
+				</select>
+				<div class="select__arrow">
+					<svg><use xlink:href="#angle-down"></use></svg>
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+</ng-container>

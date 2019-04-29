@@ -12,27 +12,18 @@
 	<div class="content">
 		<div class="container">
 			<ul class="nav--tabs">
-				<li><a [ngClass]="{ active: tabIndex == -1 }" (click)="tabIndex = -1"><span>Detail</span></a></li>
-				<li *ngFor="let item of tabFields; let i = index;"><a [ngClass]="{ active: tabIndex == i }" (click)="tabIndex = i"><span>{{item.name}}</span></a></li>
+				<li *ngFor="let item of tabFields">
+					<a [routerLink]="item.slug" routerLinkActive="active"><span>{{item.name}}</span></a>
+				</li>
 			</ul>
 			<div class="tabs--content">
-				<form class="form" name="form" [formGroup]="form" (ngSubmit)="form.valid && onSubmit(form.value)" role="form" novalidate autocomplete="off">
+				<form class="form" name="form" [formGroup]="form" role="form" novalidate autocomplete="off">
 					<div class="fieldsets">
-						<ng-container *ngIf="tabIndex == -1">
-							<!-- <controls-component class="fieldset" [options]="options" [form]="form"></controls-component> -->
-							<div class="fieldset" *ngFor="let option of options">
-								<control-outlet class="form-group" [option]="option" [form]="form"></control-outlet>
-							</div>
-						</ng-container>
-						<ng-container *ngFor="let item of tabFields; let i = index;">
-							<ng-container *ngIf="tabIndex == i">
-								<div>{{item.name}}</div>
-							</ng-container>
-						</ng-container>
+						<router-outlet></router-outlet>
 					</div>
 					<div class="nav--inline">
-						<button type="button" class="btn--secondary" [disabled]="submitted || !form.valid" (click)="onReset()"><span>Reset</span></button>
-						<button type="submit" class="btn--primary" [disabled]="submitted || !form.valid" [ngClass]="{ 'btn--busy': busy }"><span>Save</span></button>
+						<button type="button" class="btn btn--secondary" [disabled]="submitted || !form.valid" (click)="onReset()"><span>Reset</span></button>
+						<button type="button" class="btn btn--primary" [disabled]="submitted || !form.valid" [ngClass]="{ 'btn--busy': busy }" (click)="form.valid && onSubmit(form.value)"><span>Save</span></button>
 					</div>
 				</form>
 			</div>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { takeUntil } from 'rxjs/operators';
-import { Definition, toCamelCase } from '../core/definition';
+import { Definition } from '../core/definition';
 import { StoreService } from '../core/store.service';
 import { ActionItem, Column } from '../shared/table/table.component';
 
@@ -50,7 +50,11 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 	}
 
 	onEditRow(item: any) {
-		this.router.navigate(['/admin/content', toCamelCase(item.model), item.id]);
+		this.router.navigate(['/admin/content/data', this.type, item.id]);
+	}
+
+	onDeleteRow(item: any) {
+		console.log('IndexComponent.onDeleteRow', item);
 	}
 
 	onClearCache() {

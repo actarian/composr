@@ -4,6 +4,16 @@
 		<div class="table__cell" *ngFor="let col of context.columns">{{getValue(context.row, col)}}</div>
 	</ng-template>
 
+	<!-- default actions -->
+	<ng-template #defaultAction let-context>
+		<div class="table__cell cell--lg">
+			<svg (click)="doEditRow(context.row)" *ngIf="editable"><use xlink:href="#edit"></use></svg>
+			<svg (click)="doDeleteRow(context.row)" *ngIf="deletable"><use xlink:href="#delete"></use></svg>
+			<svg (click)="doCopyRow(context.row)" *ngIf="duplicable"><use xlink:href="#copy"></use></svg>
+			<svg (click)="doViewRow(context.row)" *ngIf="visible"><use xlink:href="#view"></use></svg>
+		</div>
+	</ng-template>
+
 	<!-- headers -->
 	<div class="table__header">
 		<div class="table__cell cell--drag" *ngIf="draggable"></div>
@@ -80,12 +90,7 @@
 				<svg *ngIf="isSelected(row)"><use xlink:href="#checked"></use></svg>
 				<svg *ngIf="!isSelected(row)"><use xlink:href="#unchecked"></use></svg>
 			</div>
-			<div class="table__cell cell--lg">
-				<svg (click)="doEditRow(row)" *ngIf="editable"><use xlink:href="#edit"></use></svg>
-				<svg (click)="doDeleteRow(row)" *ngIf="deletable"><use xlink:href="#delete"></use></svg>
-				<svg (click)="doCopyRow(row)" *ngIf="duplicable"><use xlink:href="#copy"></use></svg>
-				<svg (click)="doViewRow(row)" *ngIf="visible"><use xlink:href="#view"></use></svg>
-			</div>
+			<ng-container *ngTemplateOutlet="templateActionRef || defaultAction; context: { $implicit: getContext(row) }"></ng-container>
 		</div>
 	</div>
 
@@ -103,12 +108,7 @@
 				<svg *ngIf="isSelected(row)"><use xlink:href="#checked"></use></svg>
 				<svg *ngIf="!isSelected(row)"><use xlink:href="#unchecked"></use></svg>
 			</div>
-			<div class="table__cell cell--lg">
-				<svg (click)="doEditRow(row)" *ngIf="editable"><use xlink:href="#edit"></use></svg>
-				<svg (click)="doDeleteRow(row)" *ngIf="deletable"><use xlink:href="#delete"></use></svg>
-				<svg (click)="doCopyRow(row)" *ngIf="duplicable"><use xlink:href="#copy"></use></svg>
-				<svg (click)="doViewRow(row)" *ngIf="visible"><use xlink:href="#view"></use></svg>
-			</div>
+			<ng-container *ngTemplateOutlet="templateActionRef || defaultAction; context: { $implicit: getContext(row) }"></ng-container>
 		</div>
 	</div>
 
@@ -122,12 +122,7 @@
 				<svg *ngIf="isSelected(row)"><use xlink:href="#checked"></use></svg>
 				<svg *ngIf="!isSelected(row)"><use xlink:href="#unchecked"></use></svg>
 			</div>
-			<div class="table__cell cell--lg">
-				<svg (click)="doEditRow(row)" *ngIf="editable"><use xlink:href="#edit"></use></svg>
-				<svg (click)="doDeleteRow(row)" *ngIf="deletable"><use xlink:href="#delete"></use></svg>
-				<svg (click)="doCopyRow(row)" *ngIf="duplicable"><use xlink:href="#copy"></use></svg>
-				<svg (click)="doViewRow(row)" *ngIf="visible"><use xlink:href="#view"></use></svg>
-			</div>
+			<ng-container *ngTemplateOutlet="templateActionRef || defaultAction; context: { $implicit: getContext(row) }"></ng-container>
 		</div>
 	</cdk-virtual-scroll-viewport>
 

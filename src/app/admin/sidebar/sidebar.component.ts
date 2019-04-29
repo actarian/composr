@@ -70,11 +70,10 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	onEditType(event: MouseEvent, item: MenuItem) {
 		event.preventDefault();
 		event.stopPropagation();
-		this.router.navigate(['/admin/content', 'page', 'definition', item.id]);
+		this.router.navigate(['/admin/content', 'definition', 'page', item.id]);
 	}
 
 	onAddItem(event: MouseEvent) {
-		// this.router.navigate(['/admin/content', 'page', 'add']);
 		this.modalService.open({ component: DetailAddComponent, data: 'page' }).pipe(
 			first()
 		).subscribe(e => {
@@ -85,7 +84,6 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	}
 
 	onAddType(event: MouseEvent) {
-		// this.router.navigate(['/admin/content', 'page', 'definition', 'add']);
 		this.modalService.open({ component: DefinitionAddComponent, data: 'page' }).pipe(
 			first()
 		).subscribe(e => {

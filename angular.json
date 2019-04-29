@@ -24,6 +24,7 @@
 						"statsJson": true,
 						"es5BrowserSupport": true,
 						"scripts": [
+							{ "input": "./node_modules/muuri/dist/muuri.js", "lazy": false },
 							{ "input": "./node_modules/jquery/dist/jquery.js", "lazy": false },
 							{ "input": "./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.js", "lazy": false },
 							{ "input": "./node_modules/intersection-observer/intersection-observer.js", "lazy": false },
