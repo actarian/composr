@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
 import { ModalData, ModalService } from '@designr/ui';
+import { finalize, first } from 'rxjs/operators';
 import { Definition } from '../core/definition';
 import { StoreService } from '../core/store.service';
 
@@ -16,11 +17,11 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 
 	type: string;
 	definition: Definition;
-
 	options: ControlOption<any>[];
 	form: FormGroup;
-	submitted: boolean = false;
+	error: any;
 	busy: boolean = false;
+	submitted: boolean = false;
 
 	constructor(
 		private router: Router,
@@ -61,12 +62,24 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 	}
 
 	onSubmit(model: any) {
-		console.log('onSubmit', model);
-		this.storeService.addItem(this.type, model).subscribe(item => {
-			console.log('onSubmit.success', item);
-			this.modalService.close(null, item);
-			// this.router.navigate(['/admin/content', this.type, item.id]);
-		});
+		console.log('DetailAddComponent.onSubmit', model);
+		this.submitted = true;
+		this.error = null;
+		this.busy = true;
+		this.storeService.addItem(this.type, model).pipe(
+			first(),
+			finalize(() => this.busy = false),
+		).subscribe(
+			created => {
+				this.modalService.complete(null, created);
+			},
+			error => {
+				this.error = error;
+				this.submitted = false;
+				console.log('DetailAddComponent.onSubmit.error', this.error);
+			}
+		);
 	}
+
 
 }

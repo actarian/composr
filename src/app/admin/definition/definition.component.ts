@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
-import { takeUntil } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { Definition } from '../core/definition';
 import { StoreService } from '../core/store.service';
-import { TabItem, TabService } from '../tabs/tab.serice';
+import { TabItem, TabService } from '../tabs/tab.service';
 
 @Component({
 	selector: 'definition-component',
@@ -47,7 +47,9 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 			this.type = data.type;
 			this.id = parseInt(data.id, 0);
 			console.log('definition', this.type, this.id);
-			this.storeService.getDefinition('definition').subscribe(definition => {
+			this.storeService.getDefinition('definition').pipe(
+				first(),
+			).subscribe(definition => {
 				// console.log('definition', definition);
 				this.definition = definition;
 				this.options = this.formService.getOptions(
@@ -62,7 +64,9 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 				*/
 				this.form = this.formService.getFormGroup(this.options);
 				this.tabFields = this.tabService.getTabs(this.definition);
-				this.storeService.getDetail('definition', this.id).subscribe(item => {
+				this.storeService.getDetail('definition', this.id).pipe(
+					first(),
+				).subscribe(item => {
 					console.log('getDetail', 'definition', this.id, item);
 					this.item = item;
 					this.fields = this.item.fields.slice().map(x => Object.assign({}, x));
@@ -91,7 +95,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 					));
 					this.fieldOptions = fieldOptions;
 					this.form.patchValue(item);
-					this.tabService.setTab({
+					this.tabService.setState({
 						tabFields: this.tabFields,
 						type: this.type,
 						id: this.id,

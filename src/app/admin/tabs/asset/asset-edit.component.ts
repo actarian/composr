@@ -4,8 +4,9 @@ import { ControlOption, FormService } from '@designr/control';
 import { ControlSelectOption } from '@designr/control/lib/control/select/control-select';
 import { DisposableComponent } from '@designr/core';
 import { ModalData, ModalService } from '@designr/ui';
-import { Definition } from '../core/definition';
-import { StoreService } from '../core/store.service';
+import { finalize, first } from 'rxjs/operators';
+import { Asset, Definition } from '../../core/definition';
+import { StoreService } from '../../core/store.service';
 // import { ControlOption } from '../../core/forms';
 
 export const CONTROL_TYPES: ControlSelectOption[] = [
@@ -20,16 +21,17 @@ export const CONTROL_TYPES: ControlSelectOption[] = [
 ];
 
 @Component({
-	selector: 'definition-edit-component',
-	templateUrl: './definition-edit.component.html',
-	styleUrls: ['./definition-edit.component.scss'],
+	selector: 'asset-edit-component',
+	templateUrl: './asset-edit.component.html',
+	styleUrls: ['./asset-edit.component.scss'],
 	encapsulation: ViewEncapsulation.Emulated,
 })
 
-export class DefinitionEditComponent extends DisposableComponent implements OnInit {
+export class AssetEditComponent extends DisposableComponent implements OnInit {
 
+	item: any;
+	asset: Asset;
 	definition: Definition;
-
 	options: ControlOption<any>[];
 	form: FormGroup;
 	error: any;
@@ -46,7 +48,21 @@ export class DefinitionEditComponent extends DisposableComponent implements OnIn
 	}
 
 	ngOnInit() {
-		this.definition = this.modalData as Definition;
+		const data = this.modalData as any;
+		this.item = data.item as any;
+		this.asset = data.asset as Asset;
+		this.storeService.getDefinition('Asset').subscribe(definition => {
+			this.definition = definition;
+			console.log('AssetEditComponent.getDefinition', definition);
+			this.options = this.formService.getOptions(
+				this.storeService.mapOptions(
+					this.storeService.getScalarFields(this.definition.fields)
+				)
+			);
+			this.form = this.formService.getFormGroup(this.options);
+			this.form.patchValue(this.asset);
+		});
+		/*
 		this.options = this.formService.getOptions([{
 			key: 'control',
 			schema: 'select',
@@ -73,6 +89,7 @@ export class DefinitionEditComponent extends DisposableComponent implements OnIn
 		}]);
 		this.form = this.formService.getFormGroup(this.options);
 		this.form.patchValue(this.definition);
+		*/
 	}
 
 	onReset(event): void {
@@ -80,25 +97,24 @@ export class DefinitionEditComponent extends DisposableComponent implements OnIn
 	}
 
 	onSubmit(model): void {
-		// console.log('DefinitionEditComponent.onSubmit', model);
+		// console.log('AssetEditComponent.onSubmit', model);
 		this.submitted = true;
 		this.error = null;
 		this.busy = true;
-		/*
-		this.storeService.patchDefinition(this.definition.id, model).pipe(
+		const asset = Object.assign({ id: this.asset.id }, model);
+		this.storeService.patchAsset(this.item.model, this.item.id, asset).pipe(
 			first(),
 			finalize(() => this.busy = false),
 		).subscribe(
 			patched => {
-				this.modalService.close(null, patched);
+				this.modalService.complete(null, patched);
 			},
 			error => {
 				this.error = error;
 				this.submitted = false;
-				console.log('DefinitionEditComponent.onSubmit.error', this.error);
+				console.log('AssetEditComponent.onSubmit.error', this.error);
 			}
 		);
-		*/
 	}
 
 }

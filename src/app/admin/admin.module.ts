@@ -15,13 +15,14 @@ import { AdminRouting, PAGES } from './admin.routing';
 import { AdminService } from './admin.service';
 import { AuthSigninComponent } from './auth/auth-signin.component';
 import { DefinitionAddComponent } from './definition/definition-add.component';
-import { DefinitionEditComponent } from './definition/definition-edit.component';
 import { DetailAddComponent } from './detail/detail-add.component';
 import { MuuriForOf } from './shared/muuri/muuriForOf.directive';
 import { PagerComponent } from './shared/pager/pager.component';
 import { TableComponent } from './shared/table/table.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { TabService } from './tabs/tab.serice';
+import { AssetEditComponent } from './tabs/asset/asset-edit.component';
+import { FieldEditComponent } from './tabs/fields/field-edit.component';
+import { TabService } from './tabs/tab.service';
 import { TestComponent } from './test/test.component';
 import { TestService } from './test/test.service';
 
@@ -47,9 +48,10 @@ const services = [
 ];
 
 const entryComponents: Type<DisposableComponent>[] = [
+	AssetEditComponent,
 	AuthSigninComponent,
 	DefinitionAddComponent,
-	DefinitionEditComponent,
+	FieldEditComponent,
 	DetailAddComponent,
 	TableComponent,
 	TestComponent,

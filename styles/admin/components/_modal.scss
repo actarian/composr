@@ -34,9 +34,9 @@
 .modal__page {
 	position: relative;
 	z-index: 1;
-	max-height: 90vh;
-	max-width: 90vw;
 	width: 100%;
+	max-width: calc(100vw - 144px);
+	max-height: calc(100vh - 144px);
 	overflow-x: hidden;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
@@ -44,11 +44,15 @@
 	border-radius: 6px;
 	box-shadow: 0 30px 30px -5px rgba(0, 0, 0, 0.15);
 
-	@media (max-width: 500px) {
-		max-height: calc(100% - 80px);
+	@media (max-width: 720px) {
 		margin-top: 40px;
 		width: 90%;
 		max-width: none;
+		max-height: calc(100% - 72px);
+	}
+
+	@media (min-width: 944px) {
+		max-width: 800px;
 	}
 }
 

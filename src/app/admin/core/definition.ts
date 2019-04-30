@@ -1,4 +1,23 @@
-import { toCamelCase, toTitleCase } from "./utils";
+import { toCamelCase, toTitleCase } from './utils';
+
+export interface Field {
+	id?: number | string;
+	name: string;
+	description?: string;
+	key: string;
+	type: string;
+	model?: string;
+	extend?: string;
+	fields?: Field[];
+	control?: string;
+	filterType?: number;
+	order?: number;
+	primaryKey?: boolean;
+	required?: boolean;
+	visible?: boolean;
+	editable?: boolean;
+	indexable?: boolean;
+}
 
 export interface Definition {
 	id?: number | string;
@@ -8,17 +27,7 @@ export interface Definition {
 	type: string;
 	model?: string;
 	extend?: string;
-	fields?: Definition[];
-	control?: string;
-	filterType?: number;
-	order?: number;
-	//
-	primaryKey?: boolean;
-	//
-	required?: boolean;
-	visible?: boolean;
-	editable?: boolean;
-	indexable?: boolean;
+	fields?: Field[];
 }
 
 export interface PageType {
@@ -115,9 +124,9 @@ export const REFLECTIONS: Definition[] = [{
 	extend: 'Definition',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'Name', key: 'name', type: 'string', required: true },
 		{ name: 'Model', key: 'model', type: 'string', required: true },
-		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field' }
+		{ name: 'Name', key: 'name', type: 'string', required: true },
+		{ name: 'Abstract', key: 'abstract', type: 'string' },
 	]
 }, {
 	id: 'ContentType',
@@ -128,9 +137,9 @@ export const REFLECTIONS: Definition[] = [{
 	extend: 'Definition',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'Name', key: 'name', type: 'string', required: true },
 		{ name: 'Model', key: 'model', type: 'string', required: true },
-		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field' }
+		{ name: 'Name', key: 'name', type: 'string', required: true },
+		{ name: 'Abstract', key: 'abstract', type: 'string' },
 	]
 }, {
 	id: 'PageType',
@@ -141,9 +150,9 @@ export const REFLECTIONS: Definition[] = [{
 	extend: 'Definition',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'Name', key: 'name', type: 'string', required: true },
 		{ name: 'Model', key: 'model', type: 'string', required: true },
-		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field' }
+		{ name: 'Name', key: 'name', type: 'string', required: true },
+		{ name: 'Abstract', key: 'abstract', type: 'string' },
 	]
 }, {
 	id: 'Component',
@@ -173,21 +182,22 @@ export const REFLECTIONS: Definition[] = [{
 	]
 }, {
 	id: 'Asset',
-	name: 'asset',
+	name: 'Asset',
 	key: 'asset',
 	type: 'object',
 	model: 'Asset',
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'AssetType', key: 'src', type: 'string', required: true },
+		{ name: 'AssetType', key: 'assetType', type: 'object', model: 'AssetType', required: true },
 		{ name: 'Src', key: 'src', type: 'string', required: true },
 		{ name: 'Name', key: 'name', type: 'string' },
 		{ name: 'Extension', key: 'extension', type: 'string' },
 		{ name: 'Width', key: 'width', type: 'number' },
 		{ name: 'Height', key: 'height', type: 'number' },
+		{ name: 'Author', key: 'title', type: 'string' },
 		{ name: 'Title', key: 'title', type: 'string' },
-		{ name: 'Abstract', key: 'description', type: 'string' },
+		{ name: 'Abstract', key: 'abstract', type: 'string' },
 	]
 }, {
 	id: 'Image',
@@ -198,13 +208,14 @@ export const REFLECTIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'AssetType', key: 'src', type: 'string', required: true },
+		{ name: 'AssetType', key: 'assetType', type: 'object', model: 'AssetType', required: true },
 		{ name: 'Src', key: 'src', type: 'string', required: true },
 		{ name: 'Extension', key: 'extension', type: 'string' },
 		{ name: 'Width', key: 'width', type: 'number' },
 		{ name: 'Height', key: 'height', type: 'number' },
+		{ name: 'Author', key: 'title', type: 'string' },
 		{ name: 'Title', key: 'title', type: 'string' },
-		{ name: 'Abstract', key: 'description', type: 'string' },
+		{ name: 'Abstract', key: 'abstract', type: 'string' },
 	]
 }, {
 	id: 'Content',
@@ -265,7 +276,7 @@ export const DEFINITIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
-		{ name: 'Model', key: 'model', type: 'string', model: 'Reflection', control: 'select', required: true, visible: true, indexable: true },
+		{ name: 'Model', key: 'model', type: 'string', model: 'Entity', control: 'reflection', required: true, visible: true, indexable: true },
 		// { name: 'Extend', key: 'extend', type: 'string', required: true, visible: true, indexable: true },
 		{ name: 'Name', key: 'name', type: 'string', control: 'text', required: true, visible: true, editable: true, indexable: true },
 		/*
@@ -276,7 +287,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Indexable', key: 'indexable', type: 'boolean', control: 'switch', visible: true, editable: true },
 		{ name: 'Control', key: 'control', type: 'number', control: 'select', model: 'Control', visible: true, editable: true },
 		*/
-		{ name: 'Fields', key: 'fields', type: 'array', model: 'Definition', control: 'tab', visible: true, editable: true },
+		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field', control: 'tab', visible: true, editable: true },
 		/*
 		description?: string;
 		control?: string;
@@ -288,6 +299,38 @@ export const DEFINITIONS: Definition[] = [{
 	]
 }, {
 	id: 2,
+	name: 'PageType',
+	key: 'pageType',
+	type: 'object',
+	model: 'PageType',
+	extend: 'Definition',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
+		{ name: 'Model', key: 'model', type: 'string', model: 'Page', control: 'reflection', required: true },
+		{ name: 'Name', key: 'name', type: 'string', control: 'text', required: true, visible: true, editable: true, indexable: true },
+		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field', control: 'tab', visible: true, editable: true },
+	]
+}, {
+	id: 3,
+	name: 'Asset',
+	key: 'asset',
+	type: 'object',
+	model: 'Asset',
+	extend: 'Entity',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
+		{ name: 'AssetType', key: 'assetType', type: 'object', model: 'AssetType', control: 'select', required: true, visible: true, editable: true },
+		{ name: 'Src', key: 'src', type: 'string', required: true, visible: true },
+		{ name: 'Name', key: 'name', type: 'string', visible: true },
+		{ name: 'Extension', key: 'extension', type: 'string', visible: true },
+		{ name: 'Width', key: 'width', type: 'number', visible: true },
+		{ name: 'Height', key: 'height', type: 'number', visible: true },
+		{ name: 'Author', key: 'author', type: 'string', visible: true, editable: true },
+		{ name: 'Title', key: 'title', type: 'string', visible: true, editable: true },
+		{ name: 'Abstract', key: 'abstract', type: 'string', control: 'textarea', visible: true, editable: true },
+	]
+}, {
+	id: 4,
 	name: 'Meta',
 	key: 'meta',
 	type: 'object',
@@ -300,7 +343,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Robots', key: 'robots', type: 'string', visible: true, editable: true }
 	]
 }, {
-	id: 3,
+	id: 5,
 	name: 'Page',
 	key: 'page',
 	type: 'object',
@@ -324,3 +367,12 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Taxonomies', key: 'taxonomies', type: 'array', model: 'Taxonomy', visible: true }
 	]
 }];
+
+export const STORE: { [key: string]: any[] } = {
+	assetType: [{
+		id: 100000,
+		model: 'AssetType',
+		name: 'Default Type',
+		abstract: 'Generic Picture',
+	}]
+};

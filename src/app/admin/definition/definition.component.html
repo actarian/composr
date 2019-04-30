@@ -23,8 +23,8 @@
 						<router-outlet></router-outlet>
 					</div>
 					<div class="nav--inline">
-						<button type="button" class="btn btn--secondary" [disabled]="submitted || !form.valid" (click)="onReset()"><span>Reset</span></button>
-						<button type="button" class="btn btn--primary" [disabled]="submitted || !form.valid" [ngClass]="{ 'btn--busy': busy }" (click)="form.valid && onSubmit(form.value)"><span>Save</span></button>
+						<button type="button" class="btn btn--secondary" [disabled]="busy || !form.valid" (click)="onReset()"><span>Reset</span></button>
+						<button type="button" class="btn btn--primary" [disabled]="busy || !form.valid" [ngClass]="{ 'btn--busy': busy }" (click)="form.valid && onSubmit(form.value)"><span>Save</span></button>
 					</div>
 				</form>
 			</div>

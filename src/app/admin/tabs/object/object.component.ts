@@ -3,24 +3,22 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
-import { takeUntil } from 'rxjs/operators';
-import { Definition } from '../core/definition';
-import { StoreService } from '../core/store.service';
-import { TabService, TabState } from './tab.serice';
+import { first } from 'rxjs/operators';
+import { Definition, Field } from '../../core/definition';
+import { StoreService } from '../../core/store.service';
+import { TabService, TabState } from '../tab.service';
 
 @Component({
-	selector: 'tab-object-component',
-	templateUrl: 'tab-object.component.html',
-	styleUrls: ['tab-object.component.scss'],
+	selector: 'object-component',
+	templateUrl: 'object.component.html',
+	styleUrls: ['object.component.scss'],
 })
-export class TabObjectComponent extends DisposableComponent implements OnInit {
+export class ObjectComponent extends DisposableComponent implements OnInit {
 
 	state: TabState;
-	field: Definition;
+	field: Field;
 	definition: Definition;
-
 	options: ControlOption<any>[];
-	form: FormGroup;
 	group: FormGroup;
 	submitted: boolean = false;
 	busy: boolean = false;
@@ -37,15 +35,17 @@ export class TabObjectComponent extends DisposableComponent implements OnInit {
 	ngOnInit() {
 		const path = this.route.snapshot.url[0].path;
 		this.tabService.state$.pipe(
-			takeUntil(this.unsubscribe),
+			first(),
 		).subscribe(state => {
 			this.state = state;
-			// console.log('TabObjectComponent.state', state);
+			// console.log('ObjectComponent.state', state);
 			const field = state.definition.fields.find(x => x.key === path);
 			this.field = field;
-			// console.log('TabObjectComponent.field', field);
+			// console.log('ObjectComponent.field', field);
 			const form = this.state.form;
-			this.storeService.getDefinition(field.model).subscribe(definition => {
+			this.storeService.getDefinition(field.model).pipe(
+				first(),
+			).subscribe(definition => {
 				this.definition = definition;
 				// console.log(definition);
 				this.options = this.formService.getOptions(
@@ -59,21 +59,13 @@ export class TabObjectComponent extends DisposableComponent implements OnInit {
 					form.setControl(field.key, group);
 				}
 				this.group = group;
-				// this.form = this.formService.getFormGroup(this.options);
 				const item = state.item[field.key];
 				if (item) {
-					// console.log('TabObjectComponent.item', item);
-					const patch = {};
-					patch[field.key] = item[field.key];
-					this.form.patchValue(patch);
+					// console.log('ObjectComponent.item', item);
+					this.group.patchValue(item);
 				}
-				// this.form.patchValue(state.item[field.key]);
 			});
 		});
-	}
-
-	onSubmit(value) {
-
 	}
 
 }

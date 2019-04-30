@@ -50,8 +50,8 @@ export class MuuriForOf<T> extends NgForOf<T> implements OnChanges, AfterContent
 		const node = this.viewContainerRef.element.nativeElement.parentNode;
 		if (!this.muuri_) {
 			this.muuri_ = new muuri(node, {
-				layoutDuration: 200,
-				layoutEasing: 'ease',
+				layoutDuration: 0,
+				layoutEasing: 'ease-in-out',
 				layout: {
 					fillGaps: true,
 					horizontal: false,

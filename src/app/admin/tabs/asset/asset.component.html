@@ -6,9 +6,9 @@
 	</ul>
 	<ng-container *ngIf="mode == 1">
 		<div class="listing">
-			<div class="listing__item" *muuriFor="let asset of state.item.assets">
+			<div class="listing__item" *muuriFor="let asset of state.item.assets" (click)="onEditRow(asset)">
 				<div class="listing__content">
-					<div class="picture">
+					<div class="picture" [ngStyle]="{ 'padding-top.%': 100 / asset.width * asset.height }">
 						<img [src]="asset.src" />
 					</div>
 					<div class="group--headline">

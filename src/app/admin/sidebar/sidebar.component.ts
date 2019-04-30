@@ -53,7 +53,7 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	ngOnInit() {
 		this.expanded = this.storage.get('expanded') || false;
 		this.expand.emit(this.expanded);
-		this.storeService.getTypes('definition', 'page').subscribe(types => this.types = types);
+		this.storeService.getTypes('definition', 'Page').subscribe(types => this.types = types);
 	}
 
 	onClickNav(event: MouseEvent) {
@@ -74,7 +74,8 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	}
 
 	onAddItem(event: MouseEvent) {
-		this.modalService.open({ component: DetailAddComponent, data: 'page' }).pipe(
+		// !!! make it generic
+		this.modalService.open({ component: DetailAddComponent, data: 'Page' }).pipe(
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {
@@ -84,7 +85,8 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	}
 
 	onAddType(event: MouseEvent) {
-		this.modalService.open({ component: DefinitionAddComponent, data: 'page' }).pipe(
+		// !!! make it generic
+		this.modalService.open({ component: DefinitionAddComponent, data: 'PageType' }).pipe(
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {

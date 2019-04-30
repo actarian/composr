@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ControlOption } from '@designr/control';
 import { BehaviorSubject } from 'rxjs';
-import { Definition } from '../core/definition';
+import { Definition, Field } from '../core/definition';
 import { StoreService } from '../core/store.service';
 
 export interface TabItem {
@@ -19,7 +19,7 @@ export interface TabState {
 	item: any;
 	options: ControlOption<any>[];
 	form: FormGroup;
-	fields?: Definition[];
+	fields?: Field[];
 	fieldOptions?: ControlOption<any>[][];
 }
 
@@ -35,7 +35,7 @@ export class TabService {
 	) {
 	}
 
-	setTab(state: TabState) {
+	setState(state: TabState) {
 		this.state$.next(state);
 	}
 

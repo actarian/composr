@@ -1,5 +1,5 @@
 <ng-container *ngIf="definition">
-	<div class="container">
+	<div class="container admin-vars">
 		<div class="group--headline">{{definition.name}}</div>
 		<div class="group--form">
 			<form class="form" [ngClass]="{ submitted: submitted }" name="form" [formGroup]="form" (ngSubmit)="form.valid && onSubmit(form.value)" role="form" novalidate autocomplete="off">

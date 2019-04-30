@@ -1,10 +1,10 @@
 
 import { Injectable } from '@angular/core';
 import { ControlOption } from '@designr/control';
-import { Identity, LocalStorageService } from '@designr/core';
-import { Observable, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
-import { CONTROL_MAP, Definition } from './definition';
+import { Entity, Identity, LocalStorageService } from '@designr/core';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { CONTROL_MAP, Definition, Field } from './definition';
 import { FakeService } from './fake.service';
 import { toCamelCase } from './utils';
 
@@ -20,99 +20,79 @@ export class StoreService extends FakeService {
 	}
 
 	getReflection(type: string): Observable<Definition> {
-		return of(this.store.reflection.find(x => toCamelCase(x.model) === type)).pipe(
+		return this.getReflection$(type).pipe(
 			tap(x => console.log('getReflection', type, x))
 		);
 	}
 
 	getDefinition(type: string): Observable<Definition> {
-		return of(this.store.definition.find(x => toCamelCase(x.model) === toCamelCase(type))).pipe(
+		return this.getDefinition$(type).pipe(
 			tap(x => console.log('getDefinition', type, x))
 		);
 	}
 
-	getDetail(type: string, id: number): Observable<any> {
+	getDetail(type: string, id: number | string): Observable<any> {
 		// console.log(type, id, this.store[type]);
-		return of(this.store[type].find(x => x.id === id)).pipe(
+		return this.getDetail$(type, id).pipe(
 			tap(x => console.log('getDetail', type, id, x))
 		);
 	}
 
-	getTypes(type: string, ofType?: string): Observable<any[]> {
-		return of(this.getSync(type, ofType).map(x => {
-			return {
-				id: x.id,
-				name: x.name,
-				key: toCamelCase(x.model),
-			};
-		}));
+	getList(type: string, ofType?: string): Observable<any[]> {
+		return this.getList$(type, ofType);
 	}
 
-	getList(type: string, ofType?: string): Observable<any[]> {
-		return of(this.getListSync(type, ofType));
+	getTypes(type: string, ofType?: string): Observable<any[]> {
+		return this.getTypes$(type, ofType);
 	}
 
 	getIndex(type: string): Observable<any[]> {
-		return this.getDefinition(type).pipe(
-			switchMap(definition => {
-				if (definition) {
-					return of(this.store[type].map(x => {
-						const item: any = {};
-						item.model = x.model;
-						definition.fields.forEach(field => {
-							if (field.primaryKey || field.indexable) {
-								item[field.key] = x[field.key];
-							}
-						});
-						return item;
-					}));
-				} else {
-					return of(this.store[type]);
-				}
-			})
-		);
+		return this.getIndex$(type);
 	}
 
 	patchDetail(type: string, model: Identity): Observable<any> {
 		// console.log(type, id, this.store[type]);
-		const item = this.store[type].find(x => x.id === model.id);
-		Object.assign(item, model);
-		this.storage.set('store', this.store);
-		return of(item);
+		return this.patchDetail$(type, model);
+	}
+
+	patchField(type: string, id: number | string, model: Identity): Observable<any> {
+		return this.patchField$(type, id, model);
+	}
+
+	patchAsset(type: string, id: number | string, model: Identity): Observable<any> {
+		return this.patchAsset$(type, id, model);
 	}
 
 	addItem(type: string, model: any): Observable<any> {
-		const item = this.createItem(type, model);
-		return of(item);
+		return this.addItem$(type, model);
 	}
 
 	addType(type: string, model: any): Observable<any> {
-		const item = this.createType(type, model);
-		return of(item);
+		return this.addType$(type, model);
 	}
 
-	isScalar(item: Definition) {
+	isScalar(item: Field) {
 		// console.log(item);
 		return ['boolean', 'number', 'string', 'date'].indexOf(item.type) !== -1 || ['select'].indexOf(item.control) !== -1;
 	}
 
-	getFields(fields: Definition[], ...names: string[]): Definition[] {
+	getFields(fields: Field[], ...names: string[]): Field[] {
 		return fields.filter(x => names.indexOf(x.key) !== -1);
 	}
 
-	getScalarFields(fields: Definition[]): Definition[] {
+	getScalarFields(fields: Field[]): Field[] {
 		return fields.filter(x => x.visible && this.isScalar(x));
 	}
 
-	getNonScalarFields(fields: Definition[]): Definition[] {
+	getNonScalarFields(fields: Field[]): Field[] {
 		return fields.filter(x => x.visible && !this.isScalar(x));
 	}
 
-	getTabFields(fields: Definition[]): Definition[] {
+	getTabFields(fields: Field[]): Field[] {
 		return fields.filter(x => x.visible && !this.isScalar(x) && x.control === 'tab');
 	}
 
-	getCreationFields(fields: Definition[]): Definition[] {
+	getCreationFields(fields: Field[]): Field[] {
 		return fields.filter(x => !x.primaryKey && x.required).map(x => {
 			const field = Object.assign({}, x);
 			field.editable = true;
@@ -120,12 +100,12 @@ export class StoreService extends FakeService {
 		});
 	}
 
-	mapSchema(field: Definition): string {
+	mapSchema(field: Field): string {
 		const schema = CONTROL_MAP[toCamelCase(field.type)];
 		return schema || 'text';
 	}
 
-	mapOptions(fields: Definition[]): ControlOption<any>[] {
+	mapOptions(fields: Field[]): ControlOption<any>[] {
 		const options = fields.map(x => {
 			const schema = x.control || this.mapSchema(x);
 			const option: any = {
@@ -138,18 +118,50 @@ export class StoreService extends FakeService {
 			};
 			switch (schema) {
 				case 'select':
-					const options = this.getListSync(toCamelCase(x.model));
+					/*
+					// !!! transform options in observable
+					const options = this.getListSync(this.store, toCamelCase(x.model));
 					console.log(x.model, options);
 					options.unshift(
 						{ id: null, name: 'select' }
 					);
 					option.options = options;
+					*/
+					option.options = this.getOptions$(x.model);
+					option.asObject = x.type === 'object';
+					break;
+				case 'reflection':
+					option.schema = 'select';
+					option.options = this.getReflectionOptions$(x.model);
 					option.asObject = x.type === 'object';
 					break;
 			}
 			return option;
 		});
 		return options;
+	}
+
+	getReflectionOptions$(type: string): Observable<Entity[]> {
+		return this.getList$('reflection', type).pipe(
+			map(x => {
+				console.log('reflection', type, x);
+				x.unshift(
+					{ id: null, name: 'select a value' }
+				);
+				return x;
+			})
+		);
+	}
+
+	getOptions$(type: string): Observable<Entity[]> {
+		return this.getList$(type).pipe(
+			map(x => {
+				x.unshift(
+					{ id: null, name: 'select a value' }
+				);
+				return x;
+			})
+		);
 	}
 
 	getChangedValues(original: any, patched: any): any {

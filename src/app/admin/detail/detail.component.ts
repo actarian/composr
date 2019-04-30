@@ -3,10 +3,10 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
-import { takeUntil } from 'rxjs/operators';
+import { finalize, first, takeUntil } from 'rxjs/operators';
 import { Definition } from '../core/definition';
 import { StoreService } from '../core/store.service';
-import { TabItem, TabService } from '../tabs/tab.serice';
+import { TabItem, TabService } from '../tabs/tab.service';
 
 @Component({
 	selector: 'detail-component',
@@ -24,8 +24,9 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 
 	options: ControlOption<any>[];
 	form: FormGroup;
-	submitted: boolean = false;
+	error: any;
 	busy: boolean = false;
+	submitted: boolean = false;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -43,7 +44,9 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 			this.type = data.type;
 			this.id = parseInt(data.id, 0);
 			console.log('detail', this.type, this.id);
-			this.storeService.getDefinition(this.type).subscribe(definition => {
+			this.storeService.getDefinition(this.type).pipe(
+				first(),
+			).subscribe(definition => {
 				this.definition = definition;
 				this.options = this.formService.getOptions(
 					this.storeService.mapOptions(
@@ -52,11 +55,13 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 				);
 				this.form = this.formService.getFormGroup(this.options);
 				this.tabFields = this.tabService.getTabs(this.definition);
-				this.storeService.getDetail(this.type, this.id).subscribe(item => {
+				this.storeService.getDetail(this.type, this.id).pipe(
+					first(),
+				).subscribe(item => {
 					console.log('getDetail', this.type, this.id, item);
 					this.item = item;
 					this.form.patchValue(item);
-					this.tabService.setTab({
+					this.tabService.setState({
 						tabFields: this.tabFields,
 						type: this.type,
 						id: this.id,
@@ -81,6 +86,25 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 
 	onSubmit(model: any) {
 		console.log('DetailComponent.onSubmit', this.type, this.id, model);
+		this.submitted = true;
+		this.error = null;
+		this.busy = true;
+		const item = Object.assign({ id: this.id }, model);
+		this.storeService.patchDetail(this.type, item).pipe(
+			first(),
+			finalize(() => this.busy = false),
+		).subscribe(
+			patched => {
+				console.log('patched!!!', patched);
+				Object.assign(this.item, patched);
+				console.log(this.form);
+			},
+			error => {
+				this.error = error;
+				this.submitted = false;
+				console.log('AssetEditComponent.onSubmit.error', this.error);
+			}
+		);
 	}
 
 	onPreview() {

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { DisposableComponent } from '@designr/core';
 import { takeUntil } from 'rxjs/operators';
-import { TabService, TabState } from './tab.serice';
+import { TabService, TabState } from '../tab.service';
 
 @Component({
-	selector: 'tab-detail-component',
-	templateUrl: 'tab-detail.component.html',
-	styleUrls: ['tab-detail.component.scss'],
+	selector: 'scalar-component',
+	templateUrl: 'scalar.component.html',
+	styleUrls: ['scalar.component.scss'],
 })
-export class TabDetailComponent extends DisposableComponent implements OnInit {
+export class ScalarComponent extends DisposableComponent implements OnInit {
 
 	state: TabState;
 
@@ -22,7 +22,7 @@ export class TabDetailComponent extends DisposableComponent implements OnInit {
 		this.tabService.state$.pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe(state => {
-			console.log('TabDetailComponent', state);
+			console.log('ScalarComponent', state);
 			this.state = state;
 		});
 	}
