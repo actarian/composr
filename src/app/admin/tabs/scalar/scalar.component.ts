@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { takeUntil } from 'rxjs/operators';
 import { TabService, TabState } from '../tab.service';
@@ -13,6 +14,7 @@ export class ScalarComponent extends DisposableComponent implements OnInit {
 	state: TabState;
 
 	constructor(
+		private route: ActivatedRoute,
 		private tabService: TabService,
 	) {
 		super();

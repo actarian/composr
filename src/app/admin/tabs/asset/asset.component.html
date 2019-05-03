@@ -1,4 +1,6 @@
 <ng-container [formGroup]="state.form" *ngIf="state && state.form">
+	<h2>{{field.name}}</h2>
+	<p>{{field.description}}</p>
 	<ul class="nav--modes">
 		<li *ngFor="let item of modes" [ngClass]="{ active: mode === item.id }" (click)="mode = item.id">
 			<span>{{item.name}}</span>
@@ -9,7 +11,7 @@
 			<div class="listing__item" *muuriFor="let asset of state.item.assets" (click)="onEditRow(asset)">
 				<div class="listing__content">
 					<div class="picture" [ngStyle]="{ 'padding-top.%': 100 / asset.width * asset.height }">
-						<img [src]="asset.src" />
+						<img [src]="getSrc(asset)" />
 					</div>
 					<div class="group--headline">
 						<span class="name">{{asset.name}}</span>
@@ -26,6 +28,7 @@
 			<ng-template #template let-item>
 				<!-- <div class="table__cell" *ngFor="let col of item.columns; let i = index">{{item.getValue(item.row, col)}}</div> -->
 				<div class="table__cell">
+					<!-- [src]="getSrc(asset)" -->
 					<img [src]="item.getValue(item.row, item.keys.src)" />
 				</div>
 				<div class="table__cell">{{item.getValue(item.row, item.keys.name)}}</div>

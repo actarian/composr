@@ -1,4 +1,6 @@
 <ng-container [formGroup]="state.form" *ngIf="state && state.form">
+	<h2>Detail</h2>
+	<p></p>
 	<!-- <controls-component class="fieldset" [options]="state.options" [form]="state.form"></controls-component> -->
 	<div class="fieldset" *ngFor="let option of state.options">
 		<control-outlet class="form-group" [option]="option" [form]="state.form"></control-outlet>

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DisposableComponent, Entity } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first } from 'rxjs/operators';
-import { Field } from '../../core/definition';
+import { Asset, Field } from '../../core/definition';
 import { Column } from '../../shared/table/table.component';
 import { TabService, TabState } from '../tab.service';
 import { AssetEditComponent } from './asset-edit.component';
@@ -38,6 +38,15 @@ export class AssetComponent extends DisposableComponent implements OnInit {
 			}
 		}
 	];
+
+	getSrc(asset: Asset): string {
+		const w = 640;
+		const h = Math.round(640 / asset.width * asset.height);
+		const components = asset.src.split('/');
+		components[components.length - 2] = w.toString();
+		components[components.length - 1] = h.toString();
+		return components.join('/');
+	}
 
 	constructor(
 		private route: ActivatedRoute,
