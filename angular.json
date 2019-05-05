@@ -31,6 +31,10 @@
 							{ "input": "./node_modules/json-formatter-js/dist/json-formatter.js", "lazy": true },
 							{ "input": "./node_modules/mapbox-gl/dist/mapbox-gl.js", "lazy": false },
 							{ "input": "./node_modules/marked/lib/marked.js", "lazy": false }
+						],
+						"lazyModules": [
+							"src/app/admin/pages/pages.module",
+							"src/app/admin/contents/contents.module"
 						]
 					},
 					"configurations": {

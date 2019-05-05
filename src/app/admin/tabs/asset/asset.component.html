@@ -1,6 +1,10 @@
 <ng-container [formGroup]="state.form" *ngIf="state && state.form">
-	<h2>{{field.name}}</h2>
-	<p>{{field.description}}</p>
+	<!--
+	<div class="fieldset--headline">
+		<h2 class="title">{{field.name}}</h2>
+		<div class="description">{{field.description}}</div>
+	</div>
+	-->
 	<ul class="nav--modes">
 		<li *ngFor="let item of modes" [ngClass]="{ active: mode === item.id }" (click)="mode = item.id">
 			<span>{{item.name}}</span>

@@ -12,3 +12,11 @@ $font-size: var(--font-size);
 $btn-radius: var(--btn-radius);
 $card-radius: var(--card-radius);
 $bullet-size: var(--bullet-size);
+
+$grid-columns: 12 !default;
+$grid-gutter-width: 30px !default;
+$grid-breakpoints: (xs: 0, sm: 768px, md: 1024px, lg: 1440px, xl: 1920px) !default;
+$container-max-widths: (sm: calc(100vw - 120px),
+md: calc(100vw - 180px),
+lg: calc(100vw - 240px),
+xl: calc(100vw - 300px)) !default;

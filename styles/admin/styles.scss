@@ -22,26 +22,6 @@ a {
 	--card-radius: 30px;
 	--bullet-size: 12px;
 
-	.form {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-
-		.fieldsets {
-			flex: 1 1 auto;
-			overflow-x: hidden;
-			overflow-y: auto;
-		}
-
-		.nav--inline {
-			flex: 0 0 50px;
-		}
-	}
-
-	.fieldset {
-		@extend %fieldset;
-	}
-
 	.btn--secondary {
 		@extend %btn-secondary;
 		padding: 13px 20px;
@@ -109,7 +89,8 @@ a {
 		}
 
 	}
-
 }
 
 @import 'components/modal';
+@import 'components/controls';
+@import 'components/fieldsets';

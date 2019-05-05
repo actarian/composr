@@ -1,0 +1,137 @@
+@import '~styles/admin/variables';
+@import '~styles/admin/mixins';
+
+:host {
+	@extend %layout-menu;
+}
+
+.sidebar__secondary {
+	flex: 0 0 216px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	width: 216px;
+	height: 100%;
+	padding-right: 16px;
+
+	.headline {
+		height: 36px;
+		flex: 0 0 36px;
+		display: flex;
+		align-items: center;
+		margin-bottom: 16px;
+	}
+
+	.title {
+		font-size: 14px;
+		line-height: 1.5;
+		font-weight: bold;
+		color: #ffffff;
+	}
+
+	.category {
+		font-size: 11px;
+		font-weight: 500;
+		line-height: 1.5;
+		color: #7888ae;
+		text-transform: uppercase;
+		margin-bottom: 16px;
+	}
+}
+
+.nav--menu-primary {
+	@extend %nav-vertical;
+	margin-bottom: 24px;
+
+	&>li {
+		margin-bottom: 1px;
+	}
+}
+
+.nav--menu-secondary {
+	@extend %nav-vertical;
+	margin-bottom: 24px;
+
+	&>li {
+		margin-bottom: 1px;
+	}
+}
+
+.btn--menu-primary {
+	@extend %btn-flex;
+	border-radius: 2px;
+	font-size: 12px;
+	font-weight: normal;
+	padding: 10px 10px 10px 32px;
+	justify-content: space-between;
+
+	span {
+		flex: 1 1 auto;
+	}
+
+	svg {
+		width: 15px;
+		height: 15px;
+		transition: fill ease-in-out 350ms;
+		margin-right: 11px;
+		pointer-events: all;
+		fill: #7888ae;
+	}
+
+	&,
+	&:active,
+	&:focus,
+	&:visited {
+		color: #7888ae;
+	}
+
+	&.active,
+	&:hover {
+		background: #2440c3;
+		color: white;
+
+		svg {
+			fill: #ffffff;
+		}
+	}
+}
+
+.btn--menu-secondary {
+	@extend %btn-flex;
+	border-radius: 2px;
+	font-size: 12px;
+	font-weight: normal;
+	padding: 10px 10px 10px 8px;
+	justify-content: space-between;
+
+	span {
+		flex: 1 1 auto;
+	}
+
+	svg {
+		width: 15px;
+		height: 15px;
+		transition: fill ease-in-out 350ms;
+		margin-right: 11px;
+		pointer-events: all;
+		fill: #7888ae;
+	}
+
+	&,
+	&:active,
+	&:focus,
+	&:visited {
+		color: #7888ae;
+	}
+
+	&.active,
+	&:hover {
+		background: #2440c3;
+		color: white;
+
+		svg {
+			fill: #ffffff;
+		}
+	}
+}

@@ -47,7 +47,8 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 			this.type = data.type;
 			this.id = parseInt(data.id, 0);
 			console.log('definition', this.type, this.id);
-			this.storeService.getDefinition('definition').pipe(
+			// !!! make PageType dynamic
+			this.storeService.getDefinition('PageType').pipe(
 				first(),
 			).subscribe(definition => {
 				// console.log('definition', definition);

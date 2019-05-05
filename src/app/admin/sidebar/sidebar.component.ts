@@ -1,13 +1,7 @@
 // import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
-import { DisposableComponent, LocalStorageService, MenuItem } from '@designr/core';
-import { ModalCompleteEvent, ModalService } from '@designr/ui';
-import { first } from 'rxjs/operators';
+import { DisposableComponent, LocalStorageService } from '@designr/core';
 import { AdminService } from '../admin.service';
-import { StoreService } from '../core/store.service';
-import { DefinitionAddComponent } from '../definition/definition-add.component';
-import { DetailAddComponent } from '../detail/detail-add.component';
 
 @Component({
 	selector: 'sidebar-component',
@@ -40,11 +34,8 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	types: any[] = [];
 
 	constructor(
-		private router: Router,
 		private storage: LocalStorageService,
-		private modalService: ModalService,
 		public adminService: AdminService,
-		public storeService: StoreService,
 	) {
 		super();
 		this.shortName = this.adminService.admin.firstName.substr(0, 1) + this.adminService.admin.lastName.substr(0, 1);
@@ -53,7 +44,6 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 	ngOnInit() {
 		this.expanded = this.storage.get('expanded') || false;
 		this.expand.emit(this.expanded);
-		this.storeService.getTypes('definition', 'Page').subscribe(types => this.types = types);
 	}
 
 	onClickNav(event: MouseEvent) {
@@ -65,34 +55,6 @@ export class SidebarComponent extends DisposableComponent implements OnInit {
 		}
 		this.storage.set('expanded', this.expanded);
 		this.expand.emit(this.expanded);
-	}
-
-	onEditType(event: MouseEvent, item: MenuItem) {
-		event.preventDefault();
-		event.stopPropagation();
-		this.router.navigate(['/admin/content', 'definition', 'page', item.id]);
-	}
-
-	onAddItem(event: MouseEvent) {
-		// !!! make it generic
-		this.modalService.open({ component: DetailAddComponent, data: 'Page' }).pipe(
-			first()
-		).subscribe(e => {
-			if (e instanceof ModalCompleteEvent) {
-				console.log('onAddItem.ModalCompleteEvent', e.data);
-			}
-		});
-	}
-
-	onAddType(event: MouseEvent) {
-		// !!! make it generic
-		this.modalService.open({ component: DefinitionAddComponent, data: 'PageType' }).pipe(
-			first()
-		).subscribe(e => {
-			if (e instanceof ModalCompleteEvent) {
-				console.log('onAddType.ModalCompleteEvent', e.data);
-			}
-		});
 	}
 
 	onSign(): void {

@@ -115,6 +115,9 @@ export class StoreService extends FakeService {
 				placeholder: x.description || x.key,
 				disabled: !x.editable || x.primaryKey,
 				required: x.required,
+				//
+				type: x.type,
+				primaryKey: x.primaryKey,
 			};
 			switch (schema) {
 				case 'select':
@@ -143,6 +146,7 @@ export class StoreService extends FakeService {
 
 	getReflectionOptions$(type: string): Observable<Entity[]> {
 		return this.getList$('reflection', type).pipe(
+			tap(x => console.log('getReflectionOptions$', type, x)),
 			map(x => {
 				console.log('reflection', type, x);
 				x.unshift(

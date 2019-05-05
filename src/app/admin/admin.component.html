@@ -1,8 +1,6 @@
 <div class="admin admin-vars">
 	<div class="wrapper" [ngClass]="{ opened: opened }">
 		<sidebar-component (expand)="opened = $event"></sidebar-component>
-		<div class="wrapper__content">
-			<router-outlet #outlet="outlet"></router-outlet>
-		</div>
+		<router-outlet #outlet="outlet"></router-outlet>
 	</div>
 </div>

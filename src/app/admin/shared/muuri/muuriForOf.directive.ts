@@ -28,13 +28,15 @@ export class MuuriForOf<T> extends NgForOf<T> implements OnChanges, AfterContent
 
 	ngOnChanges(changes: SimpleChanges): void {
 		console.log('MuuriForOf.ngOnChanges', changes);
+		this.zone.runOutsideAngular(() => {
+			setTimeout(() => {
+				this.onMuuri();
+			});
+		});
 	}
 
 	ngAfterContentChecked(): void {
 		console.log('MuuriForOf.ngAfterContentChecked');
-		this.zone.runOutsideAngular(() => {
-			this.onMuuri();
-		});
 		/*
 		if ('ngForIn' in changes) {
 			this.ngForOf = Object.keys(this.ngForIn);

@@ -50,7 +50,7 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 	}
 
 	onEditRow(item: any) {
-		this.router.navigate(['/admin/content/data', this.type, item.id]);
+		this.router.navigate(['/admin/pages/data', this.type, item.id]);
 	}
 
 	onDeleteRow(item: any) {

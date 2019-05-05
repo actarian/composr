@@ -1,4 +1,8 @@
 <ng-container [formGroup]="state.form" *ngIf="state && state.form">
+	<div class="fieldset--headline">
+		<h2 class="title">{{field.name}}</h2>
+		<div class="description">{{field.description}}</div>
+	</div>
 	<div cdkDropList (cdkDropListDropped)="onDropField($event)">
 		<div class="definition" [ngClass]="{ required: field.required }" [formGroup]="state.form" *ngFor="let field of state.fields; let n = index" cdkDrag [cdkDragDisabled]="field.primaryKey || field.required">
 			<div class="drag__placeholder" *cdkDragPlaceholder></div>

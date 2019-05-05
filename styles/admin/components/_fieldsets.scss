@@ -1,0 +1,82 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.nav--inline {
+		flex: 0 0 50px;
+	}
+}
+
+.fieldset--headline {
+	display: flex;
+	align-items: stretch;
+
+	.title {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		justify-content: center;
+		position: relative;
+		padding-right: 20px;
+		margin-right: 20px;
+		text-align: right;
+
+		/*
+		font-size: 23px;
+		font-weight: bold;
+		color: #191b22;
+
+		&:after {
+			content: '';
+			display: block;
+			position: absolute;
+			width: 3px;
+			height: 100%;
+			top: 0;
+			right: -1px;
+			background: $border;
+			transition: opacity ease-in-out 350ms;
+		}
+		*/
+
+		background: $border;
+		color: $primary;
+		font-size: 19px;
+		font-weight: normal;
+		padding: 8px 19px 8px 8px;
+		border-radius: 3px;
+
+		@include media-breakpoint-down(md) {
+			flex: 0 0 130px;
+		}
+
+		@include media-breakpoint-up(lg) {
+			flex: 0 0 180px;
+		}
+	}
+
+	.description {
+		flex: 1 1 auto;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		font-size: 14px;
+		line-height: 1.3;
+		color: #585a61;
+	}
+
+}
+
+.fieldsets {
+	flex: 1 1 auto;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.fieldset {
+	padding: 20px 0;
+	border-bottom: 1px solid $border; // #e7e7eb;
+	// @extend %fieldset;
+}

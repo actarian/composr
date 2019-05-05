@@ -1,2 +1,6 @@
 @import '~styles/admin/variables';
 @import '~styles/admin/mixins';
+
+:host {
+	@extend %layout-wrapper-main;
+}

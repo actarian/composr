@@ -306,7 +306,7 @@ export const DEFINITIONS: Definition[] = [{
 	extend: 'Definition',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
-		{ name: 'Model', key: 'model', type: 'string', model: 'Page', control: 'reflection', required: true },
+		{ name: 'Model', key: 'model', type: 'string', model: 'Page', control: 'reflection', required: true, visible: true, editable: true, indexable: true },
 		{ name: 'Name', key: 'name', type: 'string', control: 'text', required: true, visible: true, editable: true, indexable: true },
 		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field', control: 'tab', visible: true, editable: true },
 	]
@@ -359,7 +359,10 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Description', key: 'description', type: 'string', control: 'textarea', visible: true, editable: true },
 		{ name: 'Slug', key: 'slug', type: 'string', visible: true, editable: true },
 		{ name: 'Active', key: 'active', type: 'boolean', control: 'switch', visible: true, editable: true },
-		{ name: 'Meta', key: 'meta', type: 'object', model: 'Meta', control: 'tab', visible: true },
+		{
+			name: 'Meta', key: 'meta', type: 'object', model: 'Meta', control: 'tab', visible: true,
+			description: 'lorem ipsum'
+		},
 		{ name: 'Contents', key: 'contents', type: 'array', model: 'Content', control: 'tab', visible: true },
 		{ name: 'Assets', key: 'assets', type: 'array', model: 'Asset', control: 'tab', visible: true },
 		{ name: 'Related', key: 'related', type: 'array', model: 'Page', control: 'tab', visible: true },

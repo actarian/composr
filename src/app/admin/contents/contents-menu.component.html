@@ -1,0 +1,38 @@
+<div class="sidebar__secondary">
+	<div class="headline">
+		<div class="title">Site Manager</div>
+	</div>
+	<div class="category">Directories</div>
+	<ul class="nav--menu-primary">
+		<li>
+			<a class="btn--menu-primary" [routerLink]="['/admin/contents/data', 'content']" routerLinkActive="active">
+				<span>Contents</span>
+				<svg (click)="onEditType($event, type)"><use xlink:href="#edit"></use></svg>
+			</a>
+		</li>
+		<li>
+			<a class="btn--menu-secondary" (click)="onAddItem($event)"><svg><use xlink:href="#add"></use></svg> <span>Add Content</span></a>
+		</li>
+		<!--
+		<li>
+			<a class="btn--menu-primary" routerLink="/admin/contents/category" routerLinkActive="active">
+				<span>Categories</span>
+				<svg (click)="onEditItem($event, item)"><use xlink:href="#edit"></use></svg>
+			</a>
+		</li>
+		-->
+	</ul>
+	<div class="category">Content Types</div>
+	<ul class="nav--menu-secondary">
+		<li *ngFor="let item of types">
+			<a class="btn--menu-secondary" [routerLink]="['/admin/contents/data', item.key]" routerLinkActive="active">
+				<svg><use xlink:href="#document"></use></svg>
+				<span>{{item.name}}</span>
+				<svg (click)="onEditType($event, item)"><use xlink:href="#edit"></use></svg>
+			</a>
+		</li>
+		<li>
+			<a class="btn--menu-secondary" (click)="onAddType($event)"><svg><use xlink:href="#add"></use></svg> <span>Add Content Type</span></a>
+		</li>
+	</ul>
+</div>

@@ -19,13 +19,26 @@
 	overflow: hidden;
 	width: 72px;
 	flex: 0 0 72px;
+}
 
-	.opened>& {
-		width: 288px;
-		flex: 0 0 288px;
+%layout-menu {
+	height: 100%;
+	overflow: hidden;
+	width: 216px;
+	flex: 0 0 216px;
+	display: none;
+
+	.opened & {
+		display: block;
 	}
+}
 
-	// transition: all ease-in-out 350ms;
+%layout-wrapper-main {
+	display: flex;
+	height: 100%;
+	overflow: hidden;
+	width: calc(100% - 72px);
+	flex: 1 1 calc(100% - 72px);
 }
 
 %layout-wrapper-content {
