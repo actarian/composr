@@ -23,7 +23,7 @@ import { FieldComponent } from './tabs/fields/field.component';
 import { ObjectComponent } from './tabs/object/object.component';
 import { RelationComponent } from './tabs/relation/relation.component';
 import { ScalarComponent } from './tabs/scalar/scalar.component';
-import { TabService } from './tabs/tab.service';
+import { TabComponent } from './tabs/tab.component';
 
 const modules = [
 	CommonModule,
@@ -37,7 +37,6 @@ const modules = [
 ];
 
 const services = [
-	TabService,
 ];
 
 const entryComponents: Type<DisposableComponent>[] = [
@@ -59,6 +58,7 @@ const components: Type<DisposableComponent>[] = [
 	PagerComponent,
 	RelationComponent,
 	ScalarComponent,
+	TabComponent,
 	TableComponent,
 	...entryComponents,
 ];

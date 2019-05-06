@@ -4,12 +4,9 @@ import { DefinitionComponent } from '../shared/definition/definition.component';
 import { DetailComponent } from '../shared/detail/detail.component';
 import { IndexComponent } from '../shared/index/index.component';
 import { NotFoundComponent } from '../shared/not-found/not-found.component';
-import { AssetComponent } from '../shared/tabs/asset/asset.component';
-import { ContentComponent } from '../shared/tabs/content/content.component';
 import { FieldComponent } from '../shared/tabs/fields/field.component';
-import { ObjectComponent } from '../shared/tabs/object/object.component';
-import { RelationComponent } from '../shared/tabs/relation/relation.component';
 import { ScalarComponent } from '../shared/tabs/scalar/scalar.component';
+import { TabComponent } from '../shared/tabs/tab.component';
 import { PagesComponent } from './pages.component';
 
 const ROUTES: Routes = [{
@@ -19,7 +16,8 @@ const ROUTES: Routes = [{
 		{
 			path: 'data/:type/:id', component: DetailComponent, children: [
 				{ path: '', redirectTo: 'detail', pathMatch: 'full' },
-				{ path: 'detail', component: ScalarComponent },
+				{ path: 'detail', component: ScalarComponent, data: { tab: true } },
+				/*
 				{ path: 'meta', component: ObjectComponent },
 				{ path: 'contents', component: ContentComponent },
 				{ path: 'assets', component: AssetComponent },
@@ -27,6 +25,8 @@ const ROUTES: Routes = [{
 				{ path: 'features', component: RelationComponent },
 				{ path: 'taxonomies', component: RelationComponent },
 				{ path: ':key', component: ObjectComponent },
+				*/
+				{ path: ':key', component: TabComponent, data: { tab: true } },
 			]
 		},
 		{

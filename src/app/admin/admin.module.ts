@@ -1,5 +1,6 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, Type } from '@angular/core';
+import { RouteReuseStrategy } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { AdminComponent } from './admin.component';
 import { AdminGuard } from './admin.guard';
@@ -9,6 +10,7 @@ import { AdminRouting } from './admin.routing';
 import { AdminService } from './admin.service';
 import { AuthSigninComponent } from './auth/auth-signin.component';
 import { AuthComponent } from './auth/auth.component';
+import { CustomRouteReuseStrategy } from './custom-route-reuse.strategy';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SharedModule } from './shared/shared.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -23,6 +25,7 @@ const modules = [
 ];
 
 const services = [
+	{ provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
 	AdminService,
 	AdminResolve,
 	TestService,

@@ -1,0 +1,22 @@
+<ng-container [formGroup]="state.form" *ngIf="state && state.form">
+	{{field.type}}
+	<ng-container [ngSwitch]="field.type">
+		<ng-container *ngSwitchCase="'object'">
+			<object-component></object-component>
+		</ng-container>
+		<ng-container *ngSwitchCase="'array'">
+			<ng-container [ngSwitch]="field.model">
+				<ng-container *ngSwitchCase="'Content'">
+					<content-component></content-component>
+				</ng-container>
+				<ng-container *ngSwitchCase="'Asset'">
+					<asset-component></asset-component>
+				</ng-container>
+				<ng-container *ngSwitchDefault>
+					<relation-component></relation-component>
+				</ng-container>
+			</ng-container>
+		</ng-container>
+		<ng-container *ngSwitchDefault>{{field.type}}</ng-container>
+	</ng-container>
+</ng-container>

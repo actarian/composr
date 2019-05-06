@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { first, takeUntil } from 'rxjs/operators';
-import { Field } from '../../../core/definition';
-import { TabService, TabState } from '../tab.service';
+import { Field } from '../../core/definition';
+import { TabService, TabState } from './tab.service';
 
 @Component({
-	selector: 'relation-component',
-	templateUrl: 'relation.component.html',
-	styleUrls: ['relation.component.scss'],
+	selector: 'tab-component',
+	templateUrl: 'tab.component.html',
+	styleUrls: ['tab.component.scss'],
 })
-export class RelationComponent extends DisposableComponent implements OnInit {
+export class TabComponent extends DisposableComponent implements OnInit {
 
 	state: TabState;
 	field: Field;
@@ -26,7 +26,6 @@ export class RelationComponent extends DisposableComponent implements OnInit {
 		this.tabService.state$.pipe(
 			first(),
 		).subscribe(state => {
-			console.log('RelationComponent', state);
 			this.state = state;
 			this.route.params.pipe(
 				takeUntil(this.unsubscribe),
@@ -34,6 +33,7 @@ export class RelationComponent extends DisposableComponent implements OnInit {
 				const path = this.route.snapshot.url[0].path;
 				const field = state.definition.fields.find(x => x.key === path);
 				this.field = field;
+				console.log('path', path, 'field', field);
 			});
 		});
 	}

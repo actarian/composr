@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DisposableComponent, Entity } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
-import { first } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { Asset, Field } from '../../../core/definition';
 import { Column } from '../../table/table.component';
 import { TabService, TabState } from '../tab.service';
@@ -57,14 +57,18 @@ export class AssetComponent extends DisposableComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		const path = this.route.snapshot.url[0].path;
 		this.tabService.state$.pipe(
 			first(),
 		).subscribe(state => {
 			console.log('AssetComponent', state);
 			this.state = state;
-			const field = state.definition.fields.find(x => x.key === path);
-			this.field = field;
+			this.route.params.pipe(
+				takeUntil(this.unsubscribe),
+			).subscribe(data => {
+				const path = this.route.snapshot.url[0].path;
+				const field = state.definition.fields.find(x => x.key === path);
+				this.field = field;
+			});
 		});
 	}
 
