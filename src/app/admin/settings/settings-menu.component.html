@@ -1,0 +1,38 @@
+<div class="sidebar__secondary">
+	<div class="headline">
+		<div class="title">Site Manager</div>
+	</div>
+	<div class="category">Directories</div>
+	<ul class="nav--menu-primary">
+		<li>
+			<a class="btn--menu-primary" [routerLink]="['/admin/settings/data', 'component']" routerLinkActive="active">
+				<span>Components</span>
+				<svg (click)="onEditType($event, 'component')"><use xlink:href="#edit"></use></svg>
+			</a>
+		</li>
+		<li>
+			<a class="btn--menu-primary" [routerLink]="['/admin/settings/data', 'language']" routerLinkActive="active">
+				<span>Languages</span>
+				<svg (click)="onEditType($event, 'language')"><use xlink:href="#edit"></use></svg>
+			</a>
+		</li>
+		<li>
+			<a class="btn--menu-secondary" (click)="onAddType($event)"><svg><use xlink:href="#add"></use></svg> <span>Add Type</span></a>
+		</li>
+	</ul>
+	<!--
+	<div class="category">Page Types</div>
+	<ul class="nav--menu-secondary">
+		<li *ngFor="let item of types">
+			<a class="btn--menu-secondary" [routerLink]="['/admin/settings/data', item.key]" routerLinkActive="active">
+				<svg><use xlink:href="#document"></use></svg>
+				<span>{{item.name}}</span>
+				<svg (click)="onEditType($event, item)"><use xlink:href="#edit"></use></svg>
+			</a>
+		</li>
+		<li>
+			<a class="btn--menu-secondary" (click)="onAddType($event)"><svg><use xlink:href="#add"></use></svg> <span>Add Page Type</span></a>
+		</li>
+	</ul>
+	-->
+</div>

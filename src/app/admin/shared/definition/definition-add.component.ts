@@ -5,15 +5,15 @@ import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
 import { ModalData, ModalService } from '@designr/ui';
 import { finalize, first } from 'rxjs/operators';
-import { Definition } from '../core/definition';
-import { StoreService } from '../core/store.service';
+import { Definition } from '../../core/definition';
+import { StoreService } from '../../core/store.service';
 
 @Component({
-	selector: 'detail-add-component',
-	templateUrl: 'detail-add.component.html',
-	styleUrls: ['detail-add.component.scss'],
+	selector: 'definition-add-component',
+	templateUrl: 'definition-add.component.html',
+	styleUrls: ['definition-add.component.scss'],
 })
-export class DetailAddComponent extends DisposableComponent implements OnInit {
+export class DefinitionAddComponent extends DisposableComponent implements OnInit {
 
 	type: string;
 	definition: Definition;
@@ -36,6 +36,7 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 
 	ngOnInit() {
 		this.type = this.modalData as string;
+		console.log('DefinitionAddComponent.ngOnInit', this.type);
 		this.storeService.getDefinition(this.type).subscribe(definition => {
 			this.definition = definition;
 			this.options = this.formService.getOptions(
@@ -44,9 +45,6 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 				)
 			);
 			this.form = this.formService.getFormGroup(this.options);
-			this.form.reset({
-				pageType: { id: null },
-			});
 		});
 		/*
 		this.route.params.pipe(
@@ -62,11 +60,13 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 	}
 
 	onSubmit(model: any) {
-		console.log('DetailAddComponent.onSubmit', model);
+		console.log('DefinitionAddComponent.onSubmit', model);
 		this.submitted = true;
 		this.error = null;
 		this.busy = true;
-		this.storeService.addItem(this.type, model).pipe(
+		const field = this.definition.fields.find(x => x.key === 'model');
+		const type = field.model;
+		this.storeService.addType(type, model).pipe(
 			first(),
 			finalize(() => this.busy = false),
 		).subscribe(
@@ -76,10 +76,9 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 			error => {
 				this.error = error;
 				this.submitted = false;
-				console.log('DetailAddComponent.onSubmit.error', this.error);
+				console.log('DefinitionAddComponent.onSubmit.error', this.error);
 			}
 		);
 	}
-
 
 }

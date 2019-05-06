@@ -10,11 +10,11 @@ import { FieldComponent } from '../shared/tabs/fields/field.component';
 import { ObjectComponent } from '../shared/tabs/object/object.component';
 import { RelationComponent } from '../shared/tabs/relation/relation.component';
 import { ScalarComponent } from '../shared/tabs/scalar/scalar.component';
-import { PagesComponent } from './pages.component';
+import { SettingsComponent } from './settings.component';
 
 const ROUTES: Routes = [{
-	path: '', component: PagesComponent, children: [
-		{ path: '', redirectTo: 'data/page', pathMatch: 'full' },
+	path: '', component: SettingsComponent, children: [
+		{ path: '', redirectTo: 'data/component', pathMatch: 'full' },
 		{ path: 'data/:type', component: IndexComponent },
 		{
 			path: 'data/:type/:id', component: DetailComponent, children: [
@@ -47,5 +47,5 @@ const ROUTES: Routes = [{
 	exports: [RouterModule]
 })
 
-export class PagesRouting { }
+export class SettingsRouting { }
 

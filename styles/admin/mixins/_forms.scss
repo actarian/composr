@@ -35,19 +35,19 @@
 
 	&.disabled {
 
-		color: #585a61;
-		background: #eff0f3;
-		border-color: $border;
+		background: $disabled;
+		border-color: $disabled;
+		color: $foreground-disabled;
 
 		select {
-			color: #585a61;
+			color: $foreground-disabled;
 		}
 
 		.select__arrow {
 			border-left: 1px solid rgba(#585a61, 0.2);
 
 			svg {
-				fill: #585a61;
+				fill: $foreground-disabled;
 			}
 		}
 
@@ -232,8 +232,9 @@
 		}
 
 		&[disabled] {
-			background: #eff0f3;
-			border-color: $border;
+			background: $disabled;
+			border-color: $disabled;
+			color: $foreground-disabled;
 		}
 
 	}

@@ -4,6 +4,8 @@ $foreground: var(--color-foreground);
 $foreground-secondary: var(--color-foreground-secondary);
 $primary: var(--color-primary);
 $border: var(--color-border);
+$disabled: var(--color-disabled);
+$foreground-disabled: var(--color-foreground-disabled);
 $facebook: var(--color-facebook);
 $google: var(--color-google);
 $font-primary: var(--font-primary);
@@ -17,6 +19,6 @@ $grid-columns: 12 !default;
 $grid-gutter-width: 30px !default;
 $grid-breakpoints: (xs: 0, sm: 768px, md: 1024px, lg: 1440px, xl: 1920px) !default;
 $container-max-widths: (sm: calc(100vw - 120px),
-md: calc(100vw - 180px),
-lg: calc(100vw - 240px),
-xl: calc(100vw - 300px)) !default;
+	md: calc(100vw - 180px),
+	lg: calc(100vw - 240px),
+	xl: calc(100vw - 300px)) !default;

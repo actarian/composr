@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { DisposableComponent, Entity } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first } from 'rxjs/operators';
-import { Asset, Field } from '../../core/definition';
-import { Column } from '../../shared/table/table.component';
+import { Asset, Field } from '../../../core/definition';
+import { Column } from '../../table/table.component';
 import { TabService, TabState } from '../tab.service';
 import { AssetEditComponent } from './asset-edit.component';
 

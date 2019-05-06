@@ -4,8 +4,8 @@ import { DisposableComponent, LocalStorageService, MenuItem } from '@designr/cor
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first } from 'rxjs/operators';
 import { StoreService } from '../core/store.service';
-import { DefinitionAddComponent } from '../definition/definition-add.component';
-import { DetailAddComponent } from '../detail/detail-add.component';
+import { DefinitionAddComponent } from '../shared/definition/definition-add.component';
+import { DetailAddComponent } from '../shared/detail/detail-add.component';
 
 @Component({
 	selector: 'contents-menu-component',

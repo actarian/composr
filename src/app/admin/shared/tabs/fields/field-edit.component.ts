@@ -2,17 +2,17 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ControlOption, FormService } from '@designr/control';
 import { ControlSelectOption } from '@designr/control/lib/control/select/control-select';
-import { DisposableComponent } from '@designr/core';
+import { DisposableComponent, Identity } from '@designr/core';
 import { ModalData, ModalService } from '@designr/ui';
 import { finalize, first } from 'rxjs/operators';
-import { Asset, Definition } from '../../core/definition';
-import { StoreService } from '../../core/store.service';
-// import { ControlOption } from '../../core/forms';
+import { Field } from '../../../core/definition';
+import { StoreService } from '../../../core/store.service';
 
 export const CONTROL_TYPES: ControlSelectOption[] = [
 	{ name: 'select', id: null },
 	// { name: 'checkbox', id: 'Checkbox' },
 	{ name: 'Number', id: 'number' },
+	{ name: 'Reflection', id: 'reflection' },
 	{ name: 'Select', id: 'select' },
 	{ name: 'Switch', id: 'switch' },
 	{ name: 'Tab', id: 'tab' },
@@ -21,17 +21,17 @@ export const CONTROL_TYPES: ControlSelectOption[] = [
 ];
 
 @Component({
-	selector: 'asset-edit-component',
-	templateUrl: './asset-edit.component.html',
-	styleUrls: ['./asset-edit.component.scss'],
+	selector: 'field-edit-component',
+	templateUrl: './field-edit.component.html',
+	styleUrls: ['./field-edit.component.scss'],
 	encapsulation: ViewEncapsulation.Emulated,
 })
 
-export class AssetEditComponent extends DisposableComponent implements OnInit {
+export class FieldEditComponent extends DisposableComponent implements OnInit {
 
-	item: any;
-	asset: Asset;
-	definition: Definition;
+	type: string = 'Definition';
+	id: number | string;
+	field: Field;
 	options: ControlOption<any>[];
 	form: FormGroup;
 	error: any;
@@ -49,20 +49,8 @@ export class AssetEditComponent extends DisposableComponent implements OnInit {
 
 	ngOnInit() {
 		const data = this.modalData as any;
-		this.item = data.item as any;
-		this.asset = data.asset as Asset;
-		this.storeService.getDefinition('Asset').subscribe(definition => {
-			this.definition = definition;
-			console.log('AssetEditComponent.getDefinition', definition);
-			this.options = this.formService.getOptions(
-				this.storeService.mapOptions(
-					this.storeService.getScalarFields(this.definition.fields)
-				)
-			);
-			this.form = this.formService.getFormGroup(this.options);
-			this.form.patchValue(this.asset);
-		});
-		/*
+		this.id = data.id as number | string;
+		this.field = data.field as Field;
 		this.options = this.formService.getOptions([{
 			key: 'control',
 			schema: 'select',
@@ -70,7 +58,7 @@ export class AssetEditComponent extends DisposableComponent implements OnInit {
 			placeholder: 'control',
 			options: CONTROL_TYPES,
 			required: false,
-			disabled: this.definition.primaryKey,
+			disabled: this.field.primaryKey,
 			order: 1
 		}, {
 			key: 'name',
@@ -88,21 +76,20 @@ export class AssetEditComponent extends DisposableComponent implements OnInit {
 			order: 3
 		}]);
 		this.form = this.formService.getFormGroup(this.options);
-		this.form.patchValue(this.definition);
-		*/
+		this.form.patchValue(this.field);
 	}
 
 	onReset(event): void {
-		this.form.reset(this.definition);
+		this.form.reset(this.field);
 	}
 
 	onSubmit(model): void {
-		// console.log('AssetEditComponent.onSubmit', model);
+		// console.log('FieldEditComponent.onSubmit', model);
 		this.submitted = true;
 		this.error = null;
 		this.busy = true;
-		const asset = Object.assign({ id: this.asset.id }, model);
-		this.storeService.patchAsset(this.item.model, this.item.id, asset).pipe(
+		const field = Object.assign({ id: this.field.id }, model) as Identity;
+		this.storeService.patchField(this.type, this.id, field).pipe(
 			first(),
 			finalize(() => this.busy = false),
 		).subscribe(
@@ -112,7 +99,7 @@ export class AssetEditComponent extends DisposableComponent implements OnInit {
 			error => {
 				this.error = error;
 				this.submitted = false;
-				console.log('AssetEditComponent.onSubmit.error', this.error);
+				console.log('FieldEditComponent.onSubmit.error', this.error);
 			}
 		);
 	}

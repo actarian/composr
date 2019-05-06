@@ -6,24 +6,24 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ControlModule } from '@designr/control';
 import { CoreModule, DisposableComponent } from '@designr/core';
-import { DefinitionAddComponent } from '../definition/definition-add.component';
-import { DefinitionComponent } from '../definition/definition.component';
-import { DetailAddComponent } from '../detail/detail-add.component';
-import { DetailComponent } from '../detail/detail.component';
-import { IndexComponent } from '../index/index.component';
 import { MuuriForOf } from '../shared/muuri/muuriForOf.directive';
 import { PagerComponent } from '../shared/pager/pager.component';
 import { TableComponent } from '../shared/table/table.component';
-import { AssetEditComponent } from '../tabs/asset/asset-edit.component';
-import { AssetComponent } from '../tabs/asset/asset.component';
-import { ContentComponent } from '../tabs/content/content.component';
-import { FieldEditComponent } from '../tabs/fields/field-edit.component';
-import { FieldComponent } from '../tabs/fields/field.component';
-import { ObjectComponent } from '../tabs/object/object.component';
-import { RelationComponent } from '../tabs/relation/relation.component';
-import { ScalarComponent } from '../tabs/scalar/scalar.component';
-import { TabService } from '../tabs/tab.service';
+import { DefinitionAddComponent } from './definition/definition-add.component';
+import { DefinitionComponent } from './definition/definition.component';
+import { DetailAddComponent } from './detail/detail-add.component';
+import { DetailComponent } from './detail/detail.component';
+import { IndexComponent } from './index/index.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { AssetEditComponent } from './tabs/asset/asset-edit.component';
+import { AssetComponent } from './tabs/asset/asset.component';
+import { ContentComponent } from './tabs/content/content.component';
+import { FieldEditComponent } from './tabs/fields/field-edit.component';
+import { FieldComponent } from './tabs/fields/field.component';
+import { ObjectComponent } from './tabs/object/object.component';
+import { RelationComponent } from './tabs/relation/relation.component';
+import { ScalarComponent } from './tabs/scalar/scalar.component';
+import { TabService } from './tabs/tab.service';
 
 const modules = [
 	CommonModule,

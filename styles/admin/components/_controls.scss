@@ -76,7 +76,7 @@ select {
 		height: 100%;
 		top: 0;
 		right: -1px;
-		background: $border;
+		background: $disabled;
 		// opacity: 0;
 		transition: opacity ease-in-out 350ms;
 	}
@@ -157,8 +157,9 @@ select {
 	}
 
 	&[disabled] {
-		background: #eff0f3;
-		border-color: $border; // #eff0f3;
+		background: $disabled;
+		border-color: $disabled;
+		color: $foreground-disabled;
 	}
 
 	&:-webkit-autofill {
@@ -219,20 +220,20 @@ select {
 	}
 
 	.disabled & {
-		background: #eff0f3;
-		color: #585a61;
-		border-color: $border;
+		background: $disabled;
+		border-color: $disabled;
+		color: $foreground-disabled;
 
 		select {
-			background: #eff0f3;
-			color: #585a61;
+			background: $disabled;
+			color: $foreground-disabled;
 		}
 
 		.select__arrow {
 			border-left: 1px solid rgba(#585a61, 0.2);
 
 			svg {
-				fill: #585a61;
+				fill: $foreground-disabled;
 			}
 		}
 	}

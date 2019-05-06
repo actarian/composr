@@ -369,6 +369,19 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Features', key: 'features', type: 'array', model: 'Feature', control: 'tab', visible: true },
 		{ name: 'Taxonomies', key: 'taxonomies', type: 'array', model: 'Taxonomy', visible: true }
 	]
+}, {
+	id: 6,
+	name: 'Component',
+	key: 'component',
+	type: 'object',
+	model: 'Component',
+	extend: 'Entity',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
+		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
+		{ name: 'Path', key: 'path', type: 'string', visible: true, editable: true, indexable: true },
+		{ name: 'Types', key: 'types', type: 'array', model: 'PageType', control: 'tab', visible: true }
+	]
 }];
 
 export const STORE: { [key: string]: any[] } = {

@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
 import { first, takeUntil } from 'rxjs/operators';
-import { Definition } from '../core/definition';
-import { StoreService } from '../core/store.service';
+import { Definition } from '../../core/definition';
+import { StoreService } from '../../core/store.service';
 import { TabItem, TabService } from '../tabs/tab.service';
 
 @Component({

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { takeUntil } from 'rxjs/operators';
-import { Definition } from '../core/definition';
-import { StoreService } from '../core/store.service';
-import { ActionItem, Column } from '../shared/table/table.component';
+import { Definition } from '../../core/definition';
+import { StoreService } from '../../core/store.service';
+import { ActionItem, Column } from '../table/table.component';
 
 @Component({
 	selector: 'index-component',
@@ -50,7 +50,8 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 	}
 
 	onEditRow(item: any) {
-		this.router.navigate(['/admin/pages/data', this.type, item.id]);
+		console.log(this.route.snapshot.root);
+		this.router.navigate(['../', this.type, item.id], { relativeTo: this.route });
 	}
 
 	onDeleteRow(item: any) {

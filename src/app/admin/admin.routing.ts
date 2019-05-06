@@ -5,7 +5,6 @@ import { AdminGuard } from './admin.guard';
 import { AdminResolve } from './admin.resolve';
 import { AuthComponent } from './auth/auth.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { SettingsComponent } from './settings/settings.component';
 import { TestComponent } from './test/test.component';
 import { UsersComponent } from './users/users.component';
 
@@ -13,6 +12,7 @@ const ROUTES: Routes = [
 	{
 		path: 'admin', component: AdminComponent, children: [
 			{ path: '', redirectTo: 'pages', pathMatch: 'full' },
+			{ path: 'dashboard', component: DashboardComponent },
 			{
 				path: 'pages', loadChildren: '../admin/pages/pages.module#PagesModule',
 				data: { preload: true }
@@ -21,9 +21,11 @@ const ROUTES: Routes = [
 				path: 'contents', loadChildren: '../admin/contents/contents.module#ContentsModule',
 				data: { preload: true }
 			},
-			{ path: 'dashboard', component: DashboardComponent },
-			{ path: 'user', component: UsersComponent },
-			{ path: 'setting', component: SettingsComponent },
+			{
+				path: 'settings', loadChildren: '../admin/settings/settings.module#SettingsModule',
+				data: { preload: true }
+			},
+			{ path: 'users', component: UsersComponent },
 			{ path: 'test', component: TestComponent }
 		], canActivate: [AdminGuard], resolve: { admin: AdminResolve }
 	},

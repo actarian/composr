@@ -10,7 +10,6 @@ import { AdminService } from './admin.service';
 import { AuthSigninComponent } from './auth/auth-signin.component';
 import { AuthComponent } from './auth/auth.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { SettingsComponent } from './settings/settings.component';
 import { SharedModule } from './shared/shared.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { TestComponent } from './test/test.component';
@@ -38,7 +37,6 @@ const components: Type<DisposableComponent>[] = [
 	AdminComponent,
 	AuthComponent,
 	DashboardComponent,
-	SettingsComponent,
 	SidebarComponent,
 	TestComponent,
 	UsersComponent,
