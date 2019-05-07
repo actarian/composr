@@ -1,0 +1,21 @@
+@import '~styles/admin/variables';
+@import '~styles/admin/mixins';
+
+:host {
+	display: block;
+	background: white;
+}
+
+.container {
+	padding: 20px 40px;
+}
+
+.group--form {
+	display: flex;
+	flex-wrap: wrap;
+
+	.btn--toggle {
+		flex: 0 1 calc(25% - 1px);
+		margin: 0 1px 1px 0;
+	}
+}

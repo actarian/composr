@@ -7,7 +7,7 @@ import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { finalize, first } from 'rxjs/operators';
 import { User } from '../shared/user/user';
 import { UserService } from '../shared/user/user.service';
-// import { ControlOption } from '../../core/forms';
+// import { ControlOption } from '../../store/forms';
 import { AuthForgottenComponent } from './auth-forgotten.component';
 
 @Component({

@@ -26,7 +26,6 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { LoaderComponent } from './shared/loader/loader.component';
 import { PictureComponent } from './shared/picture/picture.component';
 import { SpritesComponent } from './shared/sprites/sprites.component';
-import { UserService } from './shared/user/user.service';
 
 const modules = [
 	CommonModule,
@@ -46,7 +45,7 @@ const modules = [
 ];
 
 const services = [
-	UserService,
+	// UserService,
 ];
 
 const shared: Type<DisposableComponent>[] = [

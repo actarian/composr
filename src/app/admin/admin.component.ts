@@ -11,6 +11,7 @@ import { Admin } from './admin';
 export class AdminComponent extends DisposableComponent {
 
 	admin: Admin;
+	opened: boolean;
 
 	constructor(
 		private route: ActivatedRoute,

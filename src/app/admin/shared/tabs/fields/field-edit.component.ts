@@ -5,8 +5,8 @@ import { ControlSelectOption } from '@designr/control/lib/control/select/control
 import { DisposableComponent, Identity } from '@designr/core';
 import { ModalData, ModalService } from '@designr/ui';
 import { finalize, first } from 'rxjs/operators';
-import { Field } from '../../../core/definition';
-import { StoreService } from '../../../core/store.service';
+import { Field } from '../../store/store';
+import { StoreService } from '../../store/store.service';
 
 export const CONTROL_TYPES: ControlSelectOption[] = [
 	{ name: 'select', id: null },

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { takeUntil } from 'rxjs/operators';
-import { Definition } from '../../core/definition';
-import { StoreService } from '../../core/store.service';
+import { Definition } from '../store/store';
+import { StoreService } from '../store/store.service';
 import { ActionItem, Column } from '../table/table.component';
 
 @Component({

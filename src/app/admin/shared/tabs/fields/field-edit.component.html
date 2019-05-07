@@ -15,7 +15,7 @@
 			</div>
 			-->
 			<div class="nav--inline">
-				<button type="button" class="btn btn--secondary" (click)="onReset()"><span>Reset</span></button>
+				<button type="button" class="btn btn--secondary" (click)="onReset($event)"><span>Reset</span></button>
 				<button type="submit" class="btn btn--primary" [disabled]="submitted || !form.valid" [ngClass]="{ disabled: submitted, invalid: !form.valid, 'btn--busy': busy }"><span>Save</span></button>
 			</div>
 		</form>

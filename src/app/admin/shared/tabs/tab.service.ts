@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ControlOption } from '@designr/control';
 import { BehaviorSubject } from 'rxjs';
-import { Definition, Field } from '../../core/definition';
-import { StoreService } from '../../core/store.service';
+import { Definition, Field } from '../store/store';
+import { StoreService } from '../store/store.service';
 
 export interface TabItem {
 	slug: string;

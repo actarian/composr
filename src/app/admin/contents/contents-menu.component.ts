@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { DisposableComponent, LocalStorageService, MenuItem } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first } from 'rxjs/operators';
-import { StoreService } from '../core/store.service';
 import { DefinitionAddComponent } from '../shared/definition/definition-add.component';
 import { DetailAddComponent } from '../shared/detail/detail-add.component';
+import { StoreService } from '../shared/store/store.service';
 
 @Component({
 	selector: 'contents-menu-component',

@@ -1,5 +1,4 @@
 <ng-container [formGroup]="state.form" *ngIf="state && state.form">
-	{{field.type}}
 	<ng-container [ngSwitch]="field.type">
 		<ng-container *ngSwitchCase="'object'">
 			<object-component></object-component>

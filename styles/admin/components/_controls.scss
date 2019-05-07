@@ -94,6 +94,7 @@ select {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
+	width: 100%;
 }
 
 .control__group--checkbox,
@@ -102,6 +103,70 @@ select {
 	width: 100%;
 	margin: 10px 0;
 	padding: 20px 0;
+}
+
+.control__group--multi {
+	.control__input {
+		flex: 1 1 auto;
+		border-radius: 3px 0 0 3px;
+	}
+
+	.control__addon {
+		@extend %btn-primary;
+		flex: 0 0 40px;
+		border-radius: 0 3px 3px 0;
+
+		position: relative;
+		padding: 13px 20px;
+		font-size: 13px;
+		font-weight: bold;
+
+		svg {
+			width: 16px;
+			height: 16px;
+			fill: white;
+		}
+
+		&>span+svg,
+		&>svg+span {
+			margin-left: 12px;
+		}
+	}
+}
+
+.control__group--localized-text {
+
+	.control__input {
+		flex: 1 1 auto;
+		border-radius: 3px 0 0 3px;
+	}
+
+	.control__addon {
+		@extend %btn-primary;
+		flex: 0 0 120px;
+		border-radius: 0 3px 3px 0;
+
+		position: relative;
+		padding: 13px 20px;
+		font-size: 13px;
+		font-weight: bold;
+
+		select {
+			pointer-events: all;
+		}
+
+		svg {
+			width: 16px;
+			height: 16px;
+			fill: white;
+		}
+
+		&>span+svg,
+		&>svg+span {
+			margin-left: 12px;
+		}
+	}
+
 }
 
 /*
@@ -141,7 +206,7 @@ select {
 	line-height: 1;
 	color: #585a61;
 	border: 1px solid $border; // #a9aeb8;
-	border-radius: 2px;
+	border-radius: 3px;
 	padding: 10px;
 	box-sizing: border-box;
 	outline: none;

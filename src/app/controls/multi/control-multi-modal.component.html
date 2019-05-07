@@ -1,0 +1,33 @@
+<div class="container admin-vars">
+	<div class="group--headline">
+		<div class="title">{{option.placeholder}}</div>
+		<div class="abstract">ControlMulti</div>
+	</div>
+	<div class="group--form">
+		<div class="btn btn--toggle" [ngClass]="{ active: item.active }" (click)="onToggle(item)" *ngFor="let item of items">{{item.name}}</div>
+		<!--
+		<form class="form" name="form" [formGroup]="form" (ngSubmit)="form.valid && onSubmit(form.value)" role="form" novalidate autocomplete="off">
+			<div class="fieldsets">
+				<div class="fieldset" *ngFor="let option of options">
+					<control-outlet class="form-group" [option]="option" [form]="form">
+						<ng-template #labelRef let-context>
+							<div class="control__label control__label--{{context.option.schema}}" [attr.for]="context.option.key">
+								<div class="title">{{context.option.label}}</div>
+								<div class="type"><svg *ngIf="context.option.primaryKey"><use xlink:href="#lock"></use></svg> {{context.option.type}}</div>
+							</div>
+						</ng-template>
+					</control-outlet>
+				</div>
+			</div>
+			<div class="nav--inline">
+				<button type="submit" class="btn btn--primary" [disabled]="submitted || !form.valid" [ngClass]="{ 'btn--busy': busy }"><span>Create</span></button>
+			</div>
+		</form>
+		-->
+		<div class="nav--inline">
+			<button type="button" class="btn btn--secondary" (click)="onToggleAll()"><span>All</span></button>
+			<button type="button" class="btn btn--secondary" (click)="onToggleNone()"><span>None</span></button>
+			<button type="button" class="btn btn--primary" (click)="onDone()"><span>Done</span></button>
+		</div>
+	</div>
+</div>

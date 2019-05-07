@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first, takeUntil } from 'rxjs/operators';
-import { Field } from '../../../core/definition';
+import { Field } from '../../store/store';
 import { TabService, TabState } from '../tab.service';
 import { FieldEditComponent } from './field-edit.component';
 

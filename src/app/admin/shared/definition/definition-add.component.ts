@@ -5,8 +5,8 @@ import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
 import { ModalData, ModalService } from '@designr/ui';
 import { finalize, first } from 'rxjs/operators';
-import { Definition } from '../../core/definition';
-import { StoreService } from '../../core/store.service';
+import { Definition } from '../store/store';
+import { StoreService } from '../store/store.service';
 
 @Component({
 	selector: 'definition-add-component',

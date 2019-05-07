@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { DisposableComponent, LocalStorageService } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first } from 'rxjs/operators';
-import { StoreService } from '../core/store.service';
 import { DefinitionAddComponent } from '../shared/definition/definition-add.component';
+import { StoreService } from '../shared/store/store.service';
 
 @Component({
 	selector: 'settings-menu-component',

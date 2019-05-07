@@ -1,0 +1,24 @@
+<ng-container [formGroup]="form">
+	<ng-template #inputDef let-context>
+		<div class="control__group control__group--multi">
+			<div class="control__input control__input--multi">
+				<ng-container *ngIf="!context.items.length">
+					{{ context.option.placeholder | label }}
+				</ng-container>
+				<ng-container *ngIf="context.items.length">
+					{{ context.names }}
+				</ng-container>
+			</div>
+			<div class="control__addon" (click)="context.onEditField()" *ngIf="!context.option.disabled">
+				<svg><use xlink:href="#edit"></use></svg>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template #errorDef let-context>
+		<div class="control__error control__error--multi" *ngIf="context.control.invalid && (context.control.dirty || context.control.touched)">
+			<div *ngIf="context.control.errors.required">{{ 'errors.required' | label }}</div>
+		</div>
+	</ng-template>
+	<ng-container *ngTemplateOutlet="context.inputRef || inputDef; context: { $implicit: context }"></ng-container>
+	<ng-container *ngTemplateOutlet="context.errorRef || errorDef; context: { $implicit: context }"></ng-container>
+</ng-container>

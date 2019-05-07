@@ -73,10 +73,18 @@
 	@extend %btn-flex;
 	position: relative;
 	border-radius: 3px;
-	background: $primary;
-	color: white;
 
-	&:hover {
+	&,
+	&:link,
+	&:active,
+	&:visited,
+	&:focus {
+		background: $primary;
+		color: white;
+	}
+
+	&:hover,
+	&.active {
 		background: #1b35ac; // primary-dark
 		color: white;
 	}
@@ -87,7 +95,6 @@
 %btn-secondary {
 	@extend %btn-flex;
 	position: relative;
-	color: #191b22;
 
 	&:before {
 		content: '';
@@ -106,13 +113,22 @@
 		position: relative;
 	}
 
-	&:hover {
+	&,
+	&:link,
+	&:active,
+	&:visited,
+	&:focus {
+		background: transparent;
+		color: #191b22;
+	}
+
+	&:hover,
+	&.active {
+		color: white;
 
 		&:before {
 			height: 100%;
 		}
-
-		color: white;
 	}
 
 	&[disabled] {}

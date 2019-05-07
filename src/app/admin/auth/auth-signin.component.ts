@@ -6,7 +6,7 @@ import { ModalService } from '@designr/ui';
 import { finalize, first } from 'rxjs/operators';
 import { AdminAuth } from '../admin';
 import { AdminService } from '../admin.service';
-// import { ControlOption } from '../../core/forms';
+// import { ControlOption } from '../../store/forms';
 
 @Component({
 	selector: 'auth-signin-component',
