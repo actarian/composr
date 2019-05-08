@@ -422,6 +422,18 @@ export const DEFINITIONS: Definition[] = [{
 	]
 }, {
 	id: 7,
+	name: 'Content',
+	key: 'content',
+	type: 'object',
+	model: 'Content',
+	extend: 'Entity',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
+		{ name: 'ContentType', key: 'contentType', type: 'object', model: 'ContentType', control: 'select', required: true, visible: true, indexable: true },
+		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
+	]
+}, {
+	id: 8,
 	name: 'Component',
 	key: 'component',
 	type: 'object',
@@ -434,7 +446,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Types', key: 'types', type: 'array', model: 'PageType', control: 'multi', visible: true, editable: true, indexable: true }
 	]
 }, {
-	id: 8,
+	id: 9,
 	name: 'Language',
 	key: 'language',
 	type: 'object',
@@ -456,6 +468,7 @@ export const STORE: { [key: string]: any[] } = {
 		name: 'Default Type',
 		abstract: 'Generic Picture',
 	}],
+	contents: [],
 	language: [{
 		id: 1,
 		name: 'Italiano',
