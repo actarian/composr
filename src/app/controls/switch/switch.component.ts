@@ -12,8 +12,8 @@ export const SWITCH_VALUE_ACCESSOR: any = {
 
 @Component({
 	selector: 'switch-component',
-	templateUrl: './switch.component.html',
 	styleUrls: ['./switch.component.scss'],
+	templateUrl: './switch.component.html',
 	providers: [SWITCH_VALUE_ACCESSOR],
 	encapsulation: ViewEncapsulation.Emulated,
 })

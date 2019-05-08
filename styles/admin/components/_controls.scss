@@ -10,6 +10,11 @@ select {
 	}
 }
 
+select option {
+	background: white;
+	color: $foreground-disabled;
+}
+
 .control {
 	// display: block;
 	//
@@ -18,10 +23,11 @@ select {
 
 	&>* {
 		flex: 1 1 auto;
-
+		/*
 		&:last-child {
 			display: flex;
 		}
+		*/
 	}
 
 	&.required {

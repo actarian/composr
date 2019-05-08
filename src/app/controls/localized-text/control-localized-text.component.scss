@@ -1,0 +1,54 @@
+@import '~styles/admin/variables';
+
+:host {
+	display: block;
+}
+
+.languages__item {
+	border-radius: 3px;
+	padding: 2px 5px;
+	font-size: 13px;
+	line-height: 1;
+	cursor: pointer;
+
+	svg {
+		width: 8px;
+		height: 8px;
+		margin-left: 4px;
+	}
+
+	&,
+	&:link,
+	&:active,
+	&:visited,
+	&:focus {
+		background: $border;
+		color: $primary;
+
+		svg {
+			fill: $primary;
+		}
+	}
+
+	&:hover,
+	&.active {
+		background: $primary;
+		color: white;
+
+		svg {
+			fill: white;
+		}
+	}
+
+	&[disabled] {}
+}
+
+.languages {
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 2px;
+
+	&>.languages__item+.languages__item {
+		margin-left: 1px;
+	}
+}

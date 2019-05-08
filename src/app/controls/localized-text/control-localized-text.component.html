@@ -3,8 +3,8 @@
 		<div class="control__group control__group--localized-text">
 			<input class="control__input control__input--localized-text" placeholder="{{ context.option.placeholder | label }}" [id]="context.option.key" type="text" [value]="value" (input)="onInput($event.target.value)">
 			<div class="control__addon" *ngIf="!context.option.disabled">
-				<select (input)="onSelect($event.target.value)">
-					<option *ngFor="let item of context.options" [value]="item.code">{{item?.name}}</option>
+				<select (input)="onSetLanguage($event.target.value)">
+					<option *ngFor="let item of context.options" [value]="item.code" [selected]="context.language == item.code">{{item?.name}}</option>
 				</select>
 			</div>
 		</div>
@@ -18,4 +18,9 @@
 	</ng-template>
 	<ng-container *ngTemplateOutlet="context.inputRef || inputDef; context: { $implicit: context }"></ng-container>
 	<ng-container *ngTemplateOutlet="context.errorRef || errorDef; context: { $implicit: context }"></ng-container>
+	<div class="languages" *ngIf="activeLanguages.length">
+		<div class="languages__item" [ngClass]="{ active: item.code === language }" *ngFor="let item of activeLanguages">
+			<span (click)="onSetLanguage(item.code)">{{item.code}}</span> <svg (click)="onRemoveLanguage(item.code)"><use xlink:href="#close-sm"></use></svg>
+		</div>
+	</div>
 </ng-container>

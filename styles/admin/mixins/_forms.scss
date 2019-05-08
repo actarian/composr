@@ -95,7 +95,11 @@
 	align-items: stretch;
 
 	&>* {
-		flex: 1 1 auto;
+		flex: 0 0 80px;
+	}
+
+	.btn--toggle {
+		margin-right: 3px;
 	}
 
 	.info {

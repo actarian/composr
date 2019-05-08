@@ -130,8 +130,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 	}
 
 	onSubmit(model: any) {
-		console.log('DefinitionComponent.onSubmit', this.type, this.id, model);
-		return;
+		// console.log('DefinitionComponent.onSubmit', this.type, this.id, model);
 		model.fields = this.fields;
 		const changedItem = this.storeService.getChangedValues(this.item, model);
 		console.log('onSubmit.changedItem', changedItem ? Object.assign({}, changedItem) : changedItem);
