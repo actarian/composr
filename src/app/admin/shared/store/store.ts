@@ -102,9 +102,9 @@ export interface Page {
 	pageType: PageType;
 	component: Component;
 	name: string;
-	title?: string;
-	abstract?: string;
-	description?: string;
+	title?: Localization | string;
+	abstract?: Localization | string;
+	description?: Localization | string;
 	meta?: Meta;
 	slug?: string;
 	active?: boolean;
@@ -201,7 +201,7 @@ export const REFLECTIONS: Definition[] = [{
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
 		{ name: 'Name', key: 'name', type: 'string', required: true },
-		{ name: 'IsoCode', key: 'code', type: 'string' },
+		{ name: 'Code', key: 'code', type: 'string' },
 		{ name: 'Description', key: 'description', type: 'object', model: 'Localization' },
 		{ name: 'Active', key: 'active', type: 'boolean' }
 	]
@@ -213,10 +213,10 @@ export const REFLECTIONS: Definition[] = [{
 	model: 'Meta',
 	extend: 'Entity',
 	fields: [
-		{ name: 'Title', key: 'title', type: 'string' },
-		{ name: 'Description', key: 'description', type: 'string' },
-		{ name: 'Keywords', key: 'keywords', type: 'string' },
-		{ name: 'Robots', key: 'robots', type: 'string' }
+		{ name: 'Title', key: 'title', type: 'object', model: 'Localization' },
+		{ name: 'Description', key: 'description', type: 'object', model: 'Localization' },
+		{ name: 'Keywords', key: 'keywords', type: 'object', model: 'Localization' },
+		{ name: 'Robots', key: 'robots', type: 'object', model: 'Localization' }
 	]
 }, {
 	id: 'Asset',
@@ -252,8 +252,8 @@ export const REFLECTIONS: Definition[] = [{
 		{ name: 'Width', key: 'width', type: 'number' },
 		{ name: 'Height', key: 'height', type: 'number' },
 		{ name: 'Author', key: 'title', type: 'string' },
-		{ name: 'Title', key: 'title', type: 'string' },
-		{ name: 'Abstract', key: 'abstract', type: 'string' },
+		{ name: 'Title', key: 'title', type: 'object', model: 'Localization' },
+		{ name: 'Abstract', key: 'abstract', type: 'object', model: 'Localization' },
 	]
 }, {
 	id: 'Content',
@@ -280,9 +280,9 @@ export const REFLECTIONS: Definition[] = [{
 		{ name: 'Component', key: 'component', type: 'object', model: 'Component' },
 		{ name: 'Name', key: 'name', type: 'string', required: true },
 		{ name: 'Slug', key: 'slug', type: 'string' },
-		{ name: 'Title', key: 'title', type: 'string' },
-		{ name: 'Abstract', key: 'abstract', type: 'string' },
-		{ name: 'Description', key: 'description', type: 'string' },
+		{ name: 'Title', key: 'title', type: 'object', model: 'Localization' },
+		{ name: 'Abstract', key: 'abstract', type: 'object', model: 'Localization' },
+		{ name: 'Description', key: 'description', type: 'object', model: 'Localization' },
 		{ name: 'Active', key: 'active', type: 'boolean' },
 		{ name: 'Meta', key: 'meta', type: 'object', model: 'Meta' },
 		{ name: 'Contents', key: 'contents', type: 'array', model: 'Content' },
@@ -377,8 +377,8 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Width', key: 'width', type: 'number', visible: true },
 		{ name: 'Height', key: 'height', type: 'number', visible: true },
 		{ name: 'Author', key: 'author', type: 'string', visible: true, editable: true },
-		{ name: 'Title', key: 'title', type: 'string', visible: true, editable: true },
-		{ name: 'Abstract', key: 'abstract', type: 'string', control: 'textarea', visible: true, editable: true },
+		{ name: 'Title', key: 'title', type: 'object', model: 'Localization', control: 'localized-text', visible: true, editable: true },
+		{ name: 'Abstract', key: 'abstract', type: 'object', model: 'Localization', control: 'localized-textarea', visible: true, editable: true },
 	]
 }, {
 	id: 5,
@@ -388,10 +388,10 @@ export const DEFINITIONS: Definition[] = [{
 	model: 'Meta',
 	extend: 'Identity',
 	fields: [
-		{ name: 'Title', key: 'title', type: 'string', visible: true, editable: true },
-		{ name: 'Description', key: 'description', type: 'string', control: 'textarea', visible: true, editable: true },
-		{ name: 'Keywords', key: 'keywords', type: 'string', visible: true, editable: true },
-		{ name: 'Robots', key: 'robots', type: 'string', visible: true, editable: true }
+		{ name: 'Title', key: 'title', type: 'object', model: 'Localization', control: 'localized-text', visible: true, editable: true },
+		{ name: 'Description', key: 'description', type: 'object', model: 'Localization', control: 'localized-textarea', visible: true, editable: true },
+		{ name: 'Keywords', key: 'keywords', type: 'object', model: 'Localization', control: 'localized-text', visible: true, editable: true },
+		{ name: 'Robots', key: 'robots', type: 'object', model: 'Localization', control: 'localized-text', visible: true, editable: true }
 	]
 }, {
 	id: 6,
@@ -405,9 +405,9 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'PageType', key: 'pageType', type: 'object', model: 'PageType', control: 'select', required: true, visible: true, indexable: true },
 		{ name: 'Component', key: 'component', type: 'object', model: 'Component', control: 'select', visible: true, editable: true, indexable: true }, // special scalar relation type with pageType
 		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
-		{ name: 'Title', key: 'title', type: 'string', visible: true, editable: true, indexable: true },
-		{ name: 'Abstract', key: 'abstract', type: 'string', control: 'textarea', visible: true, editable: true },
-		{ name: 'Description', key: 'description', type: 'string', control: 'textarea', visible: true, editable: true },
+		{ name: 'Title', key: 'title', type: 'object', model: 'Localization', control: 'localized-text', visible: true, editable: true, indexable: true },
+		{ name: 'Abstract', key: 'abstract', type: 'object', model: 'Localization', control: 'localized-textarea', visible: true, editable: true },
+		{ name: 'Description', key: 'description', type: 'object', model: 'Localization', control: 'localized-textarea', visible: true, editable: true },
 		{ name: 'Slug', key: 'slug', type: 'string', visible: true, editable: true },
 		{ name: 'Active', key: 'active', type: 'boolean', control: 'switch', visible: true, editable: true },
 		{
@@ -443,7 +443,7 @@ export const DEFINITIONS: Definition[] = [{
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
 		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
-		{ name: 'IsoCode', key: 'code', type: 'string', visible: true, editable: true, indexable: true },
+		{ name: 'Code', key: 'code', type: 'string', visible: true, editable: true, indexable: true },
 		{ name: 'Description', key: 'description', type: 'object', model: 'Localization', control: 'localized-text', visible: true, editable: true, indexable: true },
 		{ name: 'Active', key: 'active', type: 'boolean', visible: true, editable: true, indexable: true },
 	]

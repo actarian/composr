@@ -13,38 +13,67 @@ export class ControlLocalizedTextComponent extends ControlComponent implements O
 
 	@Input() option: ControlLocalizedText;
 	options: ControlLocalizedTextOption[] = [];
-	values: Localization;
 	value: string;
-	language: ControlLocalizedTextOption;
-	compareWith: Function = this.compareWith_.bind(this);
+	// compareWith: Function = this.compareWith_.bind(this);
+	private values_: Localization;
+	private language_: string;
+
+	get language(): string {
+		return this.language_;
+	}
+
+	set language(language: string) {
+		this.language_ = language;
+		this.setValue();
+		// console.log(language, this.value);
+	}
+
+	get values(): Localization {
+		return this.values_;
+	}
+
+	set values(values: Localization) {
+		this.values_ = values;
+		this.setValue();
+		// console.log(values, this.value);
+	}
+
+	setValue() {
+		const values = this.values;
+		const language = this.language;
+		let value;
+		if (values && language) {
+			value = values[this.language];
+		}
+		this.value = value || null;
+	}
 
 	ngOnInit() {
 		this.values = this.control.value;
-		this.control.valueChanges.pipe(
-			takeUntil(this.unsubscribe)
-		).subscribe(values => {
-			this.values = values;
-			this.value = this.values && this.language ? this.values[this.language.code] : null;
-			console.log(values, this.value);
-		});
 		this.options$().pipe(
 			takeUntil(this.unsubscribe)
 		).subscribe(options => {
 			options = options.filter(x => x.id !== null);
 			this.options = options;
-			this.language = options ? options[0] : null;
-			// console.log(this.language);
-			this.value = this.values && this.language ? this.values[this.language.code] : null;
-			console.log(options, this.values, this.value);
+			this.language = options ? options[0].code : null;
+		});
+		this.control.valueChanges.pipe(
+			takeUntil(this.unsubscribe)
+		).subscribe(values => {
+			this.values = values;
 		});
 	}
 
 	onInput(value: string) {
-		console.log('onInput', value);
+		// console.log('onInput', value);
+		const values = Object.assign({}, this.control.value || {});
+		values[this.language] = value;
+		// console.log('values', values);
+		this.control.patchValue(values);
 	}
 
-	onSelect(value: string) {
-		console.log('onSelect', value);
+	onSelect(language: string) {
+		this.language = language;
 	}
 
 	options$(): Observable<ControlLocalizedTextOption[]> {
@@ -62,6 +91,7 @@ export class ControlLocalizedTextComponent extends ControlComponent implements O
 		}
 	}
 
+	/*
 	compareWith_(a: ControlLocalizedTextOption | number, b: ControlLocalizedTextOption | number) {
 		if (this.option.asObject) {
 			a = a as ControlLocalizedTextOption;
@@ -71,5 +101,6 @@ export class ControlLocalizedTextComponent extends ControlComponent implements O
 			return b ? a === b : a === null;
 		}
 	}
+	*/
 
 }

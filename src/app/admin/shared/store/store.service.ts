@@ -9,7 +9,7 @@ import { CONTROL_MAP, Definition, Field } from './store';
 import { toCamelCase } from './utils';
 
 export const SCALAR_TYPES: string[] = ['boolean', 'number', 'string', 'date'];
-export const SCALAR_CONTROLS: string[] = ['select', 'reflection', 'multi', 'localized-text'];
+export const SCALAR_CONTROLS: string[] = ['select', 'reflection', 'multi', 'localized-text', 'localized-textarea'];
 
 @Injectable({
 	providedIn: 'root',
@@ -145,6 +145,7 @@ export class StoreService extends FakeService {
 					option.options = this.getOptions$(x.model);
 					break;
 				case 'localized-text':
+				case 'localized-textarea':
 					option.options = this.getLanguageOptions$('Language');
 					break;
 			}

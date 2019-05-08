@@ -4,7 +4,9 @@ import { CanActivate, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { AdminService } from './admin.service';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root',
+})
 export class AdminGuard implements CanActivate {
 
 	constructor(

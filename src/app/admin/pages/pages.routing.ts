@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DefinitionComponent } from '../shared/definition/definition.component';
 import { DetailComponent } from '../shared/detail/detail.component';
+import { DetailGuard } from '../shared/guards/detail.guard';
+import { TabGuard } from '../shared/guards/tab.guard';
 import { IndexComponent } from '../shared/index/index.component';
 import { NotFoundComponent } from '../shared/not-found/not-found.component';
 import { FieldComponent } from '../shared/tabs/fields/field.component';
@@ -26,8 +28,8 @@ const ROUTES: Routes = [{
 				{ path: 'taxonomies', component: RelationComponent },
 				{ path: ':key', component: ObjectComponent },
 				*/
-				{ path: ':key', component: TabComponent, data: { tab: true } },
-			]
+				{ path: ':key', component: TabComponent, data: { tab: true }, canActivate: [TabGuard] },
+			], canActivate: [DetailGuard]
 		},
 		{
 			path: 'definition/:type/:id', component: DefinitionComponent, children: [

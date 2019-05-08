@@ -1,0 +1,21 @@
+<ng-container [formGroup]="form">
+	<ng-template #inputDef let-context>
+		<div class="control__group control__group--localized-textarea">
+			<textarea class="control__input control__input--localized-textarea" placeholder="{{ context.option.placeholder | label }}" [id]="context.option.key" rows="4" [value]="value" (input)="onInput($event.target.value)"></textarea>
+			<div class="control__addon" *ngIf="!context.option.disabled">
+				<select (input)="onSelect($event.target.value)">
+					<option *ngFor="let item of context.options" [value]="item.code">{{item?.name}}</option>
+				</select>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template #errorDef let-context>
+		<div class="control__error control__error--localized-textarea" *ngIf="context.control.invalid && (context.control.dirty || context.control.touched)">
+			<div *ngIf="context.control.errors.required">{{ 'errors.required' | label }}</div>
+			<div *ngIf="context.control.errors.minlength">{{ 'errors.minlength' | label : null : { minlength: context.option.minlength } }}</div>
+			<div *ngIf="context.control.errors.maxlength">{{ 'errors.maxlength' | label : null : { maxlength: context.option.maxlength } }}</div>
+		</div>
+	</ng-template>
+	<ng-container *ngTemplateOutlet="context.inputRef || inputDef; context: { $implicit: context }"></ng-container>
+	<ng-container *ngTemplateOutlet="context.errorRef || errorDef; context: { $implicit: context }"></ng-container>
+</ng-container>

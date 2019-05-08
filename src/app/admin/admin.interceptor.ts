@@ -7,7 +7,9 @@ import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { AdminToken } from './admin';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root',
+})
 export class AdminHttpInterceptor implements HttpInterceptor {
 
 	storage: StorageService;

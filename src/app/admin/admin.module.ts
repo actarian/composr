@@ -3,7 +3,6 @@ import { NgModule, Type } from '@angular/core';
 import { RouteReuseStrategy } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { AdminComponent } from './admin.component';
-import { AdminGuard } from './admin.guard';
 import { AdminHttpInterceptor } from './admin.interceptor';
 import { AdminResolve } from './admin.resolve';
 import { AdminRouting } from './admin.routing';
@@ -56,7 +55,6 @@ const validators = [
 ];
 
 const guards = [
-	AdminGuard
 ];
 
 const interceptors = [{

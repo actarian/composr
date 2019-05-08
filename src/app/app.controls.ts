@@ -8,6 +8,8 @@ import { ControlCustomComponent } from './controls/custom/control-custom.compone
 import { CustomAccessorDirective } from './controls/custom/custom.accessor';
 import { ControlLocalizedText } from './controls/localized-text/control-localized-text';
 import { ControlLocalizedTextComponent } from './controls/localized-text/control-localized-text.component';
+import { ControlLocalizedTextarea } from './controls/localized-textarea/control-localized-textarea';
+import { ControlLocalizedTextareaComponent } from './controls/localized-textarea/control-localized-textarea.component';
 import { ControlMulti } from './controls/multi/control-multi';
 import { ControlMultiModalComponent } from './controls/multi/control-multi-modal.component';
 import { ControlMultiComponent } from './controls/multi/control-multi.component';
@@ -25,6 +27,7 @@ export const controls = [
 	SwitchComponent,
 	ControlMultiComponent,
 	ControlLocalizedTextComponent,
+	ControlLocalizedTextareaComponent,
 ];
 
 export const entryComponents = [
@@ -36,6 +39,7 @@ export const CONTROLS: Controls = {
 	'switch': { component: ControlSwitchComponent, model: ControlSwitch },
 	'multi': { component: ControlMultiComponent, model: ControlMulti },
 	'localized-text': { component: ControlLocalizedTextComponent, model: ControlLocalizedText },
+	'localized-textarea': { component: ControlLocalizedTextareaComponent, model: ControlLocalizedTextarea },
 };
 
 @NgModule({

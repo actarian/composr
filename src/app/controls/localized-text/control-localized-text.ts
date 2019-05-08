@@ -9,6 +9,7 @@ export interface ControlLocalizedTextOption {
 
 export class ControlLocalizedText extends ControlOption<string> {
 	schema: string = 'localized-text';
+	minlength?: number;
+	maxlength?: number;
 	options?: ControlLocalizedTextOption[] | Observable<ControlLocalizedTextOption[]>;
-	asObject: boolean;
 }

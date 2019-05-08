@@ -1,7 +1,7 @@
 <ng-container [formGroup]="form">
 	<ng-template #inputDef let-context>
 		<div class="control__group control__group--multi">
-			<div class="control__input control__input--multi">
+			<div class="control__input control__input--multi" (click)="!context.option.disabled && context.onEditField()">
 				<ng-container *ngIf="!context.items.length">
 					{{ context.option.placeholder | label }}
 				</ng-container>

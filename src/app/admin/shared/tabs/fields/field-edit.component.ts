@@ -18,6 +18,8 @@ export const CONTROL_TYPES: ControlSelectOption[] = [
 	{ name: 'Tab', id: 'tab' },
 	{ name: 'Text', id: 'text' },
 	{ name: 'Textarea', id: 'textarea' },
+	{ name: 'Localized Text', id: 'localized-text' },
+	{ name: 'Localized Textarea', id: 'localized-textarea' },
 ];
 
 @Component({
