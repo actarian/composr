@@ -129,7 +129,7 @@ export class AuthSignUpComponent extends DisposableComponent implements OnInit {
 		this.facebookService.logout().pipe(
 			first()
 		).subscribe(x => {
-			console.log('SignUpComponent.onFacebookLogout', x);
+			console.log('AuthSignUpComponent.onFacebookLogout', x);
 			this.facebook = null;
 		});
 	}
@@ -138,7 +138,7 @@ export class AuthSignUpComponent extends DisposableComponent implements OnInit {
 		this.googleService.logout().pipe(
 			first()
 		).subscribe(x => {
-			console.log('SignUpComponent.onGoogleLogout', x);
+			console.log('AuthSignUpComponent.onGoogleLogout', x);
 			this.google = null;
 		});
 	}
@@ -148,7 +148,7 @@ export class AuthSignUpComponent extends DisposableComponent implements OnInit {
 			first(),
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {
-				console.log('signed');
+				console.log('AuthSignUpComponent.signed');
 			}
 		});
 	}

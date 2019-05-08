@@ -12,7 +12,7 @@ export class NotFoundComponent extends PageComponent {
 		protected injector: Injector,
 	) {
 		super(injector);
-		console.log(this.router.url, this.router);
+		console.warn(this.router.url, this.router);
 	}
 
 }

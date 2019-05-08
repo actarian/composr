@@ -140,7 +140,7 @@ export class UserService extends EntityService<User> {
 	}
 
 	public signUp(user: UserAuth): Observable<User> {
-		console.log('UserService.signUp', user);
+		// console.log('UserService.signUp', user);
 		return this.post(`/register`, user).pipe(
 			map(user => new User(user)),
 			tap(user => {

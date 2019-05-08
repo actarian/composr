@@ -50,7 +50,7 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 	}
 
 	onEditRow(item: any) {
-		console.log(this.route.snapshot.root);
+		// console.log(this.route.snapshot.root);
 		this.router.navigate(['../', this.type, item.id], { relativeTo: this.route });
 	}
 

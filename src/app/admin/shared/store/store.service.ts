@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ControlOption } from '@designr/control';
 import { Entity, Identity, LocalStorageService } from '@designr/core';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { FakeService } from './fake.service';
 import { CONTROL_MAP, Definition, Field } from './store';
 import { toCamelCase } from './utils';
@@ -24,20 +24,20 @@ export class StoreService extends FakeService {
 
 	getReflection(type: string): Observable<Definition> {
 		return this.getReflection$(type).pipe(
-			tap(x => console.log('getReflection', type, x))
+			// tap(x => console.log('getReflection', type, x))
 		);
 	}
 
 	getDefinition(type: string): Observable<Definition> {
 		return this.getDefinition$(type).pipe(
-			tap(x => console.log('getDefinition', type, x))
+			// tap(x => console.log('getDefinition', type, x))
 		);
 	}
 
 	getDetail(type: string, id: number | string): Observable<any> {
 		// console.log(type, id, this.store[type]);
 		return this.getDetail$(type, id).pipe(
-			tap(x => console.log('getDetail', type, id, x))
+			// tap(x => console.log('getDetail', type, id, x))
 		);
 	}
 
@@ -127,7 +127,7 @@ export class StoreService extends FakeService {
 					/*
 					// !!! transform options in observable
 					const options = this.getListSync(this.store, toCamelCase(x.model));
-					console.log(x.model, options);
+					// console.log(x.model, options);
 					options.unshift(
 						{ id: null, name: 'select' }
 					);
@@ -156,7 +156,7 @@ export class StoreService extends FakeService {
 
 	getReflectionOptions$(type: string): Observable<Entity[]> {
 		return this.getList$('reflection', type).pipe(
-			tap(x => console.log('getReflectionOptions$', type, x)),
+			// tap(x => console.log('getReflectionOptions$', type, x)),
 			map(x => {
 				// console.log('reflection', type, x);
 				x.unshift(
@@ -169,7 +169,7 @@ export class StoreService extends FakeService {
 
 	getLanguageOptions$(type: string): Observable<Entity[]> {
 		return this.get$(type).pipe(
-			tap(x => console.log('getLanguageOptions$', type, x)),
+			// tap(x => console.log('getLanguageOptions$', type, x)),
 			map(x => {
 				// console.log('reflection', type, x);
 				x.unshift(

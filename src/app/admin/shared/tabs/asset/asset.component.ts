@@ -60,7 +60,7 @@ export class AssetComponent extends DisposableComponent implements OnInit {
 		this.tabService.state$.pipe(
 			first(),
 		).subscribe(state => {
-			console.log('AssetComponent', state);
+			// console.log('AssetComponent', state);
 			this.state = state;
 			this.route.params.pipe(
 				takeUntil(this.unsubscribe),
@@ -73,7 +73,7 @@ export class AssetComponent extends DisposableComponent implements OnInit {
 	}
 
 	onEditRow(asset: any) {
-		console.log('AssetComponent.onEditRow', asset);
+		// console.log('AssetComponent.onEditRow', asset);
 		this.modalService.open({
 			component: AssetEditComponent,
 			data: {
@@ -96,7 +96,7 @@ export class AssetComponent extends DisposableComponent implements OnInit {
 	}
 
 	onDropRow(assets: any[]) {
-		console.log('AssetComponent.onDropRow', assets);
+		// console.log('AssetComponent.onDropRow', assets);
 		this.state.item.assets = assets;
 	}
 

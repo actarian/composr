@@ -24,7 +24,7 @@ export class ScalarComponent extends DisposableComponent implements OnInit {
 		this.tabService.state$.pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe(state => {
-			console.log('ScalarComponent', state);
+			// console.log('ScalarComponent', state);
 			this.state = state;
 		});
 	}

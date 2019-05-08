@@ -43,7 +43,7 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 		).subscribe(data => {
 			this.type = data.type;
 			this.id = parseInt(data.id, 0);
-			console.log('detail', this.type, this.id);
+			// console.log('detail', this.type, this.id);
 			this.storeService.getDefinition(this.type).pipe(
 				first(),
 			).subscribe(definition => {
@@ -58,7 +58,7 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 				this.storeService.getDetail(this.type, this.id).pipe(
 					first(),
 				).subscribe(item => {
-					console.log('getDetail', this.type, this.id, item);
+					// console.log('getDetail', this.type, this.id, item);
 					this.item = item;
 					this.form.patchValue(item);
 					this.tabService.setState({
@@ -80,12 +80,12 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 	}
 
 	onReset() {
-		console.log('DetailComponent.onReset', this.type, this.id);
+		// console.log('DetailComponent.onReset', this.type, this.id);
 		this.form.reset(this.item);
 	}
 
 	onSubmit(model: any) {
-		console.log('DetailComponent.onSubmit', this.type, this.id, model);
+		// console.log('DetailComponent.onSubmit', this.type, this.id, model);
 		this.submitted = true;
 		this.error = null;
 		this.busy = true;
@@ -95,9 +95,9 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 			finalize(() => this.busy = false),
 		).subscribe(
 			patched => {
-				console.log('patched!!!', patched);
+				// console.log('patched!!!', patched);
 				Object.assign(this.item, patched);
-				console.log(this.form);
+				// console.log(this.form);
 			},
 			error => {
 				this.error = error;

@@ -36,7 +36,7 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 
 	ngOnInit() {
 		this.type = this.modalData as string;
-		console.log('DefinitionAddComponent.ngOnInit', this.type);
+		// console.log('DefinitionAddComponent.ngOnInit', this.type);
 		this.storeService.getDefinition(this.type).subscribe(definition => {
 			this.definition = definition;
 			this.options = this.formService.getOptions(
@@ -60,7 +60,7 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 	}
 
 	onSubmit(model: any) {
-		console.log('DefinitionAddComponent.onSubmit', model);
+		// console.log('DefinitionAddComponent.onSubmit', model);
 		this.submitted = true;
 		this.error = null;
 		this.busy = true;

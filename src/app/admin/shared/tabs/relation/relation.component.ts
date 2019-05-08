@@ -26,7 +26,7 @@ export class RelationComponent extends DisposableComponent implements OnInit {
 		this.tabService.state$.pipe(
 			first(),
 		).subscribe(state => {
-			console.log('RelationComponent', state);
+			// console.log('RelationComponent', state);
 			this.state = state;
 			this.route.params.pipe(
 				takeUntil(this.unsubscribe),

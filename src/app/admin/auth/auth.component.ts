@@ -23,7 +23,7 @@ export class AuthComponent extends DisposableComponent implements OnInit {
 		this.modalService.open({ component: AuthSigninComponent }).pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe(event => {
-			console.log(event);
+			// console.log(event);
 			if (event.data && event.data.accessToken) {
 				this.router.navigate(['/admin']);
 			}

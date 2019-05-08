@@ -62,7 +62,7 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 	}
 
 	onSubmit(model: any) {
-		console.log('DetailAddComponent.onSubmit', model);
+		// console.log('DetailAddComponent.onSubmit', model);
 		this.submitted = true;
 		this.error = null;
 		this.busy = true;

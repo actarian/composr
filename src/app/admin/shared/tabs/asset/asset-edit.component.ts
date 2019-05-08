@@ -53,7 +53,7 @@ export class AssetEditComponent extends DisposableComponent implements OnInit {
 		this.asset = data.asset as Asset;
 		this.storeService.getDefinition('Asset').subscribe(definition => {
 			this.definition = definition;
-			console.log('AssetEditComponent.getDefinition', definition);
+			// console.log('AssetEditComponent.getDefinition', definition);
 			this.options = this.formService.getOptions(
 				this.storeService.mapOptions(
 					this.storeService.getScalarFields(this.definition.fields)

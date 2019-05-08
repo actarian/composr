@@ -21,7 +21,7 @@ export class TabGuard implements CanActivate {
 			const params = route.params;
 			const type = params.type;
 			const id = parseInt(params.id, 0);
-			console.log('TabGuard', params);
+			// console.log('TabGuard', params);
 			this.storeService.getDefinition(type).pipe(
 				first(),
 			).subscribe(definition => {

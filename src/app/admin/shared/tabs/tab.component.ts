@@ -33,7 +33,7 @@ export class TabComponent extends DisposableComponent implements OnInit {
 				const path = this.route.snapshot.url[0].path;
 				const field = state.definition.fields.find(x => x.key === path);
 				this.field = field;
-				console.log('path', path, 'field', field);
+				// console.log('TabComponent', path', path, 'field', field);
 			});
 		});
 	}

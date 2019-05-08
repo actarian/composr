@@ -46,9 +46,9 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 		).subscribe(data => {
 			this.type = data.type;
 			this.id = parseInt(data.id, 0);
-			console.log('definition', this.type, this.id);
-			// !!! make PageType dynamic
-			this.storeService.getDefinition('PageType').pipe(
+			// console.log('definition', this.type, this.id);
+			// !!! make PageType dynamic (name + type ???)
+			this.storeService.getDefinition(this.type + 'Type').pipe(
 				first(),
 			).subscribe(definition => {
 				// console.log('definition', definition);
@@ -68,7 +68,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 				this.storeService.getDetail('definition', this.id).pipe(
 					first(),
 				).subscribe(item => {
-					console.log('getDetail', 'definition', this.id, item);
+					// console.log('getDetail', 'definition', this.id, item);
 					this.item = item;
 					this.fields = this.item.fields.slice().map(x => Object.assign({}, x));
 					const fieldOptions = this.fields.map(x => {
@@ -111,7 +111,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 			});
 			/*
 			this.storeService.getDefinition(this.type).subscribe(definition => {
-				console.log('definition', definition);
+				// console.log('definition', definition);
 				this.definition = definition;
 				this.sortFields(this.definition.fields);
 				this.fields = this.definition.fields.slice().map(x => Object.assign({}, x));
@@ -125,7 +125,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 	}
 
 	onReset() {
-		console.log('DefinitionComponent.onReset', this.type, this.id);
+		// console.log('DefinitionComponent.onReset', this.type, this.id);
 		this.form.reset(this.item);
 	}
 

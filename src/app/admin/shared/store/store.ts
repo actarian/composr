@@ -422,6 +422,19 @@ export const DEFINITIONS: Definition[] = [{
 	]
 }, {
 	id: 7,
+	name: 'ContentType',
+	key: 'contentType',
+	type: 'object',
+	model: 'ContentType',
+	extend: 'Definition',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
+		{ name: 'Model', key: 'model', type: 'string', model: 'Content', control: 'reflection', required: true, visible: true, editable: true, indexable: true },
+		{ name: 'Name', key: 'name', type: 'string', control: 'text', required: true, visible: true, editable: true, indexable: true },
+		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field', control: 'tab', visible: true, editable: true },
+	]
+}, {
+	id: 8,
 	name: 'Content',
 	key: 'content',
 	type: 'object',
@@ -433,7 +446,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
 	]
 }, {
-	id: 8,
+	id: 9,
 	name: 'Component',
 	key: 'component',
 	type: 'object',
@@ -446,7 +459,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Types', key: 'types', type: 'array', model: 'PageType', control: 'multi', visible: true, editable: true, indexable: true }
 	]
 }, {
-	id: 9,
+	id: 10,
 	name: 'Language',
 	key: 'language',
 	type: 'object',
@@ -468,7 +481,8 @@ export const STORE: { [key: string]: any[] } = {
 		name: 'Default Type',
 		abstract: 'Generic Picture',
 	}],
-	contents: [],
+	content: [],
+	contentType: DEFINITIONS.filter(x => x.model === 'ContentType'),
 	language: [{
 		id: 1,
 		name: 'Italiano',

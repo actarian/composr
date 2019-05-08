@@ -52,7 +52,7 @@ export class AuthComponent extends DisposableComponent implements OnInit {
 			switchMap(me => this.userService.tryFacebook(me)),
 			finalize(() => this.facebookBusy = false),
 		).subscribe(user => {
-			console.log(user);
+			// console.log(user);
 			if (user) {
 				this.onAuth(user);
 			} else {
@@ -92,7 +92,7 @@ export class AuthComponent extends DisposableComponent implements OnInit {
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {
 				this.onAuth(e.data);
-				console.log('AuthComponent.onSignIn', e);
+				// console.log('AuthComponent.onSignIn', e);
 			}
 		});
 	}
@@ -102,7 +102,7 @@ export class AuthComponent extends DisposableComponent implements OnInit {
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {
-				console.log('signed');
+				console.log('AuthComponent.signed');
 			}
 		});
 	}

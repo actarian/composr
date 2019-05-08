@@ -34,7 +34,7 @@ export class ControlMultiComponent extends ControlComponent implements OnInit {
 		}).pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe(event => {
-			console.log('onEditField', event);
+			// console.log('onEditField', event);
 			if (event instanceof ModalCompleteEvent) {
 				const items = event.data as Entity[];
 				this.control.setValue(items);
@@ -48,7 +48,7 @@ export class ControlMultiComponent extends ControlComponent implements OnInit {
 			takeUntil(this.unsubscribe)
 		).subscribe(items => {
 			this.items = items;
-			console.log(items);
+			// console.log(items);
 		});
 	}
 

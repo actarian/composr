@@ -30,7 +30,7 @@ export class FieldComponent extends DisposableComponent implements OnInit {
 		this.tabService.state$.pipe(
 			first(),
 		).subscribe(state => {
-			console.log('FieldComponent', state);
+			// console.log('FieldComponent', state);
 			this.state = state;
 			this.route.params.pipe(
 				takeUntil(this.unsubscribe),
@@ -48,7 +48,7 @@ export class FieldComponent extends DisposableComponent implements OnInit {
 	}
 
 	onEditField(event: MouseEvent, field: Field) {
-		console.log('FieldComponent.onEditField', event, field);
+		// console.log('FieldComponent.onEditField', event, field);
 		this.modalService.open({
 			component: FieldEditComponent,
 			data: {
@@ -58,9 +58,9 @@ export class FieldComponent extends DisposableComponent implements OnInit {
 		}).pipe(
 			first()
 		).subscribe(e => {
-			console.log('onEditField', e);
+			// console.log('onEditField', e);
 			if (e instanceof ModalCompleteEvent) {
-				console.log('FieldComponent.onEditField.ModalCompleteEvent', e.data);
+				// console.log('FieldComponent.onEditField.ModalCompleteEvent', e.data);
 				Object.assign(field, e.data as Field);
 			}
 		});
@@ -68,7 +68,7 @@ export class FieldComponent extends DisposableComponent implements OnInit {
 
 	onDropField(event: CdkDragDrop<string[]>) {
 		moveItemInArray(this.state.fields, event.previousIndex, event.currentIndex);
-		console.log('FieldComponent.onDropField', event.previousIndex, event.currentIndex);
+		// console.log('FieldComponent.onDropField', event.previousIndex, event.currentIndex);
 		this.sortFields(this.state.fields);
 		// this.dropField.emit(this.fields);
 	}

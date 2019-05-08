@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Identity, LocalStorageService } from '@designr/core';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
-import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { getIpsum } from './ipsum';
 import { Asset, Definition, DEFINITIONS, Field, Page, REFLECTIONS, STORE } from './store';
 import { toCamelCase, toTitleCase } from './utils';
@@ -68,7 +68,7 @@ export class FakeService {
 
 	getTypes$(type: string, ofType?: string): Observable<any[]> {
 		return this.get$(type, ofType).pipe(
-			tap(x => console.log('getTypes$', x)),
+			// tap(x => console.log('getTypes$', x)),
 			map(x => x.map(x => {
 				return {
 					id: x.id,

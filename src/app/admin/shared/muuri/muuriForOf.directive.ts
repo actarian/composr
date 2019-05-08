@@ -27,7 +27,7 @@ export class MuuriForOf<T> extends NgForOf<T> implements OnChanges, AfterContent
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		console.log('MuuriForOf.ngOnChanges', changes);
+		// console.log('MuuriForOf.ngOnChanges', changes);
 		this.zone.runOutsideAngular(() => {
 			setTimeout(() => {
 				this.onMuuri();
@@ -36,7 +36,7 @@ export class MuuriForOf<T> extends NgForOf<T> implements OnChanges, AfterContent
 	}
 
 	ngAfterContentChecked(): void {
-		console.log('MuuriForOf.ngAfterContentChecked');
+		// console.log('MuuriForOf.ngAfterContentChecked');
 		/*
 		if ('ngForIn' in changes) {
 			this.ngForOf = Object.keys(this.ngForIn);
@@ -68,7 +68,7 @@ export class MuuriForOf<T> extends NgForOf<T> implements OnChanges, AfterContent
 			const items = Array.from(node.querySelectorAll('.listing__item'));
 			const newItems = items.filter(x => previousItems.indexOf(x) === -1);
 			const removeItems = previousItems.filter(x => items.indexOf(x) === -1);
-			console.log('MuuriDirective', 'newItems', newItems, 'removeItems', removeItems);
+			// console.log('MuuriDirective', 'newItems', newItems, 'removeItems', removeItems);
 			this.muuri_.remove(removeItems);
 			this.muuri_.add(newItems);
 			// this.muuri_.refreshItems(items).layout();

@@ -34,7 +34,7 @@ export class ContentComponent extends DisposableComponent implements OnInit {
 				const path = this.route.snapshot.url[0].path;
 				const field = state.definition.fields.find(x => x.key === path);
 				this.field = field;
-				console.log('ContentComponent', field);
+				// console.log('ContentComponent', field);
 			});
 		});
 	}

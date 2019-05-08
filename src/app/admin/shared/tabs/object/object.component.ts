@@ -44,7 +44,7 @@ export class ObjectComponent extends DisposableComponent implements OnInit {
 				const path = this.route.snapshot.url[0].path;
 				const field = state.definition.fields.find(x => x.key === path);
 				this.field = field;
-				console.log('ObjectComponent.field', field);
+				// console.log('ObjectComponent.field', field);
 				const form = this.state.form;
 				this.storeService.getDefinition(field.model).pipe(
 					first(),
