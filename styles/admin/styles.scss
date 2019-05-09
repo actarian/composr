@@ -57,9 +57,7 @@ a {
 		font-weight: bold;
 		position: relative;
 		border-radius: 3px;
-		background: #e2e6f6;
-		color: $primary;
-		padding: 12px;
+		padding: 12px 8px;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		overflow: hidden;
@@ -78,6 +76,15 @@ a {
 		&>span+svg,
 		&>svg+span {
 			margin-left: 12px;
+		}
+
+		&,
+		&:link,
+		&:focus,
+		&:visited,
+		&:active {
+			background: #e2e6f6;
+			color: $primary;
 		}
 
 		&:hover {

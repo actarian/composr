@@ -22,22 +22,25 @@
 			<!-- <control-outlet [option]="fieldOptions[n][0]" [form]="form"></control-outlet> -->
 			<button class="btn--toggle" [ngClass]="{ active: field.visible }" (click)="field.visible = !field.visible">
 				<span *ngIf="field.visible">visible</span>
-				<span *ngIf="!field.visible">not visible</span>
+				<span *ngIf="!field.visible">hidden</span>
 			</button>
 			<button class="btn--toggle" [ngClass]="{ active: field.editable }" (click)="field.editable = !field.editable">
 				<span *ngIf="field.editable">editable</span>
-				<span *ngIf="!field.editable">not editable</span>
+				<span *ngIf="!field.editable">locked</span>
 			</button>
 			<button class="btn--toggle" [ngClass]="{ active: field.indexable }" (click)="field.indexable = !field.indexable">
 				<span *ngIf="field.indexable">indexable</span>
-				<span *ngIf="!field.indexable">not indexable</span>
+				<span *ngIf="!field.indexable">unindexable</span>
 			</button>
 			<button class="btn--toggle" [ngClass]="{ active: field.control }" (click)="onEditField($event, field)">
-				<span>{{field.control}}</span>
+				<span>{{field.control || 'control'}}</span>
 				<!--<svg><use xlink:href="#edit"></use></svg>-->
 			</button>
+			<div class="description">
+				{{field.description}}
+			</div>
 			<div class="group--actions">
-				<button class="btn--primary" [ngClass]="{ active: field.control }" (click)="onEditField($event, field)">
+				<button class="btn--round" [ngClass]="{ active: field.control }" (click)="onEditField($event, field)">
 					<span>Edit</span>
 					<svg><use xlink:href="#edit"></use></svg>
 				</button>

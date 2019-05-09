@@ -25,14 +25,27 @@
 			}
 		}
 	}
+
+	&>.description {
+		flex: 1 1 auto;
+		display: flex;
+		align-items: center;
+		padding: 0 15px;
+		font-size: 13px;
+
+		@include media-breakpoint-down(md) {
+			display: none;
+		}
+	}
 }
 
-.btn--primary {
+.btn--round {
 	@extend %btn-primary;
 	position: relative;
 	padding: 13px 20px;
 	font-size: 13px;
 	font-weight: bold;
+	border-radius: 25px;
 
 	svg {
 		width: 16px;
