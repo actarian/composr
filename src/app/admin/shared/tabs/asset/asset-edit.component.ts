@@ -1,24 +1,11 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ControlOption, FormService } from '@designr/control';
-import { ControlSelectOption } from '@designr/control/lib/control/select/control-select';
 import { DisposableComponent } from '@designr/core';
 import { ModalData, ModalService } from '@designr/ui';
 import { finalize, first } from 'rxjs/operators';
 import { Asset, Definition } from '../../store/store';
 import { StoreService } from '../../store/store.service';
-// import { ControlOption } from '../../store/forms';
-
-export const CONTROL_TYPES: ControlSelectOption[] = [
-	{ name: 'select', id: null },
-	// { name: 'checkbox', id: 'Checkbox' },
-	{ name: 'Number', id: 'number' },
-	{ name: 'Select', id: 'select' },
-	{ name: 'Switch', id: 'switch' },
-	{ name: 'Tab', id: 'tab' },
-	{ name: 'Text', id: 'text' },
-	{ name: 'Textarea', id: 'textarea' },
-];
 
 @Component({
 	selector: 'asset-edit-component',
@@ -60,40 +47,12 @@ export class AssetEditComponent extends DisposableComponent implements OnInit {
 				)
 			);
 			this.form = this.formService.getFormGroup(this.options);
-			this.form.patchValue(this.asset);
+			this.form.reset(this.asset);
 		});
-		/*
-		this.options = this.formService.getOptions([{
-			key: 'control',
-			schema: 'select',
-			label: 'Control',
-			placeholder: 'control',
-			options: CONTROL_TYPES,
-			required: false,
-			disabled: this.definition.primaryKey,
-			order: 1
-		}, {
-			key: 'name',
-			schema: 'text',
-			label: 'Name',
-			placeholder: 'name',
-			required: false,
-			order: 2
-		}, {
-			key: 'description',
-			schema: 'textarea',
-			label: 'Description',
-			placeholder: 'description',
-			required: false,
-			order: 3
-		}]);
-		this.form = this.formService.getFormGroup(this.options);
-		this.form.patchValue(this.definition);
-		*/
 	}
 
 	onReset(event): void {
-		this.form.reset(this.definition);
+		this.form.reset(this.asset);
 	}
 
 	onSubmit(model): void {

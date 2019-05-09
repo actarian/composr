@@ -48,6 +48,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 			this.id = parseInt(data.id, 0);
 			// console.log('definition', this.type, this.id);
 			// !!! make PageType dynamic (name + type ???)
+			console.log(this.type + 'Type');
 			this.storeService.getDefinition(this.type + 'Type').pipe(
 				first(),
 			).subscribe(definition => {
@@ -95,7 +96,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 						fieldOptions.map(x => this.formService.getFormGroup(x))
 					));
 					this.fieldOptions = fieldOptions;
-					this.form.patchValue(item);
+					this.form.reset(item);
 					this.tabService.setState({
 						tabFields: this.tabFields,
 						type: this.type,

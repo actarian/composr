@@ -60,7 +60,7 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 				).subscribe(item => {
 					// console.log('getDetail', this.type, this.id, item);
 					this.item = item;
-					this.form.patchValue(item);
+					this.form.reset(item);
 					this.tabService.setState({
 						tabFields: this.tabFields,
 						type: this.type,

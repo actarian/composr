@@ -78,7 +78,7 @@ export class FieldEditComponent extends DisposableComponent implements OnInit {
 			order: 3
 		}]);
 		this.form = this.formService.getFormGroup(this.options);
-		this.form.patchValue(this.field);
+		this.form.reset(this.field);
 	}
 
 	onReset(event): void {

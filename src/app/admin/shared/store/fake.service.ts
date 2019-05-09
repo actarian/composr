@@ -82,7 +82,8 @@ export class FakeService {
 	getDefinition$(type: string): Observable<Definition> {
 		return this.store$.pipe(
 			map(store => {
-				return store.definition.find(x => toCamelCase(x.model) === toCamelCase(type));
+				const definition = store.definition.find(x => toCamelCase(x.model) === toCamelCase('Definition'));
+				return store.definition.find(x => toCamelCase(x.model) === toCamelCase(type)) || definition;
 			})
 		);
 	}

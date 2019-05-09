@@ -58,9 +58,14 @@
 
 .modal__header {
 	@extend %nav;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background: white;
+	border-bottom: 1px solid $border;
+
 	min-height: 60px;
 	padding: 10px 40px;
-	border-bottom: 1px solid #eee;
 
 	.btn--close {
 		@extend %btn-icon;
@@ -109,4 +114,12 @@
 		}
 	}
 
+}
+
+.modal__footer {
+	position: sticky;
+	bottom: 0;
+	z-index: 1;
+	background: white;
+	border-top: 1px solid $border;
 }
