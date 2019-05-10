@@ -17,7 +17,6 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 	definition: Definition;
 	columns: Column[] = [];
 	items: any[] = [];
-
 	actionItems: ActionItem[] = [{
 		label: 'Delete', action: (items: any[]): boolean => {
 			return true;
@@ -51,7 +50,7 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 
 	onEditRow(item: any) {
 		// console.log(this.route.snapshot.root);
-		this.router.navigate(['../', this.type, item.id], { relativeTo: this.route });
+		this.router.navigate(['../', item.model, item.id], { relativeTo: this.route });
 	}
 
 	onDeleteRow(item: any) {

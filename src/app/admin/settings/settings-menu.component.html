@@ -5,15 +5,9 @@
 	<div class="category">Directories</div>
 	<ul class="nav--menu-primary">
 		<li>
-			<a class="btn--menu-primary" [routerLink]="['/admin/settings/data', 'component']" routerLinkActive="active">
-				<span>Components</span>
-				<svg (click)="onEditType($event, 'component')"><use xlink:href="#edit"></use></svg>
-			</a>
-		</li>
-		<li>
-			<a class="btn--menu-primary" [routerLink]="['/admin/settings/data', 'language']" routerLinkActive="active">
-				<span>Languages</span>
-				<svg (click)="onEditType($event, 'language')"><use xlink:href="#edit"></use></svg>
+			<a class="btn--menu-primary" [routerLink]="['/admin/settings/data', item.model]" routerLinkActive="active" *ngFor="let item of types">
+				<span>{{item.name}}</span>
+				<svg (click)="onEditType($event, item)"><use xlink:href="#edit"></use></svg>
 			</a>
 		</li>
 		<li>
@@ -24,7 +18,7 @@
 	<div class="category">Page Types</div>
 	<ul class="nav--menu-secondary">
 		<li *ngFor="let item of types">
-			<a class="btn--menu-secondary" [routerLink]="['/admin/settings/data', item.key]" routerLinkActive="active">
+			<a class="btn--menu-secondary" [routerLink]="['/admin/settings/data', item.model]" routerLinkActive="active">
 				<svg><use xlink:href="#document"></use></svg>
 				<span>{{item.name}}</span>
 				<svg (click)="onEditType($event, item)"><use xlink:href="#edit"></use></svg>

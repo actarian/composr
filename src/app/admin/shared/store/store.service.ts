@@ -122,6 +122,7 @@ export class StoreService extends FakeService {
 				type: x.type,
 				primaryKey: x.primaryKey,
 			};
+			// console.log(x);
 			switch (schema) {
 				case 'select':
 					/*

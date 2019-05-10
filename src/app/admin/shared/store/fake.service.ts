@@ -73,7 +73,7 @@ export class FakeService {
 				return {
 					id: x.id,
 					name: x.name,
-					key: toCamelCase(x.model),
+					model: x.model,
 				};
 			}))
 		);
@@ -105,7 +105,7 @@ export class FakeService {
 						if (definition) {
 							items = items.map(x => {
 								const item: any = {};
-								item.model = x.model;
+								item.model = x.model || type;
 								definition.fields.forEach(field => {
 									if (field.primaryKey || field.indexable) {
 										item[field.key] = x[field.key];
@@ -130,12 +130,20 @@ export class FakeService {
 	}
 
 	addItem$(type: string, model: any): Observable<any> {
-		// console.log('FakeService.addItem$', type, model);
+		console.log('FakeService.addItem$', type, model);
 		return of(this.store).pipe(
 			map(store => {
 				// !!! da rifare errore
 				// const definition = this.store.definition.find(x => toCamelCase(x.model) === type);
-				const definition = store.definition.find(x => x.id === model.typeId);
+				let id;
+				switch (type) {
+					case 'Page':
+						id = model.pageType.id;
+						break;
+					default:
+						id = model.type.id;
+				}
+				const definition = store.definition.find(x => x.id === id);
 				const items = store[toCamelCase(definition.model)];
 				const item = Object.assign({}, model);
 				item.id = UID++;
@@ -210,15 +218,28 @@ export class FakeService {
 				store.reflection = REFLECTIONS;
 				store.definition = DEFINITIONS;
 				store.component = [];
-				const pageDefinition = store.definition.find(x => toCamelCase(x.model) === 'page');
+				const pageTypeDefinition = store.definition.find(x => x.model === 'PageType');
+				pageTypeDefinition.fields.forEach(x => x.id = UID++);
+				const pageDefinition = store.definition.find(x => x.model === 'Page');
 				pageDefinition.fields.forEach(x => x.id = UID++);
-				const pageReflections = this.getSync(store, 'reflection', 'page');
+				const pageReflections = this.getSync(store, 'reflection', 'Page');
 				pageReflections.forEach(x => {
+					const definitionType = Object.assign({}, pageTypeDefinition);
+					// console.log(definition);
+					if (x.model !== 'Page') {
+						const model = x.model + 'Type';
+						definitionType.id = UID++;
+						definitionType.name = model;
+						definitionType.model = model;
+						definitionType.extend = 'PageType';
+						definitionType.fields = definitionType.fields.slice();
+						definitionType.fields.forEach(x => x.id = UID++);
+						store.definition.push(definitionType);
+					}
 					const definition = Object.assign({}, pageDefinition);
 					// console.log(definition);
 					if (x.model !== 'Page') {
 						definition.id = UID++;
-						definition.key = toCamelCase(x.model);
 						definition.name = x.model;
 						definition.model = x.model;
 						definition.extend = 'Page';

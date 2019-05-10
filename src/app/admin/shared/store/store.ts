@@ -1,4 +1,4 @@
-import { toCamelCase, toTitleCase } from './utils';
+import { toTitleCase } from './utils';
 
 export const CONTROL_MAP: { [key: string]: string } = {
 	'boolean': 'switch',
@@ -30,7 +30,6 @@ export interface Definition {
 	id?: number | string;
 	name: string;
 	description?: string;
-	key: string;
 	type: string;
 	model?: string;
 	extend?: string;
@@ -118,7 +117,6 @@ export interface Page {
 export const REFLECTIONS: Definition[] = [{
 	id: 'Definition',
 	name: 'Definition',
-	key: 'definition',
 	type: 'object',
 	model: 'Definition',
 	extend: 'Entity',
@@ -130,7 +128,6 @@ export const REFLECTIONS: Definition[] = [{
 }, {
 	id: 'Entity',
 	name: 'Entity',
-	key: 'entity',
 	type: 'object',
 	model: 'Entity',
 	extend: 'Entity',
@@ -142,7 +139,6 @@ export const REFLECTIONS: Definition[] = [{
 }, {
 	id: 'AssetType',
 	name: 'AssetType',
-	key: 'assetType',
 	type: 'object',
 	model: 'AssetType',
 	extend: 'Definition',
@@ -155,7 +151,6 @@ export const REFLECTIONS: Definition[] = [{
 }, {
 	id: 'ContentType',
 	name: 'ContentType',
-	key: 'contentType',
 	type: 'object',
 	model: 'ContentType',
 	extend: 'Definition',
@@ -168,7 +163,6 @@ export const REFLECTIONS: Definition[] = [{
 }, {
 	id: 'PageType',
 	name: 'PageType',
-	key: 'pageType',
 	type: 'object',
 	model: 'PageType',
 	extend: 'Definition',
@@ -181,7 +175,6 @@ export const REFLECTIONS: Definition[] = [{
 }, {
 	id: 'Component',
 	name: 'Component',
-	key: 'component',
 	type: 'object',
 	model: 'Component',
 	extend: 'Entity',
@@ -194,7 +187,6 @@ export const REFLECTIONS: Definition[] = [{
 }, {
 	id: 'Language',
 	name: 'Language',
-	key: 'language',
 	type: 'object',
 	model: 'Language',
 	extend: 'Entity',
@@ -208,7 +200,6 @@ export const REFLECTIONS: Definition[] = [{
 }, {
 	id: 'Meta',
 	name: 'Meta',
-	key: 'meta',
 	type: 'object',
 	model: 'Meta',
 	extend: 'Entity',
@@ -221,7 +212,6 @@ export const REFLECTIONS: Definition[] = [{
 }, {
 	id: 'Asset',
 	name: 'Asset',
-	key: 'asset',
 	type: 'object',
 	model: 'Asset',
 	extend: 'Entity',
@@ -240,7 +230,6 @@ export const REFLECTIONS: Definition[] = [{
 }, {
 	id: 'Image',
 	name: 'Image',
-	key: 'image',
 	type: 'object',
 	model: 'Image',
 	extend: 'Entity',
@@ -258,7 +247,6 @@ export const REFLECTIONS: Definition[] = [{
 }, {
 	id: 'Content',
 	name: 'Content',
-	key: 'content',
 	type: 'object',
 	model: 'Content',
 	extend: 'Entity',
@@ -270,7 +258,6 @@ export const REFLECTIONS: Definition[] = [{
 }, {
 	id: 'Page',
 	name: 'Page',
-	key: 'page',
 	type: 'object',
 	model: 'Page',
 	extend: 'Entity',
@@ -301,14 +288,12 @@ export const REFLECTIONS: Definition[] = [{
 		item.id = toTitleCase(x);
 		item.name = toTitleCase(x);
 		item.model = toTitleCase(x);
-		item.key = toCamelCase(x);
 		REFLECTIONS.push(item);
 	});
 
 export const DEFINITIONS: Definition[] = [{
 	id: 1,
 	name: 'Definition',
-	key: 'definition',
 	type: 'object',
 	model: 'Definition',
 	extend: 'Entity',
@@ -338,7 +323,6 @@ export const DEFINITIONS: Definition[] = [{
 }, {
 	id: 2,
 	name: 'Entity',
-	key: 'entity',
 	type: 'object',
 	model: 'Entity',
 	extend: 'Entity',
@@ -351,7 +335,6 @@ export const DEFINITIONS: Definition[] = [{
 }, {
 	id: 3,
 	name: 'PageType',
-	key: 'pageType',
 	type: 'object',
 	model: 'PageType',
 	extend: 'Definition',
@@ -364,7 +347,6 @@ export const DEFINITIONS: Definition[] = [{
 }, {
 	id: 4,
 	name: 'Asset',
-	key: 'asset',
 	type: 'object',
 	model: 'Asset',
 	extend: 'Entity',
@@ -383,7 +365,6 @@ export const DEFINITIONS: Definition[] = [{
 }, {
 	id: 5,
 	name: 'Meta',
-	key: 'meta',
 	type: 'object',
 	model: 'Meta',
 	extend: 'Identity',
@@ -396,7 +377,6 @@ export const DEFINITIONS: Definition[] = [{
 }, {
 	id: 6,
 	name: 'Page',
-	key: 'page',
 	type: 'object',
 	model: 'Page',
 	extend: 'Entity',
@@ -423,7 +403,6 @@ export const DEFINITIONS: Definition[] = [{
 }, {
 	id: 7,
 	name: 'ContentType',
-	key: 'contentType',
 	type: 'object',
 	model: 'ContentType',
 	extend: 'Definition',
@@ -436,7 +415,6 @@ export const DEFINITIONS: Definition[] = [{
 }, {
 	id: 8,
 	name: 'Content',
-	key: 'content',
 	type: 'object',
 	model: 'Content',
 	extend: 'Entity',
@@ -448,7 +426,6 @@ export const DEFINITIONS: Definition[] = [{
 }, {
 	id: 9,
 	name: 'Component',
-	key: 'component',
 	type: 'object',
 	model: 'Component',
 	extend: 'Entity',
@@ -461,7 +438,6 @@ export const DEFINITIONS: Definition[] = [{
 }, {
 	id: 10,
 	name: 'Language',
-	key: 'language',
 	type: 'object',
 	model: 'Language',
 	extend: 'Entity',

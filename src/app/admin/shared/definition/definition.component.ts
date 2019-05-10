@@ -3,8 +3,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
+import { compare } from 'fast-json-patch';
 import { first, takeUntil } from 'rxjs/operators';
-import { Definition } from '../store/store';
+import { Definition, Field } from '../store/store';
 import { StoreService } from '../store/store.service';
 import { TabItem, TabService } from '../tabs/tab.service';
 
@@ -21,9 +22,10 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 	type: string;
 	id: number;
 	definition: Definition;
-	fields: Definition[];
+	fields: Field[];
 	fieldOptions: ControlOption<any>[][];
 	item: any;
+	initialValue: any;
 
 	options: ControlOption<any>[];
 	form: FormGroup;
@@ -48,7 +50,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 			this.id = parseInt(data.id, 0);
 			// console.log('definition', this.type, this.id);
 			// !!! make PageType dynamic (name + type ???)
-			console.log(this.type + 'Type');
+			// console.log(this.type + 'Type');
 			this.storeService.getDefinition(this.type + 'Type').pipe(
 				first(),
 			).subscribe(definition => {
@@ -97,6 +99,7 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 					));
 					this.fieldOptions = fieldOptions;
 					this.form.reset(item);
+					this.initialValue = this.form.value;
 					this.tabService.setState({
 						tabFields: this.tabFields,
 						type: this.type,
@@ -119,6 +122,12 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 			});
 			*/
 		});
+	}
+
+	get hasDiff() {
+		const diff = compare(this.initialValue, this.form.value);
+		console.log(diff);
+		return (diff || []).length > 0;
 	}
 
 	onDelete() {

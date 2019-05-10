@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
+import { compare } from 'fast-json-patch';
 import { finalize, first, takeUntil } from 'rxjs/operators';
 import { Definition } from '../store/store';
 import { StoreService } from '../store/store.service';
@@ -21,6 +22,7 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 	id: number;
 	definition: Definition;
 	item: any;
+	initialValue: any;
 
 	options: ControlOption<any>[];
 	form: FormGroup;
@@ -56,11 +58,12 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 				this.form = this.formService.getFormGroup(this.options);
 				this.tabFields = this.tabService.getTabs(this.definition);
 				this.storeService.getDetail(this.type, this.id).pipe(
-					first(),
+					takeUntil(this.unsubscribe),
 				).subscribe(item => {
 					// console.log('getDetail', this.type, this.id, item);
 					this.item = item;
 					this.form.reset(item);
+					this.initialValue = this.form.value;
 					this.tabService.setState({
 						tabFields: this.tabFields,
 						type: this.type,
@@ -73,6 +76,12 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 				});
 			});
 		});
+	}
+
+	get hasDiff() {
+		const diff = compare(this.initialValue, this.form.value);
+		console.log(diff);
+		return (diff || []).length > 0;
 	}
 
 	onDelete() {

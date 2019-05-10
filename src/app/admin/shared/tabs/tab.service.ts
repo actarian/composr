@@ -48,10 +48,12 @@ export class TabService {
 				field: x
 			};
 		});
+		const detail = Object.assign({}, definition) as Field;
+		detail.key = 'detail';
 		tabs.unshift({
 			slug: 'detail',
 			name: 'Detail',
-			field: definition,
+			field: detail,
 		});
 		return tabs;
 	}

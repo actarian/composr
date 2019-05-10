@@ -63,10 +63,7 @@ export class ObjectComponent extends DisposableComponent implements OnInit {
 					}
 					this.group = group;
 					const item = state.item[field.key];
-					if (item) {
-						// console.log('ObjectComponent.item', item);
-						this.group.patchValue(item);
-					}
+					this.group.reset(item);
 				});
 			});
 		});

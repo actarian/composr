@@ -14,12 +14,12 @@
 			<ng-template #template let-item>
 				<div class="table__cell" *ngFor="let col of item.columns; let i = index">{{item.getValue(item.row, col)}}</div>
 				<!--
-			<div class="table__cell">{{item.getValue(item.row, item.keys.fullname)}}</div>
-			<div class="table__cell">{{item.getValue(item.row, item.keys.name)}}</div>
-			<div class="table__cell">{{item.getValue(item.row, item.keys.surname)}}</div>
-			<div class="table__cell">{{item.getValue(item.row, item.keys.short)}}</div>
-			<div class="table__cell">{{item.getValue(item.row, item.keys.active)}}</div>
-			-->
+				<div class="table__cell">{{item.getValue(item.row, item.keys.fullname)}}</div>
+				<div class="table__cell">{{item.getValue(item.row, item.keys.name)}}</div>
+				<div class="table__cell">{{item.getValue(item.row, item.keys.surname)}}</div>
+				<div class="table__cell">{{item.getValue(item.row, item.keys.short)}}</div>
+				<div class="table__cell">{{item.getValue(item.row, item.keys.active)}}</div>
+				-->
 			</ng-template>
 			<ng-template #templateAction let-item>
 				<div class="table__cell cell--lg">

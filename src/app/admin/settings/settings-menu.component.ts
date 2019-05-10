@@ -35,11 +35,11 @@ export class SettingsMenuComponent extends DisposableComponent implements OnInit
 		});
 	}
 
-	onEditType(event: MouseEvent, type: string) {
+	onEditType(event: MouseEvent, item: any) {
 		event.preventDefault();
 		event.stopPropagation();
-		const typeItem: any = this.types.find(x => x.key === type);
-		this.router.navigate(['/admin/settings', 'definition', typeItem.key, typeItem.id]);
+		// const typeItem: any = this.types.find(x => x.model === item.model);
+		this.router.navigate(['/admin/settings', 'definition', item.model, item.id]);
 	}
 
 	onAddType(event: MouseEvent) {

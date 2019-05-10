@@ -4,10 +4,10 @@
 	</div>
 	<div class="category">Directories</div>
 	<ul class="nav--menu-primary">
-		<li *ngFor="let item of types">
-			<a class="btn--menu-secondary" [routerLink]="['/admin/pages/data', item.model]" routerLinkActive="active">
-				<svg><use xlink:href="#document"></use></svg>
-				<span>{{item.name}}</span>
+		<li>
+			<a class="btn--menu-primary" [routerLink]="['/admin/pages/data', type.model]" routerLinkActive="active">
+				<span>Pages</span>
+				<svg (click)="onEditType($event, type)"><use xlink:href="#edit"></use></svg>
 			</a>
 		</li>
 		<li>
@@ -17,9 +17,10 @@
 	<div class="category">Page Types</div>
 	<ul class="nav--menu-secondary">
 		<li *ngFor="let item of types">
-			<a class="btn--menu-secondary" [routerLink]="['/admin/pages/definition', item.model, item.id]" routerLinkActive="active">
+			<a class="btn--menu-secondary" [routerLink]="['/admin/pages/data', item.model]" routerLinkActive="active">
 				<svg><use xlink:href="#document"></use></svg>
 				<span>{{item.name}}</span>
+				<svg (click)="onEditType($event, item)"><use xlink:href="#edit"></use></svg>
 			</a>
 		</li>
 		<li>

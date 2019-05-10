@@ -25,7 +25,7 @@
 	<div class="category">Content Types</div>
 	<ul class="nav--menu-secondary">
 		<li *ngFor="let item of types">
-			<a class="btn--menu-secondary" [routerLink]="['/admin/contents/data', item.key]" routerLinkActive="active">
+			<a class="btn--menu-secondary" [routerLink]="['/admin/contents/data', item.model]" routerLinkActive="active">
 				<svg><use xlink:href="#document"></use></svg>
 				<span>{{item.name}}</span>
 				<svg (click)="onEditType($event, item)"><use xlink:href="#edit"></use></svg>

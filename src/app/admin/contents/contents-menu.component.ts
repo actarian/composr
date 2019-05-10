@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { DisposableComponent, LocalStorageService, MenuItem } from '@designr/core';
+import { DisposableComponent, LocalStorageService } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first } from 'rxjs/operators';
 import { DefinitionAddComponent } from '../shared/definition/definition-add.component';
@@ -34,14 +34,14 @@ export class ContentsMenuComponent extends DisposableComponent implements OnInit
 		this.expand.emit(this.expanded);
 		this.storeService.getTypes('definition', 'Content').subscribe(types => {
 			this.types = types;
-			this.type = types.find(x => x.key === 'content');
+			this.type = types.find(x => x.model === 'Content');
 		});
 	}
 
-	onEditType(event: MouseEvent, item: MenuItem) {
+	onEditType(event: MouseEvent, type: any) {
 		event.preventDefault();
 		event.stopPropagation();
-		this.router.navigate(['/admin/contents', 'definition', 'content', item.id]);
+		this.router.navigate(['/admin/contents', 'definition', type.model, type.id]);
 	}
 
 	onAddItem(event: MouseEvent) {

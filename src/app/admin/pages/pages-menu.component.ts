@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { DisposableComponent, LocalStorageService, MenuItem } from '@designr/core';
+import { DisposableComponent, LocalStorageService } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first } from 'rxjs/operators';
 import { DefinitionAddComponent } from '../shared/definition/definition-add.component';
@@ -16,7 +16,6 @@ export class PagesMenuComponent extends DisposableComponent implements OnInit {
 
 	expanded: boolean = false;
 	@Output() expand: EventEmitter<boolean> = new EventEmitter<boolean>(true);
-
 	types: any[] = [];
 	type: any;
 
@@ -34,14 +33,14 @@ export class PagesMenuComponent extends DisposableComponent implements OnInit {
 		this.expand.emit(this.expanded);
 		this.storeService.getTypes('definition', 'Page').subscribe(types => {
 			this.types = types;
-			this.type = types.find(x => x.key === 'page');
+			this.type = types.find(x => x.model === 'Page');
 		});
 	}
 
-	onEditType(event: MouseEvent, item: MenuItem) {
+	onEditType(event: MouseEvent, type: any) {
 		event.preventDefault();
 		event.stopPropagation();
-		this.router.navigate(['/admin/pages', 'definition', 'page', item.id]);
+		this.router.navigate(['/admin/pages', 'definition', type.model, type.id]);
 	}
 
 	onAddItem(event: MouseEvent) {
