@@ -37,7 +37,7 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 		).subscribe(data => {
 			this.type = data.type;
 			this.storeService.getDefinition(this.type).subscribe(definition => {
-				// console.log('definition', definition);
+				console.log('definition', definition);
 				this.definition = definition;
 				this.columns = definition.fields.filter(x => x.indexable);
 			});

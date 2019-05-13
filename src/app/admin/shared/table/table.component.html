@@ -18,9 +18,8 @@
 	<div class="table__header">
 		<div class="table__cell cell--drag" *ngIf="draggable"></div>
 		<div class="table__cell" *ngFor="let col of columns">
-			<div class="group">
-				<span>{{col.name}}</span>
-				<div (click)="doSort(col)" *ngIf="sortable">
+			<div class="group" (click)="sortable && doSort(col)">
+				<div *ngIf="sortable">
 					<svg *ngIf="col.sort == 0">
 						<use xlink:href="#unsorted"></use>
 					</svg>
@@ -31,6 +30,7 @@
 						<use xlink:href="#descending"></use>
 					</svg>
 				</div>
+				<span>{{col.name}}</span>
 			</div>
 		</div>
 		<div class="table__cell cell--lg" (click)="toggleCheckAll()" *ngIf="selectable">

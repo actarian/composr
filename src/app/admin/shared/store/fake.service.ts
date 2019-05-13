@@ -182,11 +182,26 @@ export class FakeService {
 		);
 	}
 
+	patch(source, target) {
+		if (Array.isArray(target)) {
+			return target.map((x, i) => this.patch(source.length > i ? source[i] : x, x));
+		} else if (target && typeof target === 'object') {
+			Object.keys(target).forEach(x => {
+				source[x] = this.patch(source[x], target[x]);
+			});
+			return source;
+		} else {
+			return target;
+		}
+	}
+
 	patchDetail$(type: string, model: Identity): Observable<any> {
 		return of(this.store).pipe(
 			map(store => {
 				const item = store[toCamelCase(type)].find(x => x.id === model.id);
-				Object.assign(item, model);
+				const patched = this.patch(item, model);
+				console.log(patched);
+				// Object.assign(item, patched);
 				this.store = store;
 				return item;
 			})
@@ -316,9 +331,9 @@ export class FakeService {
 					model: component.model,
 				},
 				name,
-				title: { en: title },
-				abstract: { en: abstract },
-				description: { en: description },
+				title: [{ code: 'en', text: title }],
+				abstract: [{ code: 'en', text: abstract }],
+				description: [{ code: 'en', text: description }],
 				slug: 'slug',
 				active: Math.random() > 0.5,
 				contents: [],
@@ -326,27 +341,6 @@ export class FakeService {
 				related: [],
 				features: [],
 				taxonomies: [],
-				// model,
-				// market: { id: 1, name: 'en' },
-				// visible: Math.random() > 0.5,
-				// order: Math.floor(Math.random() * 100000),
-				/*
-				id: number | string;
-				pageType: PageType;
-				component: Component;
-				name: string;
-				title?: string;
-				abstract?: string;
-				description?: string;
-				meta?: Meta;
-				slug?: string;
-				active?: boolean;
-				contents?: Content[];
-				assets?: [];
-				related?: Page[];
-				features?: any[];
-				taxonomies?: any[];
-				*/
 			};
 		});
 	}

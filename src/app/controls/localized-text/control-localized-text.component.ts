@@ -16,7 +16,7 @@ export class ControlLocalizedTextComponent extends ControlComponent implements O
 	options: ControlLocalizedTextOption[] = [];
 	value: string;
 	compareWith: Function = this.compareWith_.bind(this);
-	private values_: Localization;
+	private values_: Localization[];
 	private language_: string;
 
 	get language(): string {
@@ -28,27 +28,27 @@ export class ControlLocalizedTextComponent extends ControlComponent implements O
 		this.setValue();
 	}
 
-	get values(): Localization {
+	get values(): Localization[] {
 		return this.values_;
 	}
 
-	set values(values: Localization) {
-		this.values_ = Object.assign({}, values);
+	set values(values: Localization[]) {
+		this.values_ = values ? values.slice().map(x => Object.assign({}, x)) : [];
 		this.setFallbackLanguage(this.values_);
 		this.setValue();
 	}
 
 	get activeLanguages(): ControlLocalizedTextOption[] {
 		if (this.options && this.values_) {
-			const o = this.options.filter(x => this.values_[x.code] !== undefined);
+			const o = this.options.filter(x => this.values_.find(v => v.code === x.code) !== undefined);
 			return o;
 		} else {
 			return [];
 		}
 	}
 
-	setFallbackLanguage(values: Localization) {
-		const languages = Object.keys(values).filter(code => values[code] !== undefined);
+	setFallbackLanguage(values: Localization[]) {
+		const languages = values.filter(v => v.text !== undefined).map(v => v.code);
 		const language = languages.find(x => x === this.language_);
 		if (!language && languages.length) {
 			this.language_ = languages[0];
@@ -58,12 +58,16 @@ export class ControlLocalizedTextComponent extends ControlComponent implements O
 	setValue() {
 		const values = this.values_;
 		const language = this.language_;
-		let value;
+		let text;
 		if (values && language) {
-			values[language] = values[language] || '';
-			value = values[language];
+			let value = values.find(v => v.code === language);
+			if (value === undefined) {
+				value = { code: language, text: '' };
+				values.push(value);
+			}
+			text = value.text;
 		}
-		this.value = value || null;
+		this.value = text || null;
 	}
 
 	ngOnInit() {
@@ -82,9 +86,10 @@ export class ControlLocalizedTextComponent extends ControlComponent implements O
 		});
 	}
 
-	onInput(value: string) {
-		const values = Object.assign({}, this.control.value || {});
-		values[this.language] = value;
+	onInput(text: string) {
+		const values = this.values_;
+		const value = values.find(v => v.code === this.language_);
+		value.text = text;
 		this.control.patchValue(values);
 	}
 
@@ -93,8 +98,12 @@ export class ControlLocalizedTextComponent extends ControlComponent implements O
 	}
 
 	onRemoveLanguage(language: string) {
-		const values = Object.assign({}, this.control.value || {});
-		delete values[this.language];
+		const values = (this.control.value || []).slice();
+		const value = values.find(v => v.code === language);
+		const index = values.indexOf(value);
+		if (index !== -1) {
+			values.splice(index, 1);
+		}
 		this.setFallbackLanguage(values);
 		this.control.patchValue(values);
 	}
