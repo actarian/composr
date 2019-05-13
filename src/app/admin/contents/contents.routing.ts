@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DefinitionComponent } from '../shared/definition/definition.component';
 import { DetailComponent } from '../shared/detail/detail.component';
+import { FieldComponent } from '../shared/fields/field.component';
 import { DetailGuard } from '../shared/guards/detail.guard';
 import { TabGuard } from '../shared/guards/tab.guard';
 import { IndexComponent } from '../shared/index/index.component';
 import { NotFoundComponent } from '../shared/not-found/not-found.component';
-import { FieldComponent } from '../shared/tabs/fields/field.component';
-import { ScalarComponent } from '../shared/tabs/scalar/scalar.component';
+import { ScalarComponent } from '../shared/scalar/scalar.component';
 import { TabComponent } from '../shared/tabs/tab.component';
 import { ContentsComponent } from './contents.component';
 

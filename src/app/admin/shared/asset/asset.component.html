@@ -1,0 +1,54 @@
+<ng-container [formGroup]="state.form" *ngIf="state && state.form">
+	<!--
+	<div class="fieldset--headline">
+		<h2 class="title">{{field.name}}</h2>
+		<div class="description">{{field.description}}</div>
+	</div>
+	-->
+	<ul class="nav--modes">
+		<li *ngFor="let item of modes" [ngClass]="{ active: mode === item.id }" (click)="mode = item.id">
+			<span>{{item.name}}</span>
+		</li>
+	</ul>
+	<ng-container *ngIf="mode == 1">
+		<div class="listing">
+			<div class="listing__item" *muuriFor="let asset of state.item.assets" (click)="onEditRow(asset)">
+				<div class="listing__content">
+					<div class="picture" [ngStyle]="{ 'padding-top.%': 100 / asset.width * asset.height }">
+						<img [src]="getSrc(asset)" />
+					</div>
+					<div class="group--headline">
+						<span class="name">{{asset.name}}</span>
+						<span class="extension">{{asset.extension}}</span>
+						<span class="size">{{asset.width}}x{{asset.height}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="mode == 2">
+		<!-- [sortable]="true" [filterable]="false" [selectable]="false" [draggable]="false" [editable]="true" [deletable]="true" [duplicable]="true" [visible]="true" [virtualized]="false" (editRow)="onEditRow($event)" -->
+		<table-component [items]="state.item.assets" [columns]="columns" [draggable]="true" (dropRow)="onDropRow($event)">
+			<ng-template #template let-item>
+				<!-- <div class="table__cell" *ngFor="let col of item.columns; let i = index">{{item.getValue(item.row, col)}}</div> -->
+				<div class="table__cell">
+					<!-- [src]="getSrc(asset)" -->
+					<img [src]="item.getValue(item.row, item.keys.src)" />
+				</div>
+				<div class="table__cell">{{item.getValue(item.row, item.keys.name)}}</div>
+				<div class="table__cell">{{item.getValue(item.row, item.keys.extension)}}</div>
+				<div class="table__cell">{{item.getValue(item.row, item.keys.size)}}</div>
+			</ng-template>
+			<ng-template #templateAction let-item>
+				<div class="table__cell cell--lg">
+					<button class="btn--action" (click)="onEditRow(item.row)">
+						<svg><use xlink:href="#edit"></use></svg>
+					</button>
+					<button class="btn--action" (click)="onDeleteRow(item.row)">
+						<svg><use xlink:href="#delete"></use></svg>
+					</button>
+				</div>
+			</ng-template>
+		</table-component>
+	</ng-container>
+</ng-container>

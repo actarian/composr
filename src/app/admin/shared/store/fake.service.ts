@@ -7,6 +7,7 @@ import { getIpsum } from './ipsum';
 import { Asset, Definition, DEFINITIONS, Field, Page, REFLECTIONS, STORE } from './store';
 import { toCamelCase, toTitleCase } from './utils';
 
+const VERSION = 1;
 let UID = 100;
 
 @Injectable({
@@ -27,8 +28,12 @@ export class FakeService {
 			if (!store) {
 				return this.createStore$;
 			}
-			UID = store.UID[0];
-			this.store_.next(store);
+			if (store.UID && store.UID[1] && store.UID[1] === VERSION) {
+				UID = store.UID[0];
+				this.store_.next(store);
+			} else {
+				return this.createStore$;
+			}
 		}
 		return this.store_;
 	}
@@ -150,6 +155,7 @@ export class FakeService {
 				item.id = UID++;
 				item.model = definition.model;
 				items.push(item);
+				store.UID[0] = UID;
 				this.store = store;
 				return item;
 			})
@@ -169,6 +175,7 @@ export class FakeService {
 				item.extend = definition.model;
 				item.model = model.model;
 				items.push(item);
+				store.UID[0] = UID;
 				this.store = store;
 				return item;
 			})
@@ -270,7 +277,7 @@ export class FakeService {
 						store[key] = store.page.filter(x => toCamelCase(x.pageType.name) === key);
 					}
 				});
-				store.UID = [UID];
+				store.UID = [UID, VERSION];
 				this.store = store;
 				return this.store_;
 			})

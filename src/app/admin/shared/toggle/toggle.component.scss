@@ -1,4 +1,55 @@
 @import '~styles/admin/variables';
+@import '~styles/admin/mixins';
+
+.btn--toggle {
+	@extend %btn-flex;
+	justify-content: center;
+	font-weight: bold;
+	position: relative;
+	border-radius: 3px;
+	padding: 12px 8px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+
+	span {
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+
+	svg {
+		width: 16px;
+		height: 16px;
+		fill: white;
+	}
+
+	&>span+svg,
+	&>svg+span {
+		margin-left: 12px;
+	}
+
+	&,
+	&:link,
+	&:focus,
+	&:visited,
+	&:active {
+		background: #e2e6f6;
+		color: $primary;
+	}
+
+	&:hover {
+		background: darken(#e2e6f6, 5%);
+		color: $primary;
+	}
+
+	&.active {
+		background: $primary;
+		color: white;
+	}
+
+	// margin-right: 20px;
+
+}
 
 .btn--toggle {
 	width: calc(100% - 3px);

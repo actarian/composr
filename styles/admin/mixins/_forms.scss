@@ -141,8 +141,8 @@
 			height: 100%;
 			top: 0;
 			right: -1px;
-			background: $primary;
-			opacity: 0;
+			background: $disabled;
+			// opacity: 0;
 			transition: opacity ease-in-out 350ms;
 		}
 	}
@@ -150,7 +150,8 @@
 	&.required {
 		.info {
 			&:after {
-				opacity: 1;
+				// opacity: 1;
+				background: $primary;
 			}
 		}
 	}
