@@ -1,0 +1,4 @@
+<button class="btn--toggle" [ngClass]="{ active: this.innerValue }" (click)="toggle()">
+	<span *ngIf="this.innerValue">{{on}}</span>
+	<span *ngIf="!this.innerValue">{{off}}</span>
+</button>

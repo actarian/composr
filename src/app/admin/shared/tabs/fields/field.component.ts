@@ -1,10 +1,12 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first, takeUntil } from 'rxjs/operators';
-import { Field } from '../../store/store';
+import { Definition, Field } from '../../store/store';
 import { TabService, TabState } from '../tab.service';
 import { FieldEditComponent } from './field-edit.component';
 
@@ -17,29 +19,40 @@ export class FieldComponent extends DisposableComponent implements OnInit {
 
 	state: TabState;
 	field: Field;
+	definition: Definition;
+	options: ControlOption<any>[];
+	fields: FormArray;
+	submitted: boolean = false;
+	busy: boolean = false;
 
 	constructor(
 		private route: ActivatedRoute,
-		private tabService: TabService,
+		private formBuilder: FormBuilder,
+		private formService: FormService,
 		private modalService: ModalService,
+		private tabService: TabService,
 	) {
 		super();
 	}
 
 	ngOnInit() {
-		this.tabService.state$.pipe(
-			first(),
-		).subscribe(state => {
-			// console.log('FieldComponent', state);
-			this.state = state;
-			this.route.params.pipe(
-				takeUntil(this.unsubscribe),
-			).subscribe(data => {
-				const path = this.route.snapshot.url[0].path;
+		this.route.params.pipe(
+			takeUntil(this.unsubscribe),
+		).subscribe(data => {
+			const path = this.route.snapshot.url[0].path;
+			this.tabService.state$.pipe(
+				first(),
+			).subscribe(state => {
+				// console.log('FieldComponent', state);
+				this.state = state;
 				const field = state.definition.fields.find(x => x.key === path);
 				this.field = field;
+				const form = this.state.form;
+				const item = state.item[field.key];
+				this.fields = form.get(field.key) as FormArray;
+				// this.sortFields(this.fields.controls);
+				this.fields.reset(item);
 			});
-			this.sortFields(this.state.fields);
 		});
 	}
 
@@ -67,23 +80,24 @@ export class FieldComponent extends DisposableComponent implements OnInit {
 	}
 
 	onDropField(event: CdkDragDrop<string[]>) {
-		moveItemInArray(this.state.fields, event.previousIndex, event.currentIndex);
+		// !!! move form array;
+		moveItemInArray(this.fields.controls, event.previousIndex, event.currentIndex);
 		// console.log('FieldComponent.onDropField', event.previousIndex, event.currentIndex);
-		this.sortFields(this.state.fields);
+		this.sortFields(this.fields.controls);
 		// this.dropField.emit(this.fields);
 	}
 
-	sortFields(fields: Field[]) {
+	sortFields(fields: AbstractControl[]) {
 		fields.sort((a, b) => {
-			if (a.primaryKey || b.primaryKey) {
-				return (a.primaryKey && !b.primaryKey) ? -1 : 1;
-			} else if (a.required || b.required) {
-				return (a.required && !b.required) ? -1 : 1;
+			if (a.get('primaryKey').value || b.get('primaryKey').value) {
+				return (a.get('primaryKey').value && !b.get('primaryKey').value) ? -1 : 1;
+			} else if (a.get('required').value || b.get('required').value) {
+				return (a.get('required').value && !b.get('required').value) ? -1 : 1;
 			} else {
 				return 0;
 			}
 		});
-		fields.forEach((x, i) => x.order = i * 10);
+		fields.forEach((x, i) => x.get('order').setValue(i * 10));
 	}
 
 }

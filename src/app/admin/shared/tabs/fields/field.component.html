@@ -3,6 +3,32 @@
 		<h2 class="title">{{field.name}}</h2>
 		<div class="description">{{field.description}}</div>
 	</div>
+	<div formArrayName="fields" cdkDropList (cdkDropListDropped)="onDropField($event)">
+		<div class="definition" [ngClass]="{ required: group.get('required') }" [formGroupName]="i" *ngFor="let group of fields.controls; let i = index" cdkDrag [cdkDragDisabled]="group.get('primaryKey').value || group.get('required').value">
+			<div class="drag__placeholder" *cdkDragPlaceholder></div>
+			<div class="drag__handle" cdkDragHandle>
+				<svg><use xlink:href="#drag"></use></svg>
+			</div>
+			<div class="info">
+				<div class="title">{{group.get('name').value}}</div>
+				<div class="type"><svg *ngIf="group.get('primaryKey').value"><use xlink:href="#lock"></use></svg> {{group.get('type').value}}</div>
+			</div>
+			<toggle-component formControlName="visible" on="visible" off="hidden"></toggle-component>
+			<toggle-component formControlName="editable" on="editable" off="locked"></toggle-component>
+			<toggle-component formControlName="indexable" on="indexable" off="unindexable"></toggle-component>
+			<button class="btn--toggle" [ngClass]="{ active: group.get('control').value }" (click)="onEditField($event, group)">
+				<span>{{group.get('control').value || 'control'}}</span>
+			</button>
+			<div class="description">{{group.get('description').value}}</div>
+			<div class="group--actions">
+				<button class="btn--round" (click)="onEditField($event, group)">
+					<span>Edit</span>
+					<svg><use xlink:href="#edit"></use></svg>
+				</button>
+			</div>
+		</div>
+	</div>
+	<!--
 	<div cdkDropList (cdkDropListDropped)="onDropField($event)">
 		<div class="definition" [ngClass]="{ required: field.required }" [formGroup]="state.form" *ngFor="let field of state.fields; let n = index" cdkDrag [cdkDragDisabled]="field.primaryKey || field.required">
 			<div class="drag__placeholder" *cdkDragPlaceholder></div>
@@ -13,13 +39,6 @@
 				<div class="title">{{field.name}}</div>
 				<div class="type"><svg *ngIf="field.primaryKey"><use xlink:href="#lock"></use></svg> {{field.type}}</div>
 			</div>
-			<!--
-			<button class="btn--toggle" [ngClass]="{ active: field.required }">
-				<span *ngIf="field.required">required</span>
-				<span *ngIf="!field.required"></span>
-			</button>
-			-->
-			<!-- <control-outlet [option]="fieldOptions[n][0]" [form]="form"></control-outlet> -->
 			<button class="btn--toggle" [ngClass]="{ active: field.visible }" (click)="field.visible = !field.visible">
 				<span *ngIf="field.visible">visible</span>
 				<span *ngIf="!field.visible">hidden</span>
@@ -34,7 +53,6 @@
 			</button>
 			<button class="btn--toggle" [ngClass]="{ active: field.control }" (click)="onEditField($event, field)">
 				<span>{{field.control || 'control'}}</span>
-				<!--<svg><use xlink:href="#edit"></use></svg>-->
 			</button>
 			<div class="description">
 				{{field.description}}
@@ -44,23 +62,8 @@
 					<span>Edit</span>
 					<svg><use xlink:href="#edit"></use></svg>
 				</button>
-				<!--
-				<button class="btn--icon" (click)="onEditField($event, field)">
-					<svg><use xlink:href="#edit"></use></svg>
-				</button>
-				-->
 			</div>
-			<!--
-			<input type="text" placeholder="add a note" />
-			<div class="group--select" [ngClass]="{ disabled: field.primaryKey }">
-				<select (input)="onSetControl($event.target.value, field)" [disabled]="field.primaryKey">
-					<option *ngFor="let item of controlTypes" [value]="item.value">{{item.label}}</option>
-				</select>
-				<div class="select__arrow">
-					<svg><use xlink:href="#angle-down"></use></svg>
-				</div>
-			</div>
-			-->
 		</div>
 	</div>
+	-->
 </ng-container>

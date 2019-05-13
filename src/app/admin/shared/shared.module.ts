@@ -24,6 +24,7 @@ import { ObjectComponent } from './tabs/object/object.component';
 import { RelationComponent } from './tabs/relation/relation.component';
 import { ScalarComponent } from './tabs/scalar/scalar.component';
 import { TabComponent } from './tabs/tab.component';
+import { ToggleComponent } from './toggle/toggle.component';
 
 const modules = [
 	CommonModule,
@@ -58,8 +59,8 @@ const components: Type<DisposableComponent>[] = [
 	PagerComponent,
 	RelationComponent,
 	ScalarComponent,
-	TabComponent,
 	TableComponent,
+	TabComponent,
 	...entryComponents,
 ];
 
@@ -91,6 +92,7 @@ const interceptors = [
 		...interceptors
 	],
 	declarations: [
+		ToggleComponent,
 		...components,
 		...directives,
 		...pipes,
@@ -101,6 +103,7 @@ const interceptors = [
 	],
 	exports: [
 		...modules,
+		ToggleComponent,
 		...components,
 		...directives,
 		...pipes,

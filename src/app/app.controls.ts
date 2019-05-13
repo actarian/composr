@@ -23,11 +23,11 @@ export const directives = [
 
 export const controls = [
 	ControlCustomComponent,
-	ControlSwitchComponent,
-	SwitchComponent,
 	ControlMultiComponent,
 	ControlLocalizedTextComponent,
 	ControlLocalizedTextareaComponent,
+	ControlSwitchComponent,
+	SwitchComponent,
 ];
 
 export const entryComponents = [

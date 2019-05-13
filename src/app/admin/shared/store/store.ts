@@ -321,7 +321,7 @@ export const DEFINITIONS: Definition[] = [{
 		*/
 	]
 }, {
-	id: 2,
+	id: 1,
 	name: 'Entity',
 	type: 'object',
 	model: 'Entity',
@@ -333,7 +333,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field', control: 'tab', visible: true, editable: true },
 	]
 }, {
-	id: 3,
+	id: 1,
 	name: 'PageType',
 	type: 'object',
 	model: 'PageType',
@@ -345,7 +345,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field', control: 'tab', visible: true, editable: true },
 	]
 }, {
-	id: 4,
+	id: 1,
 	name: 'Asset',
 	type: 'object',
 	model: 'Asset',
@@ -363,7 +363,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Abstract', key: 'abstract', type: 'object', model: 'Localization', control: 'localized-textarea', visible: true, editable: true },
 	]
 }, {
-	id: 5,
+	id: 1,
 	name: 'Meta',
 	type: 'object',
 	model: 'Meta',
@@ -375,7 +375,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Robots', key: 'robots', type: 'object', model: 'Localization', control: 'localized-text', visible: true, editable: true }
 	]
 }, {
-	id: 6,
+	id: 1,
 	name: 'Page',
 	type: 'object',
 	model: 'Page',
@@ -401,7 +401,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Taxonomies', key: 'taxonomies', type: 'array', model: 'Taxonomy', visible: true }
 	]
 }, {
-	id: 7,
+	id: 1,
 	name: 'ContentType',
 	type: 'object',
 	model: 'ContentType',
@@ -413,7 +413,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field', control: 'tab', visible: true, editable: true },
 	]
 }, {
-	id: 8,
+	id: 1,
 	name: 'Content',
 	type: 'object',
 	model: 'Content',
@@ -424,7 +424,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
 	]
 }, {
-	id: 9,
+	id: 1,
 	name: 'Component',
 	type: 'object',
 	model: 'Component',
@@ -436,7 +436,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Types', key: 'types', type: 'array', model: 'PageType', control: 'multi', visible: true, editable: true, indexable: true }
 	]
 }, {
-	id: 10,
+	id: 1,
 	name: 'Language',
 	type: 'object',
 	model: 'Language',
@@ -451,8 +451,9 @@ export const DEFINITIONS: Definition[] = [{
 }];
 
 export const STORE: { [key: string]: any[] } = {
+	asset: [],
 	assetType: [{
-		id: 100000,
+		id: 1,
 		model: 'AssetType',
 		name: 'Default Type',
 		abstract: 'Generic Picture',
@@ -469,7 +470,7 @@ export const STORE: { [key: string]: any[] } = {
 		code: 'it',
 		active: true,
 	}, {
-		id: 2,
+		id: 1,
 		name: 'English',
 		description: {
 			it: 'Inglese',

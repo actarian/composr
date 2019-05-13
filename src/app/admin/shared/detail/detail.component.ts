@@ -3,10 +3,10 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
-import { compare } from 'fast-json-patch';
 import { finalize, first, takeUntil } from 'rxjs/operators';
 import { Definition } from '../store/store';
 import { StoreService } from '../store/store.service';
+import { differs } from '../store/utils';
 import { TabItem, TabService } from '../tabs/tab.service';
 
 @Component({
@@ -79,9 +79,30 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 	}
 
 	get hasDiff() {
+		/*
+		console.log(skipEmpties({
+			a: null,
+			b: [{ c: null }],
+			d: [{ e: null, f: 1 }],
+			g: {
+				h: null
+			},
+			i: {
+				l: 1,
+				m: { n: null }
+			},
+			o: 'ciccio',
+			n: [true, false, 2, 'pippo', 3, null, 5, { a: null }]
+		}));
+		*/
+		const diff = differs(this.initialValue, this.form.value);
+		// console.log(diff);
+		return diff;
+		/*
 		const diff = compare(this.initialValue, this.form.value);
-		console.log(diff);
+		// console.log(diff);
 		return (diff || []).length > 0;
+		*/
 	}
 
 	onDelete() {

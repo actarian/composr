@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
-import { compare } from 'fast-json-patch';
 import { first, takeUntil } from 'rxjs/operators';
 import { Definition, Field } from '../store/store';
 import { StoreService } from '../store/store.service';
+import { differs } from '../store/utils';
 import { TabItem, TabService } from '../tabs/tab.service';
 
 @Component({
@@ -61,11 +61,6 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 						this.storeService.getScalarFields(this.definition.fields)
 					)
 				);
-				/*
-				this.options.push({
-					products: this.formBuilder.array([])
-				});
-				*/
 				this.form = this.formService.getFormGroup(this.options);
 				this.tabFields = this.tabService.getTabs(this.definition);
 				this.storeService.getDetail('definition', this.id).pipe(
@@ -73,31 +68,23 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 				).subscribe(item => {
 					// console.log('getDetail', 'definition', this.id, item);
 					this.item = item;
-					this.fields = this.item.fields.slice().map(x => Object.assign({}, x));
-					const fieldOptions = this.fields.map(x => {
-						return [{
-							key: 'visible',
-							schema: 'switch',
-							label: 'Visible',
-						}, {
-							key: 'editable',
-							schema: 'switch',
-							label: 'Editable',
-						}, {
-							key: 'required',
-							schema: 'switch',
-							label: 'Required',
-						}];
-						return this.formService.getOptions(
-							this.storeService.mapOptions(
-								this.storeService.getScalarFields(x.fields)
-							)
-						);
-					});
-					this.form.addControl('fields', this.formBuilder.array(
-						fieldOptions.map(x => this.formService.getFormGroup(x))
-					));
-					this.fieldOptions = fieldOptions;
+					this.fields = this.item.fields.map(x => Object.assign({}, x));
+					const fields = this.formBuilder.array(item.fields.map(x => {
+						return this.formBuilder.group({
+							type: x.type,
+							name: x.name,
+							description: x.description,
+							primaryKey: x.primaryKey,
+							required: x.required,
+							visible: x.visible,
+							editable: x.editable,
+							indexable: x.indexable,
+							control: x.control,
+							order: x.order,
+						});
+					}));
+					// console.log(fields);
+					this.form.setControl('fields', fields);
 					this.form.reset(item);
 					this.initialValue = this.form.value;
 					this.tabService.setState({
@@ -106,28 +93,24 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 						id: this.id,
 						definition: this.definition,
 						fields: this.fields,
-						fieldOptions: this.fieldOptions,
 						item: this.item,
 						options: this.options,
 						form: this.form,
 					});
 				});
 			});
-			/*
-			this.storeService.getDefinition(this.type).subscribe(definition => {
-				// console.log('definition', definition);
-				this.definition = definition;
-				this.sortFields(this.definition.fields);
-				this.fields = this.definition.fields.slice().map(x => Object.assign({}, x));
-			});
-			*/
 		});
 	}
 
 	get hasDiff() {
+		const diff = differs(this.initialValue, this.form.value);
+		// console.log(diff);
+		return diff;
+		/*
 		const diff = compare(this.initialValue, this.form.value);
 		console.log(diff);
 		return (diff || []).length > 0;
+		*/
 	}
 
 	onDelete() {
@@ -151,12 +134,6 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 				this.form.patchValue(item);
 			});
 		}
-		/*
-		const changedDefinition = this.storeService.getChangedValues(this.item.fields, this.fields);
-		if (changedDefinition) {
-
-		}
-		*/
 	}
 
 }

@@ -27,6 +27,7 @@ export class FakeService {
 			if (!store) {
 				return this.createStore$;
 			}
+			UID = store.UID[0];
 			this.store_.next(store);
 		}
 		return this.store_;
@@ -211,52 +212,56 @@ export class FakeService {
 		);
 	}
 
+	private createIds_(collection: Identity[]) {
+		collection.forEach(x => x.id = UID++);
+	}
+
 	private createStore_() {
 		return this.pictures$().pipe(
 			switchMap(pictures => {
 				const store = Object.assign({}, STORE);
+				Object.keys(store).forEach(x => this.createIds_(store[x]));
 				store.reflection = REFLECTIONS;
 				store.definition = DEFINITIONS;
 				store.component = [];
 				const pageTypeDefinition = store.definition.find(x => x.model === 'PageType');
-				pageTypeDefinition.fields.forEach(x => x.id = UID++);
+				// pageTypeDefinition.fields.forEach(x => x.id = UID++);
 				const pageDefinition = store.definition.find(x => x.model === 'Page');
-				pageDefinition.fields.forEach(x => x.id = UID++);
+				// pageDefinition.fields.forEach(x => x.id = UID++);
 				const pageReflections = this.getSync(store, 'reflection', 'Page');
 				pageReflections.forEach(x => {
 					const definitionType = Object.assign({}, pageTypeDefinition);
 					// console.log(definition);
 					if (x.model !== 'Page') {
 						const model = x.model + 'Type';
-						definitionType.id = UID++;
 						definitionType.name = model;
 						definitionType.model = model;
 						definitionType.extend = 'PageType';
 						definitionType.fields = definitionType.fields.slice();
-						definitionType.fields.forEach(x => x.id = UID++);
 						store.definition.push(definitionType);
 					}
 					const definition = Object.assign({}, pageDefinition);
 					// console.log(definition);
 					if (x.model !== 'Page') {
-						definition.id = UID++;
 						definition.name = x.model;
 						definition.model = x.model;
 						definition.extend = 'Page';
 						definition.fields = pageDefinition.fields.slice();
-						definition.fields.forEach(x => x.id = UID++);
 						store.definition.push(definition);
 					}
+				});
+				this.createIds_(store.definition);
+				store.definition.forEach(x => this.createIds_(x.fields));
+				store.definition.filter(x => x.model === 'Page' || x.extend === 'Page').forEach(x => {
 					const component = toTitleCase(x.model) + 'Component';
-					store.component.push(
-						{
-							id: definition.id, name: component, path: component.toLowerCase() + '.cshtml', types: [{
-								id: definition.id, name: definition.name
-							}]
-						}
-					);
+					store.component.push({
+						id: UID++, name: component, path: component.toLowerCase() + '.cshtml', types: [{
+							id: x.id, name: x.name
+						}]
+					});
 				});
 				store.pageType = store.definition.filter(x => x.model === 'Page' || x.extend === 'Page');
+				// this.createIds_(store.pageType);
 				store.page = this.createPages_(store, pictures, 100);
 				pageReflections.forEach((x, i) => {
 					if (x.model !== 'Page') {
@@ -265,6 +270,7 @@ export class FakeService {
 						store[key] = store.page.filter(x => toCamelCase(x.pageType.name) === key);
 					}
 				});
+				store.UID = [UID];
 				this.store = store;
 				return this.store_;
 			})
@@ -361,7 +367,7 @@ export class FakeService {
 			*/
 			// const id = uuid();
 			// const src = `https://dummyimage.com/${width}x${height}/e2e6f6/2440c3/`;
-			return {
+			const asset = {
 				id,
 				assetType: {
 					id: assetType.id,
@@ -386,6 +392,8 @@ export class FakeService {
 				abstract?: string;
 				*/
 			};
+			store.asset.push(asset);
+			return asset;
 		});
 	}
 
