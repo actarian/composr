@@ -91,12 +91,40 @@
 		@extend %pill;
 	}
 
+	.actions {
+		display: flex;
+
+		&>*+* {
+			margin-left: 3px;
+		}
+	}
+
 	.btn--headline {
 		@extend %btn-headline;
 	}
 
 	.btn--danger {
 		@extend %btn-danger;
+
+		position: relative;
+		padding: 13px 20px;
+		font-size: 13px;
+		font-weight: bold;
+
+		svg {
+			width: 16px;
+			height: 16px;
+			fill: white;
+		}
+
+		&>span+svg,
+		&>svg+span {
+			margin-left: 12px;
+		}
+	}
+
+	.btn--success {
+		@extend %btn-success;
 
 		position: relative;
 		padding: 13px 20px;

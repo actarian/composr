@@ -19,8 +19,8 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 	tabFields: TabItem[];
 	tabIndex: number = -1;
 
-	type: string;
-	id: number;
+	typeModel: string;
+	typeId: number;
 	definition: Definition;
 	fields: Field[];
 	fieldOptions: ControlOption<any>[][];
@@ -46,12 +46,12 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 		this.route.params.pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe(data => {
-			this.type = data.type;
-			this.id = parseInt(data.id, 0);
+			this.typeModel = data.typeModel;
+			this.typeId = parseInt(data.typeId, 0);
 			// console.log('definition', this.type, this.id);
 			// !!! make PageType dynamic (name + type ???)
 			// console.log(this.type + 'Type');
-			this.storeService.getDefinition(this.type + 'Type').pipe(
+			this.storeService.getDefinition(this.typeModel + 'Type').pipe(
 				first(),
 			).subscribe(definition => {
 				// console.log('definition', definition);
@@ -63,10 +63,10 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 				);
 				this.form = this.formService.getFormGroup(this.options);
 				this.tabFields = this.tabService.getTabs(this.definition);
-				this.storeService.getDetail('definition', this.id).pipe(
+				this.storeService.getDefinitionById(this.typeId).pipe(
 					first(),
 				).subscribe(item => {
-					// console.log('getDetail', 'definition', this.id, item);
+					console.log('DefinitionComponent.getDefinitionById', item);
 					this.item = item;
 					this.fields = this.item.fields.map(x => Object.assign({}, x));
 					const fields = this.formBuilder.array(item.fields.map(x => {
@@ -89,8 +89,8 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 					this.initialValue = this.form.value;
 					this.tabService.setState({
 						tabFields: this.tabFields,
-						type: this.type,
-						id: this.id,
+						type: this.typeModel,
+						id: this.typeId,
 						definition: this.definition,
 						fields: this.fields,
 						item: this.item,
@@ -114,16 +114,16 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 	}
 
 	onDelete() {
-		console.log('DefinitionComponent.onDelete', this.type, this.id);
+		console.log('DefinitionComponent.onDelete', this.typeModel, this.typeId);
 	}
 
 	onReset() {
-		// console.log('DefinitionComponent.onReset', this.type, this.id);
+		// console.log('DefinitionComponent.onReset', this.typeModel, this.typeId);
 		this.form.reset(this.item);
 	}
 
 	onSubmit(model: any) {
-		console.log('DefinitionComponent.onSubmit', this.type, this.id, model);
+		console.log('DefinitionComponent.onSubmit', this.typeModel, this.typeId, model);
 		// model.fields = this.fields;
 		const changedItem = this.storeService.getChangedValues(this.item, model);
 		console.log('onSubmit.changedItem', changedItem ? Object.assign({}, changedItem) : changedItem);

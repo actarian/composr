@@ -36,24 +36,6 @@ export interface Definition {
 	fields?: Field[];
 }
 
-export interface PageType {
-	id: number | string;
-	name: string;
-	model: string;
-}
-
-export interface ContentType {
-	id: number | string;
-	name: string;
-	model: string;
-}
-
-export interface AssetType {
-	id: number | string;
-	name: string;
-	model: string;
-}
-
 export interface Component {
 	id: number | string;
 	name: string;
@@ -81,15 +63,27 @@ export interface Meta {
 	robots: string;
 }
 
+export interface ContentType {
+	id: number | string;
+	name: string;
+	model: string;
+}
+
 export interface Content {
 	id: number | string;
 	name: string;
-	contentType: ContentType;
+	type: ContentType;
+}
+
+export interface AssetType {
+	id: number | string;
+	name: string;
+	model: string;
 }
 
 export interface Asset {
 	id: number | string;
-	assetType: AssetType;
+	type: AssetType;
 	src: string;
 	name?: string;
 	extension?: string;
@@ -99,9 +93,15 @@ export interface Asset {
 	abstract?: string;
 }
 
+export interface PageType {
+	id: number | string;
+	name: string;
+	model: string;
+}
+
 export interface Page {
 	id: number | string;
-	pageType: PageType;
+	type: PageType;
 	component: Component;
 	name: string;
 	title?: Localization[] | string;
@@ -220,7 +220,7 @@ export const REFLECTIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'AssetType', key: 'assetType', type: 'object', model: 'AssetType', required: true },
+		{ name: 'AssetType', key: 'type', type: 'object', model: 'AssetType', required: true },
 		{ name: 'Src', key: 'src', type: 'string', required: true },
 		{ name: 'Name', key: 'name', type: 'string' },
 		{ name: 'Extension', key: 'extension', type: 'string' },
@@ -238,7 +238,7 @@ export const REFLECTIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'AssetType', key: 'assetType', type: 'object', model: 'AssetType', required: true },
+		{ name: 'AssetType', key: 'type', type: 'object', model: 'AssetType', required: true },
 		{ name: 'Src', key: 'src', type: 'string', required: true },
 		{ name: 'Extension', key: 'extension', type: 'string' },
 		{ name: 'Width', key: 'width', type: 'number' },
@@ -255,7 +255,7 @@ export const REFLECTIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'ContentType', key: 'contentType', type: 'object', model: 'ContentType', required: true },
+		{ name: 'ContentType', key: 'type', type: 'object', model: 'ContentType', required: true },
 		{ name: 'Name', key: 'name', type: 'string', required: true }
 	]
 }, {
@@ -266,7 +266,7 @@ export const REFLECTIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'PageType', key: 'pageType', type: 'object', model: 'PageType', required: true },
+		{ name: 'PageType', key: 'type', type: 'object', model: 'PageType', required: true },
 		{ name: 'Component', key: 'component', type: 'object', model: 'Component' },
 		{ name: 'Name', key: 'name', type: 'string', required: true },
 		{ name: 'Slug', key: 'slug', type: 'string' },
@@ -299,7 +299,7 @@ export const DEFINITIONS: Definition[] = [{
 	name: 'Definition',
 	type: 'object',
 	model: 'Definition',
-	extend: 'Entity',
+	extend: 'Object',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
 		{ name: 'Model', key: 'model', type: 'string', model: 'Entity', control: 'reflection', required: true, visible: true, indexable: true },
@@ -328,7 +328,7 @@ export const DEFINITIONS: Definition[] = [{
 	name: 'Entity',
 	type: 'object',
 	model: 'Entity',
-	extend: 'Entity',
+	extend: 'Definiion',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
 		{ name: 'Model', key: 'model', type: 'string', model: 'Entity', control: 'reflection', required: true, visible: true, indexable: true },
@@ -343,39 +343,9 @@ export const DEFINITIONS: Definition[] = [{
 	extend: 'Definition',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
-		{ name: 'Model', key: 'model', type: 'string', model: 'Page', control: 'reflection', required: true, visible: true, editable: true, indexable: true },
+		{ name: 'Model', key: 'model', type: 'string', model: 'Page', control: 'reflection', required: true, visible: true, editable: false, indexable: true },
 		{ name: 'Name', key: 'name', type: 'string', control: 'text', required: true, visible: true, editable: true, indexable: true },
 		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field', control: 'tab', visible: true, editable: true },
-	]
-}, {
-	id: 1,
-	name: 'Asset',
-	type: 'object',
-	model: 'Asset',
-	extend: 'Entity',
-	fields: [
-		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'AssetType', key: 'assetType', type: 'object', model: 'AssetType', control: 'select', required: true, visible: true, editable: true },
-		{ name: 'Src', key: 'src', type: 'string', required: true, visible: true },
-		{ name: 'Name', key: 'name', type: 'string', visible: true },
-		{ name: 'Extension', key: 'extension', type: 'string', visible: true },
-		{ name: 'Width', key: 'width', type: 'number', visible: true },
-		{ name: 'Height', key: 'height', type: 'number', visible: true },
-		{ name: 'Author', key: 'author', type: 'string', visible: true, editable: true },
-		{ name: 'Title', key: 'title', type: 'array', model: 'Localization', control: 'localized-text', visible: true, editable: true },
-		{ name: 'Abstract', key: 'abstract', type: 'array', model: 'Localization', control: 'localized-textarea', visible: true, editable: true },
-	]
-}, {
-	id: 1,
-	name: 'Meta',
-	type: 'object',
-	model: 'Meta',
-	extend: 'Identity',
-	fields: [
-		{ name: 'Title', key: 'title', type: 'array', model: 'Localization', control: 'localized-text', visible: true, editable: true },
-		{ name: 'Description', key: 'description', type: 'array', model: 'Localization', control: 'localized-textarea', visible: true, editable: true },
-		{ name: 'Keywords', key: 'keywords', type: 'array', model: 'Localization', control: 'localized-text', visible: true, editable: true },
-		{ name: 'Robots', key: 'robots', type: 'array', model: 'Localization', control: 'localized-text', visible: true, editable: true }
 	]
 }, {
 	id: 1,
@@ -385,8 +355,8 @@ export const DEFINITIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
-		{ name: 'PageType', key: 'pageType', type: 'object', model: 'PageType', control: 'select', required: true, visible: true, indexable: true },
-		{ name: 'Component', key: 'component', type: 'object', model: 'Component', control: 'select', visible: true, editable: true, indexable: true }, // special scalar relation type with pageType
+		{ name: 'Type', key: 'type', type: 'object', model: 'PageType', control: 'definition', required: true, visible: true, indexable: true },
+		{ name: 'Component', key: 'component', type: 'object', model: 'Component', control: 'select', visible: true, editable: true, indexable: true }, // special scalar relation type with type
 		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
 		{ name: 'Title', key: 'title', type: 'array', model: 'Localization', control: 'localized-text', visible: true, editable: true, indexable: true },
 		{ name: 'Abstract', key: 'abstract', type: 'array', model: 'Localization', control: 'localized-textarea', visible: true, editable: true },
@@ -402,6 +372,36 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Related', key: 'related', type: 'array', model: 'Page', control: 'tab', visible: true },
 		{ name: 'Features', key: 'features', type: 'array', model: 'Feature', control: 'tab', visible: true },
 		{ name: 'Taxonomies', key: 'taxonomies', type: 'array', model: 'Taxonomy', visible: true }
+	]
+}, {
+	id: 1,
+	name: 'AssetType',
+	type: 'object',
+	model: 'AssetType',
+	extend: 'Definition',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
+		{ name: 'Model', key: 'model', type: 'string', model: 'Asset', control: 'reflection', required: true, visible: true, editable: true, indexable: true },
+		{ name: 'Name', key: 'name', type: 'string', control: 'text', required: true, visible: true, editable: true, indexable: true },
+		{ name: 'Fields', key: 'fields', type: 'array', model: 'Field', control: 'tab', visible: true, editable: true },
+	]
+}, {
+	id: 1,
+	name: 'Asset',
+	type: 'object',
+	model: 'Asset',
+	extend: 'Entity',
+	fields: [
+		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
+		{ name: 'Type', key: 'type', type: 'object', model: 'AssetType', control: 'definition', required: true, visible: true, editable: true },
+		{ name: 'Src', key: 'src', type: 'string', required: true, visible: true },
+		{ name: 'Name', key: 'name', type: 'string', visible: true },
+		{ name: 'Extension', key: 'extension', type: 'string', visible: true },
+		{ name: 'Width', key: 'width', type: 'number', visible: true },
+		{ name: 'Height', key: 'height', type: 'number', visible: true },
+		{ name: 'Author', key: 'author', type: 'string', visible: true, editable: true },
+		{ name: 'Title', key: 'title', type: 'array', model: 'Localization', control: 'localized-text', visible: true, editable: true },
+		{ name: 'Abstract', key: 'abstract', type: 'array', model: 'Localization', control: 'localized-textarea', visible: true, editable: true },
 	]
 }, {
 	id: 1,
@@ -423,8 +423,20 @@ export const DEFINITIONS: Definition[] = [{
 	extend: 'Entity',
 	fields: [
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
-		{ name: 'ContentType', key: 'contentType', type: 'object', model: 'ContentType', control: 'select', required: true, visible: true, indexable: true },
+		{ name: 'Type', key: 'type', type: 'object', model: 'ContentType', control: 'definition', required: true, visible: true, indexable: true },
 		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
+	]
+}, {
+	id: 1,
+	name: 'Meta',
+	type: 'object',
+	model: 'Meta',
+	extend: 'Identity',
+	fields: [
+		{ name: 'Title', key: 'title', type: 'array', model: 'Localization', control: 'localized-text', visible: true, editable: true },
+		{ name: 'Description', key: 'description', type: 'array', model: 'Localization', control: 'localized-textarea', visible: true, editable: true },
+		{ name: 'Keywords', key: 'keywords', type: 'array', model: 'Localization', control: 'localized-text', visible: true, editable: true },
+		{ name: 'Robots', key: 'robots', type: 'array', model: 'Localization', control: 'localized-text', visible: true, editable: true }
 	]
 }, {
 	id: 1,
@@ -454,15 +466,17 @@ export const DEFINITIONS: Definition[] = [{
 }];
 
 export const STORE: { [key: string]: any[] } = {
-	asset: [],
+	/*
 	assetType: [{
 		id: 1,
 		model: 'AssetType',
 		name: 'Default Type',
 		abstract: 'Generic Picture',
 	}],
+	*/
+	asset: [],
+	// contentType: DEFINITIONS.filter(x => x.model === 'ContentType'),
 	content: [],
-	contentType: DEFINITIONS.filter(x => x.model === 'ContentType'),
 	entity: [],
 	language: [{
 		id: 1,

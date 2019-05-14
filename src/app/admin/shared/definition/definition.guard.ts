@@ -8,7 +8,7 @@ import { StoreService } from '../store/store.service';
 @Injectable({
 	providedIn: 'root',
 })
-export class DetailGuard implements CanActivate {
+export class DefinitionGuard implements CanActivate {
 
 	constructor(
 		@Inject(PLATFORM_ID) private platformId: string,
@@ -19,9 +19,9 @@ export class DetailGuard implements CanActivate {
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 		if (isPlatformBrowser(this.platformId)) {
 			const params = route.params;
-			const type = params.type;
-			const id = parseInt(params.id, 0);
-			this.storeService.getDetail(type, id).pipe(
+			const typeModel = params.typeModel;
+			const typeId = parseInt(params.typeId, 0);
+			this.storeService.getDefinitionById(typeId).pipe(
 				first(),
 			).subscribe(item => {
 				if (item !== undefined) {

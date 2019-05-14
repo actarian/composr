@@ -32,7 +32,7 @@ export class ContentsMenuComponent extends DisposableComponent implements OnInit
 	ngOnInit() {
 		this.expanded = this.storage.get('expanded') || false;
 		this.expand.emit(this.expanded);
-		this.storeService.getTypes('definition', 'Content').subscribe(types => {
+		this.storeService.getDefinitionsOfType('Content').subscribe(types => {
 			this.types = types;
 			this.type = types.find(x => x.model === 'Content');
 		});
@@ -46,11 +46,11 @@ export class ContentsMenuComponent extends DisposableComponent implements OnInit
 
 	onAddItem(event: MouseEvent) {
 		// !!! make it generic
-		this.modalService.open({ component: DetailAddComponent, data: 'Content' }).pipe(
+		this.modalService.open({ component: DetailAddComponent, data: this.type.id }).pipe(
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {
-				console.log('onAddItem.ModalCompleteEvent', e.data);
+				console.log('ContentsMenuComponent.onAddItem.ModalCompleteEvent', e.data);
 			}
 		});
 	}
@@ -61,7 +61,7 @@ export class ContentsMenuComponent extends DisposableComponent implements OnInit
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {
-				console.log('onAddType.ModalCompleteEvent', e.data);
+				console.log('ContentsMenuComponent.onAddType.ModalCompleteEvent', e.data);
 			}
 		});
 	}

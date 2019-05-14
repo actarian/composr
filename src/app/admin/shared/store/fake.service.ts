@@ -85,19 +85,19 @@ export class FakeService {
 		);
 	}
 
+	getDefinitionsOfType$(type: string): Observable<Definition[]> {
+		return this.store$.pipe(
+			map(store => {
+				return store.definition.filter(x => toCamelCase(x.model) === toCamelCase(type) || toCamelCase(x.extend) === toCamelCase(type));
+			})
+		);
+	}
+
 	getDefinition$(type: string): Observable<Definition> {
 		return this.store$.pipe(
 			map(store => {
 				const definition = store.definition.find(x => toCamelCase(x.model) === toCamelCase('Definition'));
 				return store.definition.find(x => toCamelCase(x.model) === toCamelCase(type)) || definition;
-			})
-		);
-	}
-
-	getReflection$(type: string): Observable<Definition> {
-		return this.store$.pipe(
-			map(store => {
-				return store.reflection.find(x => toCamelCase(x.model) === toCamelCase(type));
 			})
 		);
 	}
@@ -127,6 +127,48 @@ export class FakeService {
 		);
 	}
 
+	getDefinitionById$(id: number): Observable<Definition> {
+		return this.store$.pipe(
+			map(store => {
+				const definition = store.definition.find(x => toCamelCase(x.model) === toCamelCase('Definition'));
+				return store.definition.find(x => x.id === id) || definition; // return base definition if undefined
+			})
+		);
+	}
+
+	getIndexById$(id: number): Observable<any[]> {
+		return this.getDefinitionById$(id).pipe(
+			switchMap(definition => {
+				return this.store$.pipe(
+					map(store => {
+						let items = store[toCamelCase(definition.model)];
+						if (definition) {
+							items = items.map(x => {
+								const item: any = {};
+								item.model = x.model || definition.model;
+								definition.fields.forEach(field => {
+									if (field.primaryKey || field.indexable) {
+										item[field.key] = x[field.key];
+									}
+								});
+								return item;
+							});
+						}
+						return items;
+					})
+				);
+			})
+		);
+	}
+
+	getReflection$(type: string): Observable<Definition> {
+		return this.store$.pipe(
+			map(store => {
+				return store.reflection.find(x => toCamelCase(x.model) === toCamelCase(type));
+			})
+		);
+	}
+
 	getDetail$(type: string, id: number | string) {
 		return this.store$.pipe(
 			map(store => {
@@ -135,21 +177,12 @@ export class FakeService {
 		);
 	}
 
-	addItem$(type: string, model: any): Observable<any> {
-		console.log('FakeService.addItem$', type, model);
+	addItem$(typeId: number, model: any): Observable<any> {
+		console.log('FakeService.addItem$', typeId, model);
 		return of(this.store).pipe(
 			map(store => {
-				// !!! da rifare errore
-				// const definition = this.store.definition.find(x => toCamelCase(x.model) === type);
-				let id;
-				switch (type) {
-					case 'Page':
-						id = model.pageType.id;
-						break;
-					default:
-						id = model.type.id;
-				}
-				const definition = store.definition.find(x => x.id === id);
+				const definition = this.store.definition.find(x => x.id === typeId);
+				console.log(definition.model);
 				const items = store[toCamelCase(definition.model)];
 				const item = Object.assign({}, model);
 				item.id = UID++;
@@ -282,14 +315,13 @@ export class FakeService {
 						}]
 					});
 				});
-				store.pageType = store.definition.filter(x => x.model === 'Page' || x.extend === 'Page');
+				// store.pageType = store.definition.filter(x => x.model === 'Page' || x.extend === 'Page');
 				// this.createIds_(store.pageType);
 				store.page = this.createPages_(store, pictures, 100);
 				pageReflections.forEach((x, i) => {
 					if (x.model !== 'Page') {
 						const key = toCamelCase(x.model);
-						// console.log(key, x.id);
-						store[key] = store.page.filter(x => toCamelCase(x.pageType.name) === key);
+						store[key] = store.page.filter(p => p.model === x.model);
 					}
 				});
 				store.UID = [UID, VERSION];
@@ -300,7 +332,9 @@ export class FakeService {
 	}
 
 	private createPages_(store, pictures, count: number = 100): Page[] {
-		const pageTypes = this.getSync(store, 'definition', 'page');
+		const pageDefinitions = this.getSync(store, 'definition', 'page');
+		const pageTypes = store.definition.filter(x => x.model === 'PageType' || x.extend === 'PageType');
+		// console.log(pageTypes);
 		return new Array(count).fill(null).map((x, i) => {
 			const id = UID++;
 			// console.log(JSON.parse(JSON.stringify(pageTypes)));
@@ -309,18 +343,19 @@ export class FakeService {
 			if (isSingleton) {
 				pageTypes.splice(pageTypes.indexOf(pageType), 1);
 			}
-			let name = pageType.name + (isSingleton ? `` : ` ${id}`);
+			const model = pageType.model.replace('Type', '');
+			let name = model + (isSingleton ? `` : ` ${id}`);
 			name = name.toLowerCase().replace(/\s/g, '-');
 			const title = getIpsum(5);
 			const abstract = getIpsum(12);
 			const description = getIpsum(50);
-			const componentName = toTitleCase(pageType.name) + 'Component';
+			const componentName = model + 'Component';
 			const component = store.component.find(x => x.name === componentName);
-			const model = toCamelCase(pageType.name);
+			console.log(pageType.model, model);
 			return {
 				id,
 				model,
-				pageType: {
+				type: {
 					id: pageType.id,
 					name: pageType.name,
 					model: pageType.model,
@@ -349,9 +384,9 @@ export class FakeService {
 		const count = 1 + Math.floor(Math.random() * 5);
 		const widths = [1920, 1600, 1280, 960];
 		const heights = [1080, 960, 720, 640, 480];
+		const assetType = store.definition.find(x => x.model === 'AssetType');
 		return new Array(count).fill(null).map((x, i) => {
 			const picture = pictures[Math.floor(Math.random() * pictures.length)];
-			const assetType = store.assetType[0];
 			const name = `picture-${i}`;
 			const extension = 'JPG';
 			const id = UID++;
@@ -370,7 +405,7 @@ export class FakeService {
 			// const src = `https://dummyimage.com/${width}x${height}/e2e6f6/2440c3/`;
 			const asset = {
 				id,
-				assetType: {
+				type: {
 					id: assetType.id,
 					name: assetType.name,
 					model: assetType.model,

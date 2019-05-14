@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DisposableComponent, LocalStorageService } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first } from 'rxjs/operators';
@@ -19,6 +19,7 @@ export class SettingsMenuComponent extends DisposableComponent implements OnInit
 	types: any[] = [];
 
 	constructor(
+		private route: ActivatedRoute,
 		private router: Router,
 		private storage: LocalStorageService,
 		private modalService: ModalService,
@@ -30,7 +31,11 @@ export class SettingsMenuComponent extends DisposableComponent implements OnInit
 	ngOnInit() {
 		this.expanded = this.storage.get('expanded') || false;
 		this.expand.emit(this.expanded);
-		this.storeService.getTypes('definition', 'Entity').subscribe(types => {
+		this.storeService.getDefinitionsOfType('Entity').subscribe(types => {
+			if (!this.types) {
+				const firstType = types[0];
+				this.router.navigate([firstType.model, firstType.id, 'items'], { relativeTo: this.route });
+			}
 			this.types = types;
 		});
 	}

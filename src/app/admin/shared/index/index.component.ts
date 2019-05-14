@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
-import { takeUntil } from 'rxjs/operators';
+import { ModalCompleteEvent, ModalService } from '@designr/ui';
+import { first, takeUntil } from 'rxjs/operators';
+import { DetailAddComponent } from '../detail/detail-add.component';
 import { Definition } from '../store/store';
 import { StoreService } from '../store/store.service';
 import { ActionItem, Column } from '../table/table.component';
@@ -13,7 +15,8 @@ import { ActionItem, Column } from '../table/table.component';
 })
 export class IndexComponent extends DisposableComponent implements OnInit {
 
-	type: string;
+	typeModel: string;
+	typeId: number;
 	definition: Definition;
 	columns: Column[] = [];
 	items: any[] = [];
@@ -26,6 +29,7 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
+		private modalService: ModalService,
 		private storeService: StoreService,
 	) {
 		super();
@@ -35,13 +39,14 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 		this.route.params.pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe(data => {
-			this.type = data.type;
-			this.storeService.getDefinition(this.type).subscribe(definition => {
-				// console.log('definition', definition);
+			this.typeModel = data.typeModel;
+			this.typeId = parseInt(data.typeId, 0);
+			this.storeService.getDefinitionById(this.typeId).subscribe(definition => {
+				console.log('definition', definition);
 				this.definition = definition;
 				this.columns = definition.fields.filter(x => x.indexable);
 			});
-			this.storeService.getIndex(this.type).subscribe(items => {
+			this.storeService.getIndexById(this.typeId).subscribe(items => {
 				// console.log('items', items.length, items[0]);
 				this.items = items;
 			});
@@ -50,7 +55,7 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 
 	onEditRow(item: any) {
 		// console.log(this.route.snapshot.root);
-		this.router.navigate(['../', item.model, item.id], { relativeTo: this.route });
+		this.router.navigate([item.id, 'edit'], { relativeTo: this.route });
 	}
 
 	onDeleteRow(item: any) {
@@ -58,7 +63,19 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 	}
 
 	onClearCache() {
-		console.log('onClearCache', this.type);
+		console.log('onClearCache', this.typeModel);
+	}
+
+	onAddItem() {
+		console.log('onAddItem', this.typeId);
+		// !!! make it generic
+		this.modalService.open({ component: DetailAddComponent, data: this.typeId }).pipe(
+			first()
+		).subscribe(e => {
+			if (e instanceof ModalCompleteEvent) {
+				console.log('IndexComponent.onAddItem.ModalCompleteEvent', e.data);
+			}
+		});
 	}
 
 }

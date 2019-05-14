@@ -149,6 +149,21 @@
 	&[disabled] {}
 }
 
+%btn-success {
+	@extend %btn-flex;
+	position: relative;
+	border-radius: 3px;
+	background: #269d5b;
+	color: white;
+
+	&:hover {
+		background: darken(#269d5b, 5%);
+		color: white;
+	}
+
+	&[disabled] {}
+}
+
 %btn-headline {
 	@extend %btn-primary;
 	position: relative;

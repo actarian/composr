@@ -5,7 +5,7 @@
 	<div class="category">Directories</div>
 	<ul class="nav--menu-primary">
 		<li>
-			<a class="btn--menu-primary" [routerLink]="['/admin/settings/data', item.model]" routerLinkActive="active" *ngFor="let item of types">
+			<a class="btn--menu-primary" [routerLink]="[item.model, item.id, 'items']" routerLinkActive="active" *ngFor="let item of types">
 				<span>{{item.name}}</span>
 				<svg (click)="onEditType($event, item)"><use xlink:href="#edit"></use></svg>
 			</a>

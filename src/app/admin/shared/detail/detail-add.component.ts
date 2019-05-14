@@ -15,7 +15,7 @@ import { StoreService } from '../store/store.service';
 })
 export class DetailAddComponent extends DisposableComponent implements OnInit {
 
-	type: string;
+	typeId: number;
 	definition: Definition;
 	options: ControlOption<any>[];
 	form: FormGroup;
@@ -35,8 +35,8 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.type = this.modalData as string;
-		this.storeService.getDefinition(this.type).subscribe(definition => {
+		this.typeId = this.modalData as number;
+		this.storeService.getDefinitionById(this.typeId).subscribe(definition => {
 			this.definition = definition;
 			this.options = this.formService.getOptions(
 				this.storeService.mapOptions(
@@ -66,7 +66,7 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 		this.submitted = true;
 		this.error = null;
 		this.busy = true;
-		this.storeService.addItem(this.type, model).pipe(
+		this.storeService.addItem(this.typeId, model).pipe(
 			first(),
 			finalize(() => this.busy = false),
 		).subscribe(

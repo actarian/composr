@@ -8,8 +8,8 @@ import { FakeService } from './fake.service';
 import { CONTROL_MAP, Definition, Field } from './store';
 import { toCamelCase } from './utils';
 
-export const SCALAR_TYPES: string[] = ['boolean', 'number', 'string', 'date'];
-export const SCALAR_CONTROLS: string[] = ['select', 'reflection', 'multi', 'localized-text', 'localized-textarea'];
+export const SCALAR_TYPES: string[] = ['boolean', 'date', 'number', 'string'];
+export const SCALAR_CONTROLS: string[] = ['definition', 'localized-text', 'localized-textarea', 'multi', 'select', 'reflection'];
 
 @Injectable({
 	providedIn: 'root',
@@ -34,6 +34,20 @@ export class StoreService extends FakeService {
 		);
 	}
 
+	getIndex(type: string): Observable<any[]> {
+		return this.getIndex$(type);
+	}
+
+	getDefinitionById(id: number): Observable<Definition> {
+		return this.getDefinitionById$(id).pipe(
+			// tap(x => console.log('getDefinition', type, x))
+		);
+	}
+
+	getIndexById(id: number): Observable<any[]> {
+		return this.getIndexById$(id);
+	}
+
 	getDetail(type: string, id: number | string): Observable<any> {
 		// console.log(type, id, this.store[type]);
 		return this.getDetail$(type, id).pipe(
@@ -45,12 +59,8 @@ export class StoreService extends FakeService {
 		return this.getList$(type, ofType);
 	}
 
-	getTypes(type: string, ofType?: string): Observable<any[]> {
-		return this.getTypes$(type, ofType);
-	}
-
-	getIndex(type: string): Observable<any[]> {
-		return this.getIndex$(type);
+	getDefinitionsOfType(type: string): Observable<Definition[]> {
+		return this.getDefinitionsOfType$(type);
 	}
 
 	patchDetail(type: string, model: Identity): Observable<any> {
@@ -66,8 +76,8 @@ export class StoreService extends FakeService {
 		return this.patchAsset$(type, id, model);
 	}
 
-	addItem(type: string, model: any): Observable<any> {
-		return this.addItem$(type, model);
+	addItem(typeId: number, model: any): Observable<any> {
+		return this.addItem$(typeId, model);
 	}
 
 	addType(type: string, model: any): Observable<any> {
@@ -142,8 +152,13 @@ export class StoreService extends FakeService {
 					option.options = this.getReflectionOptions$(x.model);
 					option.asObject = x.type === 'object';
 					break;
+				case 'definition':
+					option.schema = 'select';
+					option.options = this.getDefinitionOptions$(x.model);
+					option.asObject = x.type === 'object';
+					break;
 				case 'multi':
-					option.options = this.getOptions$(x.model);
+					option.options = this.getDefinitionOptions$(x.model); // !!! definition
 					break;
 				case 'localized-text':
 				case 'localized-textarea':
@@ -158,6 +173,19 @@ export class StoreService extends FakeService {
 	getReflectionOptions$(type: string): Observable<Entity[]> {
 		return this.getList$('reflection', type).pipe(
 			// tap(x => console.log('getReflectionOptions$', type, x)),
+			map(x => {
+				// console.log('reflection', type, x);
+				x.unshift(
+					{ id: null, name: 'select a value' }
+				);
+				return x;
+			})
+		);
+	}
+
+	getDefinitionOptions$(type: string): Observable<Definition[]> {
+		return this.getList$('definition', type).pipe(
+			// tap(x => console.log('getDefinitionOptions$', type, x)),
 			map(x => {
 				// console.log('reflection', type, x);
 				x.unshift(

@@ -11,6 +11,9 @@ import { StoreService } from '../store/store.service';
 export const CONTROL_TYPES: ControlSelectOption[] = [
 	{ name: 'select', id: null },
 	// { name: 'checkbox', id: 'Checkbox' },
+	{ name: 'Definition', id: 'definition' },
+	{ name: 'Localized Text', id: 'localized-text' },
+	{ name: 'Localized Textarea', id: 'localized-textarea' },
 	{ name: 'Number', id: 'number' },
 	{ name: 'Reflection', id: 'reflection' },
 	{ name: 'Select', id: 'select' },
@@ -18,8 +21,6 @@ export const CONTROL_TYPES: ControlSelectOption[] = [
 	{ name: 'Tab', id: 'tab' },
 	{ name: 'Text', id: 'text' },
 	{ name: 'Textarea', id: 'textarea' },
-	{ name: 'Localized Text', id: 'localized-text' },
-	{ name: 'Localized Textarea', id: 'localized-textarea' },
 ];
 
 @Component({

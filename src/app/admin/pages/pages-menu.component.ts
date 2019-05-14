@@ -1,8 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DisposableComponent, LocalStorageService } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
-import { first } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { DefinitionAddComponent } from '../shared/definition/definition-add.component';
 import { DetailAddComponent } from '../shared/detail/detail-add.component';
 import { StoreService } from '../shared/store/store.service';
@@ -21,6 +21,7 @@ export class PagesMenuComponent extends DisposableComponent implements OnInit {
 	type: any;
 
 	constructor(
+		private route: ActivatedRoute,
 		private router: Router,
 		private storage: LocalStorageService,
 		private modalService: ModalService,
@@ -32,27 +33,34 @@ export class PagesMenuComponent extends DisposableComponent implements OnInit {
 	ngOnInit() {
 		this.expanded = this.storage.get('expanded') || false;
 		this.expand.emit(this.expanded);
-		this.storeService.getTypes('definition', 'Page').subscribe(types => {
+		this.route.params.pipe(
+			takeUntil(this.unsubscribe),
+		).subscribe(data => {
+			console.log('PagesMenuComponent', data);
+		});
+		this.storeService.getDefinitionsOfType('Page').subscribe(types => {
 			this.types = types;
 			this.otherTypes = types.filter(x => x.model !== 'Page');
-			this.type = types.find(x => x.model === 'Page');
-			console.log(types);
+			if (!this.type) {
+				this.type = types.find(x => x.model === 'Page');
+				this.router.navigate([this.type.model, this.type.id, 'items'], { relativeTo: this.route });
+			}
 		});
 	}
 
 	onEditType(event: MouseEvent, type: any) {
 		event.preventDefault();
 		event.stopPropagation();
-		this.router.navigate(['/admin/pages', 'definition', type.model, type.id]);
+		this.router.navigate([type.model, type.id, 'edit'], { relativeTo: this.route });
 	}
 
 	onAddItem(event: MouseEvent) {
 		// !!! make it generic
-		this.modalService.open({ component: DetailAddComponent, data: 'Page' }).pipe(
+		this.modalService.open({ component: DetailAddComponent, data: this.type.id }).pipe(
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {
-				console.log('onAddItem.ModalCompleteEvent', e.data);
+				console.log('PagesMenuComponent.onAddItem.ModalCompleteEvent', e.data);
 			}
 		});
 	}
@@ -63,7 +71,7 @@ export class PagesMenuComponent extends DisposableComponent implements OnInit {
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {
-				console.log('onAddType.ModalCompleteEvent', e.data);
+				console.log('PagesMenuComponent.onAddType.ModalCompleteEvent', e.data);
 			}
 		});
 	}

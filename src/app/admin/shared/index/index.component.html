@@ -5,7 +5,10 @@
 		</div>
 		<div class="actions">
 			<button type="button" class="btn--headline" (click)="onClearCache()">
-				<span>Clear Page Cache</span> <svg><use xlink:href="#respawn"></use></svg>
+				<svg><use xlink:href="#respawn"></use></svg> <span>Clear Page Cache</span>
+			</button>
+			<button type="button" class="btn--success" (click)="onAddItem()">
+				<svg><use xlink:href="#add"></use></svg> <span>Add {{definition.name}}</span>
 			</button>
 		</div>
 	</div>

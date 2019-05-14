@@ -17,9 +17,9 @@ import { TabItem, TabService } from '../tabs/tab.service';
 export class DetailComponent extends DisposableComponent implements OnInit {
 
 	tabFields: TabItem[];
-
-	type: string;
-	id: number;
+	typeModel: string;
+	typeId: number;
+	itemId: number;
 	definition: Definition;
 	item: any;
 	initialValue: any;
@@ -43,13 +43,15 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 		this.route.params.pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe(data => {
-			this.type = data.type;
-			this.id = parseInt(data.id, 0);
+			this.typeModel = data.typeModel;
+			this.typeId = parseInt(data.typeId, 0);
+			this.itemId = parseInt(data.itemId, 0);
 			// console.log('detail', this.type, this.id);
-			this.storeService.getDefinition(this.type).pipe(
+			this.storeService.getDefinitionById(this.typeId).pipe(
 				first(),
 			).subscribe(definition => {
 				this.definition = definition;
+				console.log('DetailComponent.getDefinitionById', definition);
 				this.options = this.formService.getOptions(
 					this.storeService.mapOptions(
 						this.storeService.getScalarFields(this.definition.fields)
@@ -57,7 +59,7 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 				);
 				this.form = this.formService.getFormGroup(this.options);
 				this.tabFields = this.tabService.getTabs(this.definition);
-				this.storeService.getDetail(this.type, this.id).pipe(
+				this.storeService.getDetail(this.typeModel, this.itemId).pipe(
 					takeUntil(this.unsubscribe),
 				).subscribe(item => {
 					// console.log('getDetail', this.type, this.id, item);
@@ -66,8 +68,9 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 					this.initialValue = this.form.value;
 					this.tabService.setState({
 						tabFields: this.tabFields,
-						type: this.type,
-						id: this.id,
+						type: this.typeModel,
+						// typeId: this.typeId,
+						id: this.itemId,
 						definition: this.definition,
 						item: this.item,
 						options: this.options,
@@ -106,21 +109,21 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 	}
 
 	onDelete() {
-		console.log('DetailComponent.onDelete', this.type, this.id);
+		console.log('DetailComponent.onDelete', this.typeModel, this.itemId);
 	}
 
 	onReset() {
-		// console.log('DetailComponent.onReset', this.type, this.id);
+		// console.log('DetailComponent.onReset', this.typeModel, this.itemId);
 		this.form.reset(this.item);
 	}
 
 	onSubmit(model: any) {
-		// console.log('DetailComponent.onSubmit', this.type, this.id, model);
+		// console.log('DetailComponent.onSubmit', this.typeModel, this.itemId, model);
 		this.submitted = true;
 		this.error = null;
 		this.busy = true;
-		const item = Object.assign({ id: this.id }, model);
-		this.storeService.patchDetail(this.type, item).pipe(
+		const item = Object.assign({ id: this.itemId }, model);
+		this.storeService.patchDetail(this.typeModel, item).pipe(
 			first(),
 			finalize(() => this.busy = false),
 		).subscribe(
@@ -138,7 +141,7 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 	}
 
 	onPreview() {
-		console.log('DetailComponent.onPreview', this.type, this.id);
+		console.log('DetailComponent.onPreview', this.typeModel, this.itemId);
 	}
 
 }

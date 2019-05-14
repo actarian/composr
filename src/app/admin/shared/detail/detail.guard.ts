@@ -8,7 +8,7 @@ import { StoreService } from '../store/store.service';
 @Injectable({
 	providedIn: 'root',
 })
-export class TabGuard implements CanActivate {
+export class DetailGuard implements CanActivate {
 
 	constructor(
 		@Inject(PLATFORM_ID) private platformId: string,
@@ -19,16 +19,20 @@ export class TabGuard implements CanActivate {
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 		if (isPlatformBrowser(this.platformId)) {
 			const params = route.params;
-			const type = params.type;
-			const id = parseInt(params.id, 0);
-			// console.log('TabGuard', params);
-			this.storeService.getDefinition(type).pipe(
+			const typeModel = params.typeModel;
+			const typeId = parseInt(params.typeId, 0);
+			const itemId = parseInt(params.itemId, 0);
+			this.storeService.getDetail(typeModel, itemId).pipe(
 				first(),
-			).subscribe(definition => {
-				console.log('TabGuard', definition);
-				// this.router.navigate(['/admin/not-found']);
-				return of(true);
+			).subscribe(item => {
+				if (item !== undefined) {
+					return of(true);
+				} else {
+					this.router.navigate(['/admin/not-found']);
+					return of(false);
+				}
 			}, error => {
+				this.router.navigate(['/admin/not-found']);
 				return of(false);
 			});
 			return of(true);
