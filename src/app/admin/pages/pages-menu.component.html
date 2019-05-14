@@ -16,7 +16,7 @@
 	</ul>
 	<div class="category">Page Types</div>
 	<ul class="nav--menu-secondary">
-		<li *ngFor="let item of types">
+		<li *ngFor="let item of otherTypes">
 			<a class="btn--menu-secondary" [routerLink]="['/admin/pages/data', item.model]" routerLinkActive="active">
 				<svg><use xlink:href="#document"></use></svg>
 				<span>{{item.name}}</span>

@@ -14,6 +14,9 @@ import { PagesComponent } from './pages.component';
 const ROUTES: Routes = [{
 	path: '', component: PagesComponent, children: [
 		{ path: '', redirectTo: 'data/page', pathMatch: 'full' },
+		// { path: ':typeId', component: DefinitionComponent },
+		// { path: ':typeId/items', component: IndexComponent },
+		// { path: ':typeId/items/:itemId', component: DetailComponent },
 		{ path: 'data/:type', component: IndexComponent },
 		{
 			path: 'data/:type/:id', component: DetailComponent, children: [

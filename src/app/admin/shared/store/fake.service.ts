@@ -200,7 +200,7 @@ export class FakeService {
 			map(store => {
 				const item = store[toCamelCase(type)].find(x => x.id === model.id);
 				const patched = this.patch(item, model);
-				console.log(patched);
+				// console.log(patched);
 				// Object.assign(item, patched);
 				this.store = store;
 				return item;

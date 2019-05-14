@@ -17,6 +17,7 @@ export class PagesMenuComponent extends DisposableComponent implements OnInit {
 	expanded: boolean = false;
 	@Output() expand: EventEmitter<boolean> = new EventEmitter<boolean>(true);
 	types: any[] = [];
+	otherTypes: any[] = [];
 	type: any;
 
 	constructor(
@@ -33,7 +34,9 @@ export class PagesMenuComponent extends DisposableComponent implements OnInit {
 		this.expand.emit(this.expanded);
 		this.storeService.getTypes('definition', 'Page').subscribe(types => {
 			this.types = types;
+			this.otherTypes = types.filter(x => x.model !== 'Page');
 			this.type = types.find(x => x.model === 'Page');
+			console.log(types);
 		});
 	}
 
