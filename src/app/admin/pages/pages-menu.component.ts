@@ -67,7 +67,12 @@ export class PagesMenuComponent extends DisposableComponent implements OnInit {
 
 	onAddType(event: MouseEvent) {
 		// !!! make PageType dynamic
-		this.modalService.open({ component: DefinitionAddComponent, data: 'PageType' }).pipe(
+		this.modalService.open({
+			component: DefinitionAddComponent, data: {
+				definitionModel: 'PageType',
+				typeModel: 'Page',
+			}
+		}).pipe(
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DefinitionComponent } from '../shared/definition/definition.component';
+import { DefinitionGuard } from '../shared/definition/definition.guard';
 import { DetailComponent } from '../shared/detail/detail.component';
 import { DetailGuard } from '../shared/detail/detail.guard';
 import { FieldComponent } from '../shared/fields/field.component';
@@ -13,21 +14,20 @@ import { ContentsComponent } from './contents.component';
 
 const ROUTES: Routes = [{
 	path: '', component: ContentsComponent, children: [
-		{ path: '', redirectTo: 'data/component', pathMatch: 'full' },
-		{ path: 'data/:type', component: IndexComponent },
 		{
-			path: 'data/:type/:id', component: DetailComponent, children: [
+			path: ':typeModel/:typeId/edit', component: DefinitionComponent, children: [
+				{ path: '', redirectTo: 'detail', pathMatch: 'full' },
+				{ path: 'detail', component: ScalarComponent },
+				{ path: 'fields', component: FieldComponent },
+			], canActivate: [DefinitionGuard]
+		},
+		{ path: ':typeModel/:typeId/items', component: IndexComponent },
+		{
+			path: ':typeModel/:typeId/items/:itemId/edit', component: DetailComponent, children: [
 				{ path: '', redirectTo: 'detail', pathMatch: 'full' },
 				{ path: 'detail', component: ScalarComponent, data: { tab: true } },
 				{ path: ':key', component: TabComponent, data: { tab: true }, canActivate: [TabGuard] },
 			], canActivate: [DetailGuard]
-		},
-		{
-			path: 'definition/:type/:id', component: DefinitionComponent, children: [
-				{ path: '', redirectTo: 'detail', pathMatch: 'full' },
-				{ path: 'detail', component: ScalarComponent },
-				{ path: 'fields', component: FieldComponent },
-			]
 		},
 		{ path: '**', component: NotFoundComponent },
 	]

@@ -61,7 +61,12 @@ export class SettingsMenuComponent extends DisposableComponent implements OnInit
 
 	onAddType(event: MouseEvent) {
 		// !!! make PageType dynamic
-		this.modalService.open({ component: DefinitionAddComponent, data: 'Entity' }).pipe(
+		this.modalService.open({
+			component: DefinitionAddComponent, data: {
+				definitionModel: 'Definition',
+				typeModel: 'Entity',
+			}
+		}).pipe(
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {

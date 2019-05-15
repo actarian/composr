@@ -1,4 +1,4 @@
-import { Component, DoCheck, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DisposableComponent, Label, LabelService, SlugService } from '@designr/core';
 import { GoogleTagManagerPageViewEvent } from '@designr/plugins';
@@ -17,7 +17,7 @@ import { pageTransitions } from './app.animations';
 	]
 })
 
-export class AppComponent extends DisposableComponent implements DoCheck {
+export class AppComponent extends DisposableComponent {
 
 	constructor(
 		@Inject(PLATFORM_ID) private platformId: string,
@@ -39,10 +39,12 @@ export class AppComponent extends DisposableComponent implements DoCheck {
 		});
 	}
 
+	/*
 	ngDoCheck() {
 		// called whenever Angular runs change detection
-		// console.log('AppComponent.ngDoCheck');
+		console.log('AppComponent.ngDoCheck');
 	}
+	*/
 
 	prepareRoute(outlet: RouterOutlet) {
 		const snapshot = outlet.isActivated && outlet.activatedRoute && outlet.activatedRoute.snapshot;

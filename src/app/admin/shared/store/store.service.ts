@@ -1,13 +1,15 @@
 
 import { Injectable } from '@angular/core';
 import { ControlOption } from '@designr/control';
+import { ControlSelectOption } from '@designr/control/lib/control/select/control-select';
 import { Entity, Identity, LocalStorageService } from '@designr/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { FakeService } from './fake.service';
 import { CONTROL_MAP, Definition, Field } from './store';
 import { toCamelCase } from './utils';
 
+export const FLAG_OPTIONS: ControlSelectOption[] = [{ id: null, name: 'All' }, { id: true, name: 'Yes' }, { id: false, name: 'No' }];
 export const SCALAR_TYPES: string[] = ['boolean', 'date', 'number', 'string'];
 export const SCALAR_CONTROLS: string[] = ['definition', 'localized-text', 'localized-textarea', 'multi', 'select', 'reflection'];
 
@@ -48,10 +50,9 @@ export class StoreService extends FakeService {
 		return this.getIndexById$(id);
 	}
 
-	getDetail(type: string, id: number | string): Observable<any> {
-		// console.log(type, id, this.store[type]);
-		return this.getDetail$(type, id).pipe(
-			// tap(x => console.log('getDetail', type, id, x))
+	getDetail(baseModel: string, model: string, id: number | string): Observable<any> {
+		return this.getDetail$(baseModel, model, id).pipe(
+			tap(x => console.log('getDetail', baseModel, model, id, x))
 		);
 	}
 
@@ -80,8 +81,8 @@ export class StoreService extends FakeService {
 		return this.addItem$(typeId, model);
 	}
 
-	addDefinition(definition: Definition, model: string, item: any): Observable<any> {
-		return this.addDefinition$(definition, model, item);
+	addDefinition(definitionModel: string, typeModel: string, item: any): Observable<any> {
+		return this.addDefinition$(definitionModel, typeModel, item);
 	}
 
 	isScalar(item: Field) {
@@ -170,6 +171,33 @@ export class StoreService extends FakeService {
 		return options;
 	}
 
+	mapTableOptions(fields: Field[]): ControlOption<any>[] {
+		const options = this.mapOptions(fields).map((option: any) => {
+			switch (option.schema) {
+				case 'select':
+				case 'reflection':
+				case 'definition':
+				case 'multi':
+					option.schema = 'select';
+					option.asObject = false;
+					break;
+				case 'switch':
+					option.schema = 'select';
+					option.options = FLAG_OPTIONS;
+					option.asObject = false;
+					break;
+				case 'localized-text':
+				case 'localized-textarea':
+					option.schema = 'text';
+					break;
+			}
+			option.disabled = false;
+			option.required = false;
+			return option;
+		});
+		return options;
+	}
+
 	getReflectionOptions$(type: string): Observable<Entity[]> {
 		return this.getList$('reflection', type).pipe(
 			// tap(x => console.log('getReflectionOptions$', type, x)),
@@ -185,14 +213,15 @@ export class StoreService extends FakeService {
 
 	getDefinitionOptions$(type: string): Observable<Definition[]> {
 		return this.getList$('definition', type).pipe(
-			// tap(x => console.log('getDefinitionOptions$', type, x)),
+			tap(x => console.log('getDefinitionOptions$', type, x)),
 			map(x => {
 				// console.log('reflection', type, x);
 				x.unshift(
 					{ id: null, name: 'select a value' }
 				);
 				return x;
-			})
+			}),
+			tap(x => console.log('getDefinitionOptions', x))
 		);
 	}
 

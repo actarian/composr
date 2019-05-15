@@ -11,6 +11,7 @@ import { PagerComponent } from '../shared/pager/pager.component';
 import { TableComponent } from '../shared/table/table.component';
 import { AssetEditComponent } from './asset/asset-edit.component';
 import { AssetComponent } from './asset/asset.component';
+import { ContentItemComponent } from './content/content-item.component';
 import { ContentComponent } from './content/content.component';
 import { DefinitionAddComponent } from './definition/definition-add.component';
 import { DefinitionComponent } from './definition/definition.component';
@@ -23,6 +24,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ObjectComponent } from './object/object.component';
 import { RelationComponent } from './relation/relation.component';
 import { ScalarComponent } from './scalar/scalar.component';
+import { ControlResolverComponent } from './table/control-resolver.component';
 import { TabComponent } from './tabs/tab.component';
 import { ToggleComponent } from './toggle/toggle.component';
 
@@ -50,6 +52,8 @@ const entryComponents: Type<DisposableComponent>[] = [
 const components: Type<DisposableComponent>[] = [
 	AssetComponent,
 	ContentComponent,
+	ContentItemComponent,
+	ControlResolverComponent,
 	DefinitionComponent,
 	DetailComponent,
 	FieldComponent,

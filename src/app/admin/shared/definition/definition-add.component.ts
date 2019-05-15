@@ -15,7 +15,8 @@ import { StoreService } from '../store/store.service';
 })
 export class DefinitionAddComponent extends DisposableComponent implements OnInit {
 
-	type: string;
+	definitionModel: string;
+	typeModel: string;
 	definition: Definition;
 	options: ControlOption<any>[];
 	form: FormGroup;
@@ -35,9 +36,11 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 	}
 
 	ngOnInit() {
-		this.type = this.modalData as string;
+		const data = this.modalData as any;
+		this.definitionModel = data.definitionModel;
+		this.typeModel = data.typeModel;
 		// console.log('DefinitionAddComponent.ngOnInit', this.type);
-		this.storeService.getDefinition(this.type).subscribe(definition => {
+		this.storeService.getDefinition(this.definitionModel).subscribe(definition => {
 			this.definition = definition;
 			this.options = this.formService.getOptions(
 				this.storeService.mapOptions(
@@ -65,7 +68,7 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 		this.error = null;
 		this.busy = true;
 		const field = this.definition.fields.find(x => x.key === 'model');
-		this.storeService.addDefinition(this.definition, field.model, item).pipe(
+		this.storeService.addDefinition(this.definitionModel, field.model, item).pipe(
 			first(),
 			finalize(() => this.busy = false),
 		).subscribe(

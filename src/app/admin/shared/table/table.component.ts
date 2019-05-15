@@ -1,10 +1,12 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { NgForOfContext } from '@angular/common';
 import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, map, takeUntil } from 'rxjs/operators';
+import { StoreService } from '../store/store.service';
 
 export enum FilterTypeEnum {
 	Search = 0,
@@ -25,6 +27,7 @@ export interface Column {
 	filter?: any;
 	values?: Option[];
 	sort?: number;
+	control?: string;
 }
 
 export interface RowContext {
@@ -85,6 +88,8 @@ export class TableComponent extends DisposableComponent implements OnInit {
 	sorts$ = new BehaviorSubject<{ key: string, value: any }[]>([]);
 
 	public readonly filterTypes = FilterTypeEnum;
+	public options: ControlOption<any>[];
+	public optionKeys: { [key: string]: ControlOption<any> };
 	public form: FormGroup = new FormGroup({});
 	public keys: { [key: string]: Column };
 	public rows: any[];
@@ -102,8 +107,12 @@ export class TableComponent extends DisposableComponent implements OnInit {
 		return (this.draggable || !this.virtualized) ? this.pagedRows : this.rows;
 	}
 
-	constructor() {
+	constructor(
+		private formService: FormService,
+		private storeService: StoreService,
+	) {
 		super();
+		console.log('TableComponent!!!');
 	}
 
 	ngOnInit() {
@@ -133,6 +142,7 @@ export class TableComponent extends DisposableComponent implements OnInit {
 
 	private mapItemsAndColumns_(items, columns) {
 		const values = {};
+		/*
 		const keys = {};
 		columns.forEach(column => {
 			if (column.filterType === FilterTypeEnum.Select) {
@@ -155,6 +165,22 @@ export class TableComponent extends DisposableComponent implements OnInit {
 			form[x.key] = new FormControl();
 		});
 		this.form = new FormGroup(form);
+		*/
+		this.keys = columns.reduce((keys, item) => {
+			item.sort = item.sort || 0;
+			keys[item.key] = item;
+			return keys;
+		}, {});
+		this.options = this.formService.getOptions(
+			this.storeService.mapTableOptions(
+				columns // this.storeService.getScalarFields(columns)
+			)
+		);
+		this.optionKeys = this.options.reduce((keys, item) => {
+			keys[item.key] = item;
+			return keys;
+		}, {});
+		this.form = this.formService.getFormGroup(this.options);
 		if (this.formSubscription_) {
 			this.formSubscription_.unsubscribe();
 		}
@@ -179,13 +205,39 @@ export class TableComponent extends DisposableComponent implements OnInit {
 	}
 
 	private filterAndSortRows_(items, columns, filters, sorts): any[] {
-		// console.log(filters);
+		console.log(filters);
 		items = items.slice();
 		if (this.filterable && filters.length) {
 			items = items.filter(item => {
 				let has = true;
 				filters.forEach(x => {
-					const value = this.getValue(item, this.keys[x.key]); // item[x.key];
+					// !!! with controls
+					const value = item[x.key]; // this.getValue(item, this.keys[x.key]);
+					const column = this.keys[x.key];
+					const option = this.optionKeys[x.key];
+					// console.log(column.control);
+					switch (column.control) {
+						case 'select':
+						case 'reflection':
+						case 'definition':
+							has = has && (x.value === null || value.id === x.value);
+							break;
+						case 'switch':
+							has = has && (x.value === null || value === x.value);
+							break;
+						case 'number':
+							has = has && value === x.value;
+							break;
+						case 'localized-text':
+						case 'localized-textarea':
+							const firstValue = value && value[0];
+							has = has && firstValue && firstValue.text.toString().toLowerCase().indexOf(x.value.toLowerCase()) !== -1;
+							break;
+						default:
+							has = has && value && value.toString().toLowerCase().indexOf(x.value.toLowerCase()) !== -1;
+					}
+					/*
+					// !!! without controls
 					if (typeof value === 'number') {
 						has = has && value === Number(x.value);
 					} else if (typeof value === 'boolean') {
@@ -193,6 +245,7 @@ export class TableComponent extends DisposableComponent implements OnInit {
 					} else {
 						has = has && value && value.toString().toLowerCase().indexOf(x.value.toLowerCase()) !== -1;
 					}
+					*/
 				});
 				return has;
 			});
@@ -302,7 +355,16 @@ export class TableComponent extends DisposableComponent implements OnInit {
 		if (typeof col.getter === 'function') {
 			return col.getter(row, col);
 		} else {
-			return col.type === 'object' ? (row[col.key] ? row[col.key].name : null) : row[col.key];
+			let value = row[col.key];
+			switch (col.type) {
+				case 'object':
+					value = value ? value.name : null;
+					break;
+				case 'array':
+					value = value ? value.map(x => x.text) : null;
+					break;
+			}
+			return value;
 		}
 	}
 

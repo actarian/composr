@@ -61,7 +61,7 @@ export class FieldEditComponent extends DisposableComponent implements OnInit {
 			placeholder: 'control',
 			options: CONTROL_TYPES,
 			required: false,
-			disabled: this.field.primaryKey,
+			// disabled: this.field.primaryKey,
 			order: 1
 		}, {
 			key: 'name',

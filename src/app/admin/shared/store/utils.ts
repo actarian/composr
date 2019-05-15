@@ -43,6 +43,10 @@ export function differs(a: any, b: any): boolean {
 	return JSON.stringify(a) !== JSON.stringify(b);
 }
 
+export function some(collection: any[], limit: number = 10) {
+	return new Array(Math.ceil(Math.random() * limit)).fill(null).map(x => collection[Math.floor(Math.random() * collection.length)]);
+}
+
 export function uuid(a?: any) {
 	// tslint:disable-next-line: no-bitwise
 	return a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ('' + 1e7 + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);

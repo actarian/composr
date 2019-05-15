@@ -51,42 +51,40 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 			// console.log('definition', this.type, this.id);
 			// !!! make PageType dynamic (name + type ???)
 			// console.log(this.type + 'Type');
-			this.storeService.getDefinition(this.typeModel + 'Type').pipe(
+
+			this.storeService.getDefinitionById(this.typeId).pipe(
 				first(),
-			).subscribe(definition => {
-				// console.log('definition', definition);
-				this.definition = definition;
-				this.options = this.formService.getOptions(
-					this.storeService.mapOptions(
-						this.storeService.getScalarFields(this.definition.fields)
-					)
-				);
-				this.form = this.formService.getFormGroup(this.options);
-				this.tabFields = this.tabService.getTabs(this.definition);
-				this.storeService.getDefinitionById(this.typeId).pipe(
+			).subscribe(item => {
+				console.log('DefinitionComponent.getDefinitionById', item);
+				this.item = item;
+				this.fields = this.item.fields.map(x => Object.assign({}, x));
+				const fields = this.formBuilder.array(item.fields.map(x => {
+					return this.formBuilder.group({
+						key: x.key,
+						type: x.type,
+						name: x.name,
+						description: x.description,
+						primaryKey: x.primaryKey,
+						required: x.required,
+						visible: x.visible,
+						editable: x.editable,
+						indexable: x.indexable,
+						control: x.control,
+						order: x.order,
+					});
+				}));
+				const baseType = item.extend + 'Type';
+				this.storeService.getDefinition(baseType).pipe(
 					first(),
-				).subscribe(item => {
-					console.log('DefinitionComponent.getDefinitionById', item);
-					this.item = item;
-					this.fields = this.item.fields.map(x => Object.assign({}, x));
-					const fields = this.formBuilder.array(item.fields.map(x => {
-						return this.formBuilder.group({
-							type: x.type,
-							name: x.name,
-							description: x.description,
-							primaryKey: x.primaryKey,
-							required: x.required,
-							visible: x.visible,
-							editable: x.editable,
-							indexable: x.indexable,
-							control: x.control,
-							order: x.order,
-						});
-					}));
-					// console.log(fields);
-					this.form.setControl('fields', fields);
-					this.form.reset(item);
-					this.initialValue = this.form.value;
+				).subscribe(definition => {
+					this.definition = definition;
+					this.options = this.formService.getOptions(
+						this.storeService.mapOptions(
+							this.storeService.getScalarFields(this.definition.fields)
+						)
+					);
+					this.form = this.formService.getFormGroup(this.options);
+					this.tabFields = this.tabService.getTabs(this.definition);
 					this.tabService.setState({
 						tabFields: this.tabFields,
 						type: this.typeModel,
@@ -97,8 +95,15 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 						options: this.options,
 						form: this.form,
 					});
+					// console.log(fields);
+					this.form.setControl('fields', fields);
+					this.form.reset(item);
+					this.initialValue = this.form.value;
 				});
+
 			});
+
+
 		});
 	}
 

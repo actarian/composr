@@ -4,8 +4,8 @@ import { Identity, LocalStorageService } from '@designr/core';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { getIpsum } from './ipsum';
-import { Asset, Definition, DEFINITIONS, Field, Page, REFLECTIONS, STORE } from './store';
-import { toCamelCase, toTitleCase } from './utils';
+import { Asset, Content, ContentPicture, Definition, DEFINITIONS, Field, Page, REFLECTIONS, STORE } from './store';
+import { some, toCamelCase, toTitleCase } from './utils';
 
 const VERSION = 1;
 let UID = 100;
@@ -139,10 +139,16 @@ export class FakeService {
 	getIndexById$(id: number): Observable<any[]> {
 		return this.getDefinitionById$(id).pipe(
 			switchMap(definition => {
+				console.log(definition);
 				return this.store$.pipe(
 					map(store => {
-						let items = store[toCamelCase(definition.model)];
+						let items = [];
 						if (definition) {
+							items = store[toCamelCase(definition.model)];
+							if (!items) {
+								items = store[toCamelCase(definition.extend)];
+								items = items.filter(x => x.type.id === id)
+							}
 							items = items.map(x => {
 								const item: any = {};
 								item.model = x.model || definition.model;
@@ -169,10 +175,12 @@ export class FakeService {
 		);
 	}
 
-	getDetail$(type: string, id: number | string) {
+	getDetail$(baseModel: string, model: string, id: number | string) {
+		console.log('FakeService.getDetail$', baseModel, model, id);
 		return this.store$.pipe(
 			map(store => {
-				return store[toCamelCase(type)].find(x => x.id === id);
+				const collection = store[toCamelCase(model)] || store[toCamelCase(baseModel)];
+				return collection.find(x => x.id === id);
 			})
 		);
 	}
@@ -195,22 +203,22 @@ export class FakeService {
 		);
 	}
 
-	addDefinition$(def: Definition, model: string, item: any): Observable<any> {
-		console.log('FakeService.addDefinition$', def, model, item);
+	addDefinition$(definitionModel: string, typeModel: string, item: any): Observable<any> {
+		console.log('FakeService.addDefinition$', definitionModel, typeModel, item);
 		return of(this.store).pipe(
 			map(store => {
-				const definitions = store.definition;
-				const definition = definitions.find(x => toCamelCase(x.model) === toCamelCase(model));
-				const items = definitions; // store[toCamelCase(model)];
-				const item = Object.assign({}, definition);
-				item.id = UID++;
-				item.name = item.name;
-				item.extend = definition.model;
-				item.model = item.model;
-				items.push(item);
+				const reflection = store.reflection.find(x => toCamelCase(x.model) === toCamelCase(item.model));
+				const baseDefinition = store.definition.find(x => toCamelCase(x.model) === toCamelCase(typeModel));
+				const definition = Object.assign({}, reflection);
+				console.log(reflection);
+				definition.id = UID++;
+				definition.name = item.name;
+				definition.extend = typeModel;
+				definition.model = item.model;
+				store.definition.push(definition);
 				store.UID[0] = UID;
 				this.store = store;
-				return item;
+				return definition;
 			})
 		);
 	}
@@ -287,6 +295,7 @@ export class FakeService {
 				pageReflections.forEach(x => {
 					const definitionType = Object.assign({}, pageTypeDefinition);
 					// console.log(definition);
+					/*
 					if (x.model !== 'Page') {
 						const model = x.model + 'Type';
 						definitionType.name = model;
@@ -295,6 +304,7 @@ export class FakeService {
 						definitionType.fields = definitionType.fields.slice();
 						store.definition.push(definitionType);
 					}
+					*/
 					const definition = Object.assign({}, pageDefinition);
 					// console.log(definition);
 					if (x.model !== 'Page') {
@@ -317,7 +327,9 @@ export class FakeService {
 				});
 				// store.pageType = store.definition.filter(x => x.model === 'Page' || x.extend === 'Page');
 				// this.createIds_(store.pageType);
-				store.page = this.createPages_(store, pictures, 100);
+				store.asset = this.createAssets_(store, pictures, 500);
+				store.content = this.createContents_(store, 100);
+				store.page = this.createPages_(store, 100);
 				pageReflections.forEach((x, i) => {
 					if (x.model !== 'Page') {
 						const key = toCamelCase(x.model);
@@ -331,60 +343,11 @@ export class FakeService {
 		);
 	}
 
-	private createPages_(store, pictures, count: number = 100): Page[] {
-		const pageDefinitions = this.getSync(store, 'definition', 'page');
-		const pageTypes = store.definition.filter(x => x.model === 'PageType' || x.extend === 'PageType');
-		// console.log(pageTypes);
-		return new Array(count).fill(null).map((x, i) => {
-			const id = UID++;
-			// console.log(JSON.parse(JSON.stringify(pageTypes)));
-			const pageType = pageTypes[Math.floor(Math.random() * pageTypes.length)];
-			const isSingleton = pageType.name.indexOf('Detail') === -1;
-			if (isSingleton) {
-				pageTypes.splice(pageTypes.indexOf(pageType), 1);
-			}
-			const model = pageType.model.replace('Type', '');
-			let name = model + (isSingleton ? `` : ` ${id}`);
-			name = name.toLowerCase().replace(/\s/g, '-');
-			const title = getIpsum(5);
-			const abstract = getIpsum(12);
-			const description = getIpsum(50);
-			const componentName = model + 'Component';
-			const component = store.component.find(x => x.name === componentName);
-			console.log(pageType.model, model);
-			return {
-				id,
-				model,
-				type: {
-					id: pageType.id,
-					name: pageType.name,
-					model: pageType.model,
-				},
-				component: {
-					id: component.id,
-					name: component.name,
-					model: component.model,
-				},
-				name,
-				title: [{ code: 'en', text: title }],
-				abstract: [{ code: 'en', text: abstract }],
-				description: [{ code: 'en', text: description }],
-				slug: 'slug',
-				active: Math.random() > 0.5,
-				contents: [],
-				assets: this.createAssets_(store, pictures),
-				related: [],
-				features: [],
-				taxonomies: [],
-			};
-		});
-	}
-
-	private createAssets_(store, pictures): Asset[] {
-		const count = 1 + Math.floor(Math.random() * 5);
+	private createAssets_(store, pictures, count: number = 100): Asset[] {
+		// const count = 1 + Math.floor(Math.random() * 5);
 		const widths = [1920, 1600, 1280, 960];
 		const heights = [1080, 960, 720, 640, 480];
-		const assetType = store.definition.find(x => x.model === 'AssetType');
+		const type = store.definition.find(x => x.model === 'Asset');
 		return new Array(count).fill(null).map((x, i) => {
 			const picture = pictures[Math.floor(Math.random() * pictures.length)];
 			const name = `picture-${i}`;
@@ -406,9 +369,9 @@ export class FakeService {
 			const asset = {
 				id,
 				type: {
-					id: assetType.id,
-					name: assetType.name,
-					model: assetType.model,
+					id: type.id,
+					name: type.name,
+					model: type.model,
 				},
 				src,
 				name,
@@ -416,6 +379,7 @@ export class FakeService {
 				width,
 				height,
 				author,
+				active: Math.random() > 0.5
 				/*
 				id: number | string;
 				assetType: AssetType;
@@ -428,8 +392,97 @@ export class FakeService {
 				abstract?: string;
 				*/
 			};
-			store.asset.push(asset);
 			return asset;
+		});
+	}
+
+	private createContents_(store, count: number = 100): Content[] {
+		const types = store.definition.filter(x => x.extend === 'Content');
+		return new Array(count).fill(null).map((x, i) => {
+			const id = UID++;
+			// console.log(JSON.parse(JSON.stringify(types)));
+			const type = types[Math.floor(Math.random() * types.length)];
+			const model = type.model;
+			let name = `${model} ${id}`;
+			name = name.toLowerCase().replace(/\s/g, '-');
+			const title = getIpsum(5);
+			const abstract = getIpsum(12);
+			const description = getIpsum(50);
+			const componentName = model + 'Component';
+			// const component = store.component.find(x => x.name === componentName);
+			console.log(type.model, model);
+			const item = {
+				id,
+				model,
+				type: {
+					id: type.id,
+					name: type.name,
+					model: type.model,
+				},
+				/*
+				component: {
+					id: component.id,
+					name: component.name,
+					model: component.model,
+				},
+				*/
+				name,
+				title: [{ code: 'en', text: title }],
+				abstract: [{ code: 'en', text: abstract }],
+				description: [{ code: 'en', text: description }],
+				active: Math.random() > 0.5
+			};
+			if (type.fields.find(x => x.key === 'assets') !== undefined) {
+				(item as ContentPicture).assets = some(store.asset, 6);
+			}
+			return item;
+		});
+	}
+
+	private createPages_(store, count: number = 100): Page[] {
+		const types = store.definition.filter(x => x.model === 'Page' || x.extend === 'Page');
+		// console.log(types);
+		return new Array(count).fill(null).map((x, i) => {
+			const id = UID++;
+			// console.log(JSON.parse(JSON.stringify(types)));
+			const type = types[Math.floor(Math.random() * types.length)];
+			const isSingleton = type.name.indexOf('Detail') === -1;
+			if (isSingleton) {
+				types.splice(types.indexOf(type), 1);
+			}
+			const model = type.model;
+			let name = model + (isSingleton ? `` : ` ${id}`);
+			name = name.toLowerCase().replace(/\s/g, '-');
+			const title = getIpsum(5);
+			const abstract = getIpsum(12);
+			const description = getIpsum(50);
+			const componentName = model + 'Component';
+			const component = store.component.find(x => x.name === componentName);
+			return {
+				id,
+				model,
+				type: {
+					id: type.id,
+					name: type.name,
+					model: type.model,
+				},
+				component: {
+					id: component.id,
+					name: component.name,
+					model: component.model,
+				},
+				name,
+				title: [{ code: 'en', text: title }],
+				abstract: [{ code: 'en', text: abstract }],
+				description: [{ code: 'en', text: description }],
+				slug: 'slug',
+				active: Math.random() > 0.5,
+				contents: some(store.content, 4),
+				assets: some(store.asset, 6),
+				related: [],
+				features: [],
+				taxonomies: [],
+			};
 		});
 	}
 

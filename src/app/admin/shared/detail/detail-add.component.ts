@@ -45,7 +45,7 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 			);
 			this.form = this.formService.getFormGroup(this.options);
 			this.form.reset({
-				pageType: { id: null },
+				type: { id: null },
 			});
 		});
 		/*

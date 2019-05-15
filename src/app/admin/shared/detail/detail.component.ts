@@ -59,7 +59,8 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 				);
 				this.form = this.formService.getFormGroup(this.options);
 				this.tabFields = this.tabService.getTabs(this.definition);
-				this.storeService.getDetail(this.typeModel, this.itemId).pipe(
+				console.log(this.definition);
+				this.storeService.getDetail(this.definition.extend, this.definition.model, this.itemId).pipe(
 					takeUntil(this.unsubscribe),
 				).subscribe(item => {
 					// console.log('getDetail', this.type, this.id, item);

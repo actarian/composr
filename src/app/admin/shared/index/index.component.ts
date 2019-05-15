@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
-import { first, takeUntil } from 'rxjs/operators';
+import { delay, first, takeUntil, tap } from 'rxjs/operators';
 import { DetailAddComponent } from '../detail/detail-add.component';
 import { Definition } from '../store/store';
 import { StoreService } from '../store/store.service';
@@ -38,6 +38,8 @@ export class IndexComponent extends DisposableComponent implements OnInit {
 	ngOnInit() {
 		this.route.params.pipe(
 			takeUntil(this.unsubscribe),
+			tap(x => this.definition = null),
+			delay(1),
 		).subscribe(data => {
 			this.typeModel = data.typeModel;
 			this.typeId = parseInt(data.typeId, 0);

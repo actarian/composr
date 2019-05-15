@@ -1,6 +1,23 @@
 <ng-container [formGroup]="state.form" *ngIf="state && state.form">
-	<div class="fieldset--headline">
-		<h2 class="title">{{field.name}}</h2>
-		<div class="description">{{field.description}}</div>
+	<div class="content">
+		<!--
+		<div class="fieldset--headline">
+			<h2 class="title">{{field.name}}</h2>
+			<div class="description">{{field.description}}</div>
+		</div>
+		-->
+		<ng-container *ngFor="let state of contentStates">
+			<content-item-component [state]="state"></content-item-component>
+		</ng-container>
+	</div>
+	<div class="sidebar">
+		<ul class="nav--content">
+			<li class="nav__item" *ngFor="let type of contentTypes">
+				<button type="button" class="btn--content" (click)="onAddContent(type)">
+					<span>{{type.name}}</span>
+					<svg><use xlink:href="#add"></use></svg>
+				</button>
+			</li>
+		</ul>
 	</div>
 </ng-container>

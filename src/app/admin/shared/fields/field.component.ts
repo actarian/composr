@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
@@ -16,9 +16,10 @@ import { FieldEditComponent } from './field-edit.component';
 })
 export class FieldComponent extends DisposableComponent implements OnInit {
 
+	fields: FormArray;
 	state: TabState;
 	field: Field;
-	fields: FormArray;
+	item: any;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -42,6 +43,7 @@ export class FieldComponent extends DisposableComponent implements OnInit {
 				this.field = field;
 				const form = this.state.form;
 				const item = state.item[field.key];
+				this.item = item;
 				this.fields = form.get(field.key) as FormArray;
 				// this.sortFields(this.fields.controls);
 				this.fields.reset(item);
@@ -53,13 +55,15 @@ export class FieldComponent extends DisposableComponent implements OnInit {
 		console.log('onDelete', value, field);
 	}
 
-	onEditField(event: MouseEvent, field: Field) {
+	onEditField(event: MouseEvent, group: FormGroup) {
+		console.log(this.item);
+		const field = this.item.find(x => x.key === group.get('key').value);
 		// console.log('FieldComponent.onEditField', event, field);
 		this.modalService.open({
 			component: FieldEditComponent,
 			data: {
 				id: this.state.id,
-				field: field,
+				field,
 			},
 		}).pipe(
 			first()
@@ -68,6 +72,11 @@ export class FieldComponent extends DisposableComponent implements OnInit {
 			if (e instanceof ModalCompleteEvent) {
 				// console.log('FieldComponent.onEditField.ModalCompleteEvent', e.data);
 				Object.assign(field, e.data as Field);
+				group.patchValue({
+					control: field.control,
+					name: field.name,
+					description: field.description,
+				});
 			}
 		});
 	}

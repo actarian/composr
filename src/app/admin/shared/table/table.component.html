@@ -1,7 +1,15 @@
 <div class="table" [ngClass]="{ draggable: draggable }">
 	<!-- default row -->
 	<ng-template #defaultRow let-context>
-		<div class="table__cell" *ngFor="let col of context.columns">{{getValue(context.row, col)}}</div>
+		<div class="table__cell" *ngFor="let col of context.columns">
+			<ng-container [ngSwitch]="col.control">
+				<ng-container *ngSwitchCase="'switch'">
+					<svg *ngIf="getValue(context.row, col)"><use xlink:href="#checked"></use></svg>
+					<svg *ngIf="!getValue(context.row, col)"><use xlink:href="#unchecked"></use></svg>
+				</ng-container>
+				<ng-container *ngSwitchDefault>{{getValue(context.row, col)}} {{col.control}}</ng-container>
+			</ng-container>
+		</div>
 	</ng-template>
 
 	<!-- default actions -->
@@ -60,6 +68,8 @@
 	<div class="table__filters" [formGroup]="form" *ngIf="filterable">
 		<div class="table__cell cell--drag" *ngIf="draggable"></div>
 		<div class="table__cell" *ngFor="let col of columns">
+			<control-resolver [option]="optionKeys[col.key]" [form]="form"></control-resolver>
+			<!--
 			<ng-container [ngSwitch]="col.filterType">
 				<ng-container *ngSwitchCase="filterTypes.Select">
 					<div class="group--select">
@@ -73,6 +83,7 @@
 				</ng-container>
 				<ng-container *ngSwitchDefault><input [formControlName]="col.key" /></ng-container>
 			</ng-container>
+			-->
 		</div>
 		<div class="table__cell cell--lg">
 			<svg (click)="doClearFilters()"><use xlink:href="#clear"></use></svg>

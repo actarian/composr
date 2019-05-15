@@ -23,6 +23,26 @@ $icon: 18px;
 		flex: 0 0 64px;
 		text-align: center;
 	}
+
+	svg {
+		width: 20px;
+		height: 20px;
+	}
+
+	&.switch {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.checked {
+			fill: $primary;
+		}
+
+		.unchecked {
+			fill: $border;
+		}
+	}
+
 }
 
 /*

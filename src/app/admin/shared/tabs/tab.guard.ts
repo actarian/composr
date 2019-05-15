@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { catchError, first, map } from 'rxjs/operators';
 import { StoreService } from '../store/store.service';
 
 @Injectable({
@@ -26,20 +26,19 @@ export class TabGuard implements CanActivate {
 			const typeId = parseInt(parentParams.typeId, 0);
 			const itemId = parseInt(parentParams.itemId, 0);
 			// console.log('TabGuard', route, typeModel, typeId, itemId);
-			this.storeService.getDefinitionById(typeId).pipe(
+			return this.storeService.getDefinitionById(typeId).pipe(
+				map(definition => {
+					// console.log('TabGuard', definition);
+					if (definition.fields.find(x => x.key === key) !== undefined) {
+						return true;
+					} else {
+						this.router.navigate(['/admin/not-found']);
+						return false;
+					}
+				}),
+				catchError(x => of(false)),
 				first(),
-			).subscribe(definition => {
-				// console.log('TabGuard', definition);
-				if (definition.fields.find(x => x.key === key) !== undefined) {
-					return of(true);
-				} else {
-					this.router.navigate(['/admin/not-found']);
-					return of(false);
-				}
-			}, error => {
-				return of(false);
-			});
-			return of(true);
+			);
 		}
 		return of(true);
 	}
