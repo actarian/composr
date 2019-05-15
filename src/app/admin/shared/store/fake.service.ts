@@ -195,18 +195,18 @@ export class FakeService {
 		);
 	}
 
-	addType$(type: string, model: any): Observable<any> {
-		// console.log('FakeService.addType$', type, model);
+	addDefinition$(def: Definition, model: string, item: any): Observable<any> {
+		console.log('FakeService.addDefinition$', def, model, item);
 		return of(this.store).pipe(
 			map(store => {
 				const definitions = store.definition;
-				const definition = definitions.find(x => toCamelCase(x.model) === toCamelCase(type));
-				const items = definitions; // store[toCamelCase(type)];
+				const definition = definitions.find(x => toCamelCase(x.model) === toCamelCase(model));
+				const items = definitions; // store[toCamelCase(model)];
 				const item = Object.assign({}, definition);
 				item.id = UID++;
-				item.name = model.name;
+				item.name = item.name;
 				item.extend = definition.model;
-				item.model = model.model;
+				item.model = item.model;
 				items.push(item);
 				store.UID[0] = UID;
 				this.store = store;

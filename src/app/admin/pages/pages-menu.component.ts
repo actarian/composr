@@ -36,7 +36,7 @@ export class PagesMenuComponent extends DisposableComponent implements OnInit {
 		this.route.params.pipe(
 			takeUntil(this.unsubscribe),
 		).subscribe(data => {
-			console.log('PagesMenuComponent', data);
+			// console.log('PagesMenuComponent', data);
 		});
 		this.storeService.getDefinitionsOfType('Page').subscribe(types => {
 			this.types = types;
@@ -48,10 +48,10 @@ export class PagesMenuComponent extends DisposableComponent implements OnInit {
 		});
 	}
 
-	onEditType(event: MouseEvent, type: any) {
+	onEditType(event: MouseEvent, item: any) {
 		event.preventDefault();
 		event.stopPropagation();
-		this.router.navigate([type.model, type.id, 'edit'], { relativeTo: this.route });
+		this.router.navigate([item.model, item.id, 'edit'], { relativeTo: this.route });
 	}
 
 	onAddItem(event: MouseEvent) {

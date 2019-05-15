@@ -80,8 +80,8 @@ export class StoreService extends FakeService {
 		return this.addItem$(typeId, model);
 	}
 
-	addType(type: string, model: any): Observable<any> {
-		return this.addType$(type, model);
+	addDefinition(definition: Definition, model: string, item: any): Observable<any> {
+		return this.addDefinition$(definition, model, item);
 	}
 
 	isScalar(item: Field) {

@@ -59,14 +59,13 @@ export class DefinitionAddComponent extends DisposableComponent implements OnIni
 		this.form.reset();
 	}
 
-	onSubmit(model: any) {
+	onSubmit(item: any) {
 		// console.log('DefinitionAddComponent.onSubmit', model);
 		this.submitted = true;
 		this.error = null;
 		this.busy = true;
 		const field = this.definition.fields.find(x => x.key === 'model');
-		const type = field.model;
-		this.storeService.addType(type, model).pipe(
+		this.storeService.addDefinition(this.definition, field.model, item).pipe(
 			first(),
 			finalize(() => this.busy = false),
 		).subscribe(

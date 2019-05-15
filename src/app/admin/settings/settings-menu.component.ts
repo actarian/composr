@@ -43,9 +43,21 @@ export class SettingsMenuComponent extends DisposableComponent implements OnInit
 	onEditType(event: MouseEvent, item: any) {
 		event.preventDefault();
 		event.stopPropagation();
-		// const typeItem: any = this.types.find(x => x.model === item.model);
-		this.router.navigate(['/admin/settings', 'definition', item.model, item.id]);
+		this.router.navigate([item.model, item.id, 'edit'], { relativeTo: this.route });
 	}
+
+	/*
+	onAddItem(event: MouseEvent) {
+		// !!! make it generic
+		this.modalService.open({ component: DetailAddComponent, data: this.type.id }).pipe(
+			first()
+		).subscribe(e => {
+			if (e instanceof ModalCompleteEvent) {
+				console.log('SettingsMenuComponent.onAddItem.ModalCompleteEvent', e.data);
+			}
+		});
+	}
+	*/
 
 	onAddType(event: MouseEvent) {
 		// !!! make PageType dynamic
@@ -53,7 +65,7 @@ export class SettingsMenuComponent extends DisposableComponent implements OnInit
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {
-				console.log('onAddType.ModalCompleteEvent', e.data);
+				console.log('SettingsMenuComponent.onAddType.ModalCompleteEvent', e.data);
 			}
 		});
 	}
