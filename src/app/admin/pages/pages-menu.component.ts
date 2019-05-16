@@ -43,7 +43,7 @@ export class PagesMenuComponent extends DisposableComponent implements OnInit {
 			this.otherTypes = types.filter(x => x.model !== 'Page');
 			if (!this.type) {
 				this.type = types.find(x => x.model === 'Page');
-				this.router.navigate([this.type.model, this.type.id, 'items'], { relativeTo: this.route });
+				// this.router.navigate([this.type.model, this.type.id, 'items'], { relativeTo: this.route });
 			}
 		});
 	}

@@ -11,6 +11,7 @@ import { PagerComponent } from '../shared/pager/pager.component';
 import { TableComponent } from '../shared/table/table.component';
 import { AssetEditComponent } from './asset/asset-edit.component';
 import { AssetComponent } from './asset/asset.component';
+import { ContentEditComponent } from './content/content-edit.component';
 import { ContentItemComponent } from './content/content-item.component';
 import { ContentComponent } from './content/content.component';
 import { DefinitionAddComponent } from './definition/definition-add.component';
@@ -52,6 +53,7 @@ const entryComponents: Type<DisposableComponent>[] = [
 const components: Type<DisposableComponent>[] = [
 	AssetComponent,
 	ContentComponent,
+	ContentEditComponent,
 	ContentItemComponent,
 	ControlResolverComponent,
 	DefinitionComponent,

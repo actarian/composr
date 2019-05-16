@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormService } from '@designr/control';
-import { DisposableComponent } from '@designr/core';
+import { DisposableComponent, Entity } from '@designr/core';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, first, map, takeUntil, tap } from 'rxjs/operators';
 import { Content, ContentType, Field } from '../store/store';
@@ -21,6 +21,16 @@ export class ContentComponent extends DisposableComponent implements OnInit {
 
 	state: TabState;
 	field: Field;
+
+	modes: Entity[] = [{
+		id: 1,
+		name: 'View'
+	}, {
+		id: 2,
+		name: 'Edit'
+	}];
+
+	mode: number = 1;
 
 	constructor(
 		private route: ActivatedRoute,

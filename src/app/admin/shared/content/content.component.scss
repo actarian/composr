@@ -1,7 +1,7 @@
 @import '~styles/admin/variables';
 @import '~styles/admin/mixins';
 
-:host {
+.columns {
 	display: flex;
 	align-items: stretch;
 	height: 100%;
@@ -76,4 +76,8 @@
 			fill: $primary;
 		}
 	}
+}
+
+.nav--modes {
+	@extend %nav-modes;
 }

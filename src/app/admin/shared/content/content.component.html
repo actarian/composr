@@ -1,23 +1,37 @@
 <ng-container [formGroup]="state.form" *ngIf="state && state.form">
-	<div class="content">
-		<!--
-		<div class="fieldset--headline">
-			<h2 class="title">{{field.name}}</h2>
-			<div class="description">{{field.description}}</div>
-		</div>
-		-->
-		<ng-container *ngFor="let state of contentStates">
-			<content-item-component [state]="state"></content-item-component>
-		</ng-container>
+	<!--
+	<div class="fieldset--headline">
+		<h2 class="title">{{field.name}}</h2>
+		<div class="description">{{field.description}}</div>
 	</div>
-	<div class="sidebar">
-		<ul class="nav--content">
-			<li class="nav__item" *ngFor="let type of contentTypes">
-				<button type="button" class="btn--content" (click)="onAddContent(type)">
-					<span>{{type.name}}</span>
-					<svg><use xlink:href="#add"></use></svg>
-				</button>
-			</li>
-		</ul>
+	-->
+	<div class="columns">
+		<div class="content">
+			<ul class="nav--modes">
+				<li *ngFor="let item of modes" [ngClass]="{ active: mode === item.id }" (click)="mode = item.id">
+					<span>{{item.name}}</span>
+				</li>
+			</ul>
+			<ng-container *ngIf="mode == 1">
+				<ng-container *ngFor="let state of contentStates">
+					<content-item-component [state]="state"></content-item-component>
+				</ng-container>
+			</ng-container>
+			<ng-container *ngIf="mode == 2">
+				<ng-container *ngFor="let state of contentStates">
+					<content-edit-component [state]="state"></content-edit-component>
+				</ng-container>
+			</ng-container>
+		</div>
+		<div class="sidebar">
+			<ul class="nav--content">
+				<li class="nav__item" *ngFor="let type of contentTypes">
+					<button type="button" class="btn--content" (click)="onAddContent(type)">
+						<span>{{type.name}}</span>
+						<svg><use xlink:href="#add"></use></svg>
+					</button>
+				</li>
+			</ul>
+		</div>
 	</div>
 </ng-container>

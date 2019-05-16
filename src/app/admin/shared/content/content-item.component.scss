@@ -1,2 +1,29 @@
 @import '~styles/admin/variables';
 @import '~styles/admin/mixins';
+
+/*
+.fieldset--headline {
+	align-items: flex-start;
+}
+*/
+
+.fieldset--headline {
+	.description {
+		flex: 0 1 400px;
+	}
+}
+
+.picture {
+	@include aspect-bottom(1, 1);
+
+	img {
+		max-width: 100%;
+		transition: all ease-in-out 350ms;
+	}
+
+	&:hover {
+		img {
+			transform: scale(1.1, 1.1);
+		}
+	}
+}
