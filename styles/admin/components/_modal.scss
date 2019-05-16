@@ -61,19 +61,23 @@
 	position: sticky;
 	top: 0;
 	z-index: 1;
-	background: white;
 	border-bottom: 1px solid $border;
+	background: $border;
+	color: $primary;
 
 	min-height: 60px;
 	padding: 10px 40px;
 
-	.btn--close {
+	.btn--close,
+	.btn--back {
 		@extend %btn-icon;
 		margin-left: auto;
+		font-size: 0;
 
 		svg {
-			width: 24px;
-			height: 24px;
+			width: 20px;
+			height: 20px;
+			fill: $primary;
 		}
 	}
 }

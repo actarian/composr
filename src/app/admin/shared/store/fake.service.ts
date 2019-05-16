@@ -139,7 +139,7 @@ export class FakeService {
 	getIndexById$(id: number): Observable<any[]> {
 		return this.getDefinitionById$(id).pipe(
 			switchMap(definition => {
-				console.log(definition);
+				// console.log(definition);
 				return this.store$.pipe(
 					map(store => {
 						let items = [];
@@ -176,7 +176,7 @@ export class FakeService {
 	}
 
 	getDetail$(baseModel: string, model: string, id: number | string) {
-		console.log('FakeService.getDetail$', baseModel, model, id);
+		// console.log('FakeService.getDetail$', baseModel, model, id);
 		return this.store$.pipe(
 			map(store => {
 				const collection = store[toCamelCase(model)] || store[toCamelCase(baseModel)];
@@ -186,16 +186,16 @@ export class FakeService {
 	}
 
 	addItem$(typeId: number, model: any): Observable<any> {
-		console.log('FakeService.addItem$', typeId, model);
+		// console.log('FakeService.addItem$', typeId, model);
 		return of(this.store).pipe(
 			map(store => {
 				const definition = this.store.definition.find(x => x.id === typeId);
-				console.log(definition.model);
-				const items = store[toCamelCase(definition.model)];
+				// console.log(definition.model);
+				const collection = store[toCamelCase(definition.model)] || store[toCamelCase(definition.extend)];
 				const item = Object.assign({}, model);
 				item.id = UID++;
 				item.model = definition.model;
-				items.push(item);
+				collection.push(item);
 				store.UID[0] = UID;
 				this.store = store;
 				return item;
@@ -204,13 +204,13 @@ export class FakeService {
 	}
 
 	addDefinition$(definitionModel: string, typeModel: string, item: any): Observable<any> {
-		console.log('FakeService.addDefinition$', definitionModel, typeModel, item);
+		// console.log('FakeService.addDefinition$', definitionModel, typeModel, item);
 		return of(this.store).pipe(
 			map(store => {
 				const reflection = store.reflection.find(x => toCamelCase(x.model) === toCamelCase(item.model));
 				const baseDefinition = store.definition.find(x => toCamelCase(x.model) === toCamelCase(typeModel));
 				const definition = Object.assign({}, reflection);
-				console.log(reflection);
+				// console.log(reflection);
 				definition.id = UID++;
 				definition.name = item.name;
 				definition.extend = typeModel;
@@ -321,7 +321,7 @@ export class FakeService {
 					const component = toTitleCase(x.model) + 'Component';
 					store.component.push({
 						id: UID++, name: component, path: component.toLowerCase() + '.cshtml', types: [{
-							id: x.id, name: x.name
+							id: x.id, name: x.name, model: x.model,
 						}]
 					});
 				});
@@ -330,12 +330,14 @@ export class FakeService {
 				store.asset = this.createAssets_(store, pictures, 500);
 				store.content = this.createContents_(store, 100);
 				store.page = this.createPages_(store, 100);
+				/*
 				pageReflections.forEach((x, i) => {
 					if (x.model !== 'Page') {
 						const key = toCamelCase(x.model);
 						store[key] = store.page.filter(p => p.model === x.model);
 					}
 				});
+				*/
 				store.UID = [UID, VERSION];
 				this.store = store;
 				return this.store_;
@@ -410,7 +412,7 @@ export class FakeService {
 			const description = getIpsum(50);
 			const componentName = model + 'Component';
 			// const component = store.component.find(x => x.name === componentName);
-			console.log(type.model, model);
+			// console.log(type.model, model);
 			const item = {
 				id,
 				model,

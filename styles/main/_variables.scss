@@ -1,9 +1,12 @@
 body {
 	--color-background: #01091b;
-	--color-background-secondary: #f8f9fc;
+	--color-background-secondary: #ffffff; // #f8f9fc;
 	--color-foreground: #ffffff;
 	--color-foreground-secondary: #585a61;
 	--color-primary: #2440c3;
+	--color-border: #e2e6f8;
+	--color-disabled: #eff1f8;
+	--color-foreground-disabled: #868fad;
 	--color-facebook: #3B5998;
 	--color-google: #dd4b39;
 	--font-primary: 'Roboto', sans-serif;
@@ -32,6 +35,6 @@ $grid-columns: 12 !default;
 $grid-gutter-width: 30px !default;
 $grid-breakpoints: (xs: 0, sm: 768px, md: 1024px, lg: 1440px, xl: 1920px) !default;
 $container-max-widths: (sm: calc(100vw - 120px),
-md: calc(100vw - 180px),
-lg: calc(100vw - 240px),
-xl: calc(100vw - 300px)) !default;
+	md: calc(100vw - 180px),
+	lg: calc(100vw - 240px),
+	xl: calc(100vw - 300px)) !default;

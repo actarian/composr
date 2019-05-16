@@ -208,7 +208,7 @@ export const REFLECTIONS: Definition[] = [{
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true },
 		{ name: 'Name', key: 'name', type: 'string', required: true },
 		{ name: 'Path', key: 'path', type: 'string' },
-		{ name: 'Types', key: 'types', type: 'array', model: 'PageType' }
+		{ name: 'Types', key: 'types', type: 'array', model: 'Page' }
 	]
 }, {
 	id: 'Language',
@@ -402,7 +402,7 @@ export const DEFINITIONS: Definition[] = [{
 		{ name: 'Id', key: 'id', type: 'number', primaryKey: true, required: true, visible: true, indexable: true },
 		{ name: 'Name', key: 'name', type: 'string', required: true, visible: true, editable: true, indexable: true },
 		{ name: 'Path', key: 'path', type: 'string', visible: true, editable: true, indexable: true },
-		{ name: 'Types', key: 'types', type: 'array', model: 'PageType', control: 'multi', visible: true, editable: true, indexable: true }
+		{ name: 'Types', key: 'types', type: 'array', model: 'Page', control: 'multi', visible: true, editable: true, indexable: true }
 	]
 }, {
 	id: 1,
