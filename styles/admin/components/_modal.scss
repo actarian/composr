@@ -92,6 +92,10 @@
 		@extend %nav-inline;
 	}
 
+	.nav--footer {
+		@extend %nav-footer;
+	}
+
 	.btn--secondary {
 		@extend %btn-secondary;
 		padding: 13px 20px;
@@ -125,9 +129,14 @@
 }
 
 .modal__footer {
-	position: sticky;
-	bottom: 0;
-	z-index: 1;
-	background: white;
-	border-top: 1px solid $border;
+	@extend %nav-footer;
+	padding: 10px 40px 15px 40px;
 }
+
+/*
+position: sticky;
+bottom: 0;
+padding: 15px 0;
+z-index: 1;
+background: white;
+*/

@@ -1,5 +1,25 @@
 @import '~styles/admin/variables';
 
+.switch {
+	width: 70px;
+	height: 40px;
+	border-radius: 20px;
+	position: relative;
+	// margin-top: 10px;
+	background: white;
+	border: 1px solid $disabled;
+	cursor: pointer;
+
+	&.active {
+		background: $disabled;
+
+		&>.switch__knob {
+			transform: translateX(100%);
+			background: $primary;
+		}
+	}
+}
+
 .switch__knob {
 	width: 30px;
 	height: 30px;
@@ -10,21 +30,4 @@
 	margin-top: -15px;
 	margin-left: 5px;
 	transition: all ease-in-out 350ms;
-}
-
-.switch {
-	width: 70px;
-	height: 40px;
-	background: $disabled-light;
-	border-radius: 20px;
-	position: relative;
-	margin-top: 10px;
-	cursor: pointer;
-
-	&.active {
-		&>.switch__knob {
-			transform: translateX(100%);
-			background: $primary;
-		}
-	}
 }

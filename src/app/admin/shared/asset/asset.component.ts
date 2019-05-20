@@ -86,6 +86,7 @@ export class AssetComponent extends DisposableComponent implements OnInit {
 			if (e instanceof ModalCompleteEvent) {
 				console.log('AssetComponent.onEditRow.ModalCompleteEvent', e.data);
 				Object.assign(asset, e.data as Field);
+				this.state.item.assets = this.state.item.assets.slice();
 			}
 		});
 	}

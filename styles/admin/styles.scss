@@ -82,6 +82,10 @@ a {
 			@extend %nav-inline;
 		}
 
+		.nav--footer {
+			@extend %nav-footer;
+		}
+
 		.tabs--content {
 			height: calc(100% - 40px);
 		}
