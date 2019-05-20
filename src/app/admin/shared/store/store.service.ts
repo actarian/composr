@@ -24,11 +24,13 @@ export class StoreService extends FakeService {
 		super(storage);
 	}
 
+	/*
 	getReflection(type: string): Observable<Definition> {
 		return this.getReflection$(type).pipe(
 			// tap(x => console.log('getReflection', type, x))
 		);
 	}
+	*/
 
 	getDefinition(type: string): Observable<Definition> {
 		return this.getDefinition$(type).pipe(
@@ -56,9 +58,11 @@ export class StoreService extends FakeService {
 		);
 	}
 
+	/*
 	getList(type: string, ofType?: string): Observable<any[]> {
 		return this.getList$(type, ofType);
 	}
+	*/
 
 	getDefinitionsOfType(type: string): Observable<Definition[]> {
 		return this.getDefinitionsOfType$(type);
@@ -119,7 +123,7 @@ export class StoreService extends FakeService {
 		return schema || 'text';
 	}
 
-	mapOptions(fields: Field[]): ControlOption<any>[] {
+	mapOptions(fields: Field[], overrides?: { [key: string]: any }): ControlOption<any>[] {
 		const options = fields.map(x => {
 			const schema = x.control || this.mapSchema(x);
 			const option: any = {
@@ -166,6 +170,10 @@ export class StoreService extends FakeService {
 					option.options = this.getLanguageOptions$('Language');
 					break;
 			}
+			if (overrides && overrides[x.key]) {
+				Object.assign(option, overrides[x.key]);
+				console.log(option);
+			}
 			return option;
 		});
 		return options;
@@ -211,8 +219,12 @@ export class StoreService extends FakeService {
 		);
 	}
 
-	getDefinitionOptions$(type: string): Observable<Definition[]> {
-		return this.getList$('definition', type).pipe(
+	getDefinitionList(type: string): Observable<Entity[]> {
+		return this.getDefinitionListOfType$(type);
+	}
+
+	getDefinitionOptions$(type: string): Observable<Entity[]> {
+		return this.getDefinitionListOfType$(type).pipe(
 			tap(x => console.log('getDefinitionOptions$', type, x)),
 			map(x => {
 				// console.log('reflection', type, x);

@@ -8,16 +8,59 @@
 */
 
 .fieldset--headline {
+	margin-bottom: 20px;
+
+	.title {
+		.name {
+			color: $primary;
+			font-size: 19px;
+			font-weight: normal;
+			width: 100%;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+
+		.type {
+			display: block;
+			font-size: 11px;
+			font-style: italic;
+			color: $primary;
+
+			svg {
+				width: 13px;
+				height: 13px;
+				fill: #d6985b;
+			}
+		}
+	}
+
 	.description {
 		flex: 0 1 400px;
+	}
+
+	.actions {
+		display: flex;
+		align-items: center;
 	}
 }
 
 .picture {
-	@include aspect-bottom(1, 1);
+	// @include aspect-bottom(1, 1);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	max-width: 100%;
+	max-height: 30vh;
+	overflow: hidden;
+
+	background: $border;
+	border-radius: 2px;
 
 	img {
-		max-width: 100%;
+		width: 100%;
+		max-height: 100%;
+		object-fit: contain;
 		transition: all ease-in-out 350ms;
 	}
 

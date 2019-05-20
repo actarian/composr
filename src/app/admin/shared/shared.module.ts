@@ -21,9 +21,11 @@ import { DetailComponent } from './detail/detail.component';
 import { FieldEditComponent } from './fields/field-edit.component';
 import { FieldComponent } from './fields/field.component';
 import { IndexComponent } from './index/index.component';
+import { LocalizationPipe } from './localization/localization.pipe';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ObjectComponent } from './object/object.component';
 import { RelationComponent } from './relation/relation.component';
+import { ResolverComponent } from './resolver/resolver.component';
 import { ScalarComponent } from './scalar/scalar.component';
 import { ControlResolverComponent } from './table/control-resolver.component';
 import { TabComponent } from './tabs/tab.component';
@@ -45,6 +47,7 @@ const services = [
 
 const entryComponents: Type<DisposableComponent>[] = [
 	AssetEditComponent,
+	ContentEditComponent,
 	DefinitionAddComponent,
 	DetailAddComponent,
 	FieldEditComponent,
@@ -53,7 +56,6 @@ const entryComponents: Type<DisposableComponent>[] = [
 const components: Type<DisposableComponent>[] = [
 	AssetComponent,
 	ContentComponent,
-	ContentEditComponent,
 	ContentItemComponent,
 	ControlResolverComponent,
 	DefinitionComponent,
@@ -64,6 +66,7 @@ const components: Type<DisposableComponent>[] = [
 	ObjectComponent,
 	PagerComponent,
 	RelationComponent,
+	ResolverComponent,
 	ScalarComponent,
 	TableComponent,
 	TabComponent,
@@ -75,6 +78,7 @@ const directives = [
 ];
 
 const pipes = [
+	LocalizationPipe,
 ];
 
 const validators = [

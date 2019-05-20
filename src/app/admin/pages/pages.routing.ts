@@ -7,6 +7,7 @@ import { DetailGuard } from '../shared/detail/detail.guard';
 import { FieldComponent } from '../shared/fields/field.component';
 import { IndexComponent } from '../shared/index/index.component';
 import { NotFoundComponent } from '../shared/not-found/not-found.component';
+import { ResolverComponent } from '../shared/resolver/resolver.component';
 import { ScalarComponent } from '../shared/scalar/scalar.component';
 import { TabComponent } from '../shared/tabs/tab.component';
 import { TabGuard } from '../shared/tabs/tab.guard';
@@ -14,7 +15,8 @@ import { PagesComponent } from './pages.component';
 
 const ROUTES: Routes = [{
 	path: '', component: PagesComponent, children: [
-		// { path: '', redirectTo: 'page', pathMatch: 'full' },
+		{ path: '', redirectTo: 'resolver', pathMatch: 'full' },
+		{ path: 'resolver', component: ResolverComponent, data: { model: 'Page' } },
 		{
 			path: ':typeModel/:typeId/edit', component: DefinitionComponent, children: [
 				{ path: '', redirectTo: 'detail', pathMatch: 'full' },
@@ -30,23 +32,6 @@ const ROUTES: Routes = [{
 				{ path: ':key', component: TabComponent, data: { tab: true }, canActivate: [TabGuard] },
 			], canActivate: [DetailGuard]
 		},
-		/*
-		{ path: 'data/:type', component: IndexComponent },
-		{
-			path: 'data/:type/:id', component: DetailComponent, children: [
-				{ path: '', redirectTo: 'detail', pathMatch: 'full' },
-				{ path: 'detail', component: ScalarComponent, data: { tab: true } },
-				{ path: ':key', component: TabComponent, data: { tab: true }, canActivate: [TabGuard] },
-			], canActivate: [DetailGuard]
-		},
-		{
-			path: 'definition/:type/:id', component: DefinitionComponent, children: [
-				{ path: '', redirectTo: 'detail', pathMatch: 'full' },
-				{ path: 'detail', component: ScalarComponent },
-				{ path: 'fields', component: FieldComponent },
-			]
-		},
-		*/
 		{ path: '**', component: NotFoundComponent },
 	]
 }];

@@ -273,8 +273,9 @@ select option {
 		line-height: 1;
 
 		&[disabled] {
-			background: #eff0f3;
-			color: #585a61;
+			background: $disabled;
+			border-color: $disabled;
+			color: $foreground-disabled;
 		}
 	}
 

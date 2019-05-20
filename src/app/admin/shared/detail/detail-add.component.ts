@@ -38,15 +38,19 @@ export class DetailAddComponent extends DisposableComponent implements OnInit {
 		this.typeId = this.modalData as number;
 		this.storeService.getDefinitionById(this.typeId).subscribe(definition => {
 			this.definition = definition;
+			console.log(definition);
 			this.options = this.formService.getOptions(
 				this.storeService.mapOptions(
-					this.storeService.getCreationFields(this.definition.fields)
+					this.storeService.getCreationFields(this.definition.fields),
+					{ type: { disabled: definition.extend !== 'Entity' } }
 				)
 			);
 			this.form = this.formService.getFormGroup(this.options);
-			this.form.reset({
-				type: { id: null },
-			});
+			this.form.reset(
+				definition.extend === 'Entity' ?
+					{ type: { id: null } } :
+					{ type: definition }
+			);
 		});
 		/*
 		this.route.params.pipe(

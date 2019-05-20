@@ -1,21 +1,26 @@
 <ng-container [formGroup]="state.form" *ngIf="state && state.form">
-	<div class="fieldset--headline">
-		<h2 class="title">{{state.type}}</h2>
-		<div class="description">{{state.item.name}}</div>
-	</div>
-	<!-- <controls-component class="fieldset" [options]="state.options" [form]="state.form"></controls-component> -->
-	<div class="fieldset" *ngFor="let option of state.options">
-		<control-outlet class="form-group" [option]="option" [form]="state.form">
-			<ng-template #labelRef let-context>
-				<div class="control__label control__label--{{context.option.schema}}" [attr.for]="context.option.key">
-					<div class="title">{{context.option.label}}</div>
-					<div class="type"><svg *ngIf="context.option.primaryKey"><use xlink:href="#lock"></use></svg> {{context.option.type}}</div>
-				</div>
-			</ng-template>
-		</control-outlet>
-	</div>
-	<div class="nav--inline">
-		<button type="button" class="btn btn--secondary" [disabled]="busy || !form.valid" (click)="onReset()"><span>Reset</span></button>
-		<button type="button" class="btn btn--primary" [disabled]="busy || !form.valid || !hasDiff" [ngClass]="{ 'btn--busy': busy }" (click)="state.form.valid && onSubmit(state.form.value)"><span>Save</span></button>
+	<div class="group--headline">{{state.definition.name}}</div>
+	<div class="group--form" *ngIf="state.form">
+		<form class="form" [ngClass]="{ submitted: submitted }" name="form" [formGroup]="state.form" (ngSubmit)="state.form.valid && onSubmit(state.form.value)" role="form" novalidate autocomplete="off">
+			<div class="fieldset--headline">
+				<div class="title">{{state.type}}</div>
+				<div class="description">{{state.item.name}}</div>
+			</div>
+			<!-- <controls-component class="fieldset" [options]="state.options" [form]="state.form"></controls-component> -->
+			<div class="fieldset" *ngFor="let option of state.options">
+				<control-outlet class="form-group" [option]="option" [form]="state.form">
+					<ng-template #labelRef let-context>
+						<div class="control__label control__label--{{context.option.schema}}" [attr.for]="context.option.key">
+							<div class="title">{{context.option.label}}</div>
+							<div class="type"><svg *ngIf="context.option.primaryKey"><use xlink:href="#lock"></use></svg> {{context.option.type}}</div>
+						</div>
+					</ng-template>
+				</control-outlet>
+			</div>
+			<div class="nav--inline">
+				<button type="button" class="btn btn--secondary" [disabled]="busy || !state.form.valid" (click)="onReset()"><span>Reset</span></button>
+				<button type="button" class="btn btn--primary" [disabled]="busy || !state.form.valid || !hasDiff" [ngClass]="{ 'btn--busy': busy }" (click)="state.form.valid && onSubmit(state.form.value)"><span>Save</span></button>
+			</div>
+		</form>
 	</div>
 </ng-container>

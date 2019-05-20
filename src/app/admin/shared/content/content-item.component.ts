@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { AssetEditComponent } from '../asset/asset-edit.component';
 import { Asset, Field } from '../store/store';
 import { TabState } from '../tabs/tab.service';
+import { ContentEditComponent } from './content-edit.component';
 
 @Component({
 	selector: 'content-item-component',
@@ -35,7 +36,7 @@ export class ContentItemComponent extends DisposableComponent implements OnInit 
 	}
 
 	onEditAsset(asset: any) {
-		// console.log('AssetComponent.onEditRow', asset);
+		// console.log('ContentItemComponent.onEditAsset', asset);
 		this.modalService.open({
 			component: AssetEditComponent,
 			data: {
@@ -46,10 +47,30 @@ export class ContentItemComponent extends DisposableComponent implements OnInit 
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {
-				console.log('AssetComponent.onEditRow.ModalCompleteEvent', e.data);
+				console.log('ContentItemComponent.onEditAsset.ModalCompleteEvent', e.data);
 				Object.assign(asset, e.data as Field);
 			}
 		});
 	}
+
+	onEditContent() {
+		// console.log('ContentItemComponent.onEditContent', asset);
+		this.modalService.open({
+			component: ContentEditComponent,
+			data: this.state,
+		}).pipe(
+			first()
+		).subscribe(e => {
+			if (e instanceof ModalCompleteEvent) {
+				console.log('ContentItemComponent.onEditContent.ModalCompleteEvent', e.data);
+				// Object.assign(this.state.item, e.data as Field);
+			}
+		});
+	}
+
+	/*
+	asset aspect
+	[ngStyle]="{ 'padding-top.%': 100 / state.item.assets[0].width * state.item.assets[0].height }"
+	*/
 
 }

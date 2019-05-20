@@ -1,18 +1,26 @@
 <ng-container [formGroup]="state.form" *ngIf="state && state.form">
 	<div class="fieldset--headline">
-		<h2 class="title">{{state.type}}</h2>
+		<div class="title">
+			<span class="name">{{state.item.name}}</span>
+			<span class="type">{{state.type}}</span>
+		</div>
 		<div class="description">
-			<h2>{{state.item.title[0].text}}</h2>
+			<div>{{state.item.title | localization}}</div>
+		</div>
+		<div class="actions">
+			<button type="button" class="btn--icon" (click)="onEditContent()">
+				<svg><use xlink:href="#edit"></use></svg>
+			</button>
 		</div>
 	</div>
 	<div class="fieldset--headline">
-		<h2 class="title"></h2>
+		<div class="title"></div>
 		<div class="description">
-			<div class="picture" *ngIf="state.item.assets" (click)="onEditAsset(state.item.assets[0])" [ngStyle]="{ 'padding-top.%': 100 / state.item.assets[0].width * state.item.assets[0].height }">
+			<div class="picture" *ngIf="state.item.assets" (click)="onEditAsset(state.item.assets[0])">
 				<img [src]="getSrc(state.item.assets[0])" />
 			</div>
-			<h4>{{state.item.abstract[0].text}}</h4>
-			<p>{{state.item.description[0].text}}</p>
+			<h4>{{state.item.abstract | localization}}</h4>
+			<p>{{state.item.description | localization}}</p>
 		</div>
 	</div>
 </ng-container>

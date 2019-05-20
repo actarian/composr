@@ -49,10 +49,12 @@
 
 		@include media-breakpoint-down(md) {
 			flex: 0 0 130px;
+			max-width: 130px;
 		}
 
 		@include media-breakpoint-up(lg) {
 			flex: 0 0 180px;
+			max-width: 180px;
 		}
 	}
 

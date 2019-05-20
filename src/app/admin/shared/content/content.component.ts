@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormService } from '@designr/control';
 import { DisposableComponent, Entity } from '@designr/core';
+import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, first, map, takeUntil, tap } from 'rxjs/operators';
+import { DetailAddComponent } from '../detail/detail-add.component';
 import { Content, ContentType, Field } from '../store/store';
 import { StoreService } from '../store/store.service';
 import { TabService, TabState } from '../tabs/tab.service';
@@ -37,6 +39,7 @@ export class ContentComponent extends DisposableComponent implements OnInit {
 		private formService: FormService,
 		private tabService: TabService,
 		private storeService: StoreService,
+		private modalService: ModalService,
 	) {
 		super();
 	}
@@ -53,7 +56,7 @@ export class ContentComponent extends DisposableComponent implements OnInit {
 				const path = this.route.snapshot.url[0].path;
 				const field = state.definition.fields.find(x => x.key === path);
 				this.field = field;
-				this.contents = this.state.item[field.key] as Content[];
+				this.contents = this.state.item[this.field.key] as Content[];
 				this.getContentStates$(this.contents).pipe(
 					first(),
 				).subscribe(
@@ -63,13 +66,16 @@ export class ContentComponent extends DisposableComponent implements OnInit {
 				);
 				// console.log('ContentComponent', field);
 			});
-			this.storeService.getDefinitionsOfType('Content').pipe(
+			this.storeService.getDefinitionList('Content').pipe(
 				first(),
 			).subscribe(x => this.contentTypes = x as ContentType[]);
 		});
 	}
 
 	getContentStates$(contents: Content[]): Observable<TabState[]> {
+		if (!contents) {
+			return of([]);
+		}
 		const definitions$ = contents.map(x => this.storeService.getDefinitionById(x.type.id as number));
 		console.log(contents);
 		return combineLatest(definitions$).pipe(
@@ -110,5 +116,14 @@ export class ContentComponent extends DisposableComponent implements OnInit {
 
 	onAddContent(type: ContentType) {
 		console.log('ContentComponent.onAddContent', type);
+		// !!! make it generic
+		this.modalService.open({ component: DetailAddComponent, data: type.id }).pipe(
+			first()
+		).subscribe(e => {
+			if (e instanceof ModalCompleteEvent) {
+				console.log('ContentComponent.onAddItem.ModalCompleteEvent', e.data);
+			}
+		});
 	}
+
 }

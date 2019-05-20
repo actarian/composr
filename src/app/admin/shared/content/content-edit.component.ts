@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DisposableComponent } from '@designr/core';
+import { ModalData } from '@designr/ui';
 import { StoreService } from '../store/store.service';
 import { TabState } from '../tabs/tab.service';
 
@@ -15,13 +17,28 @@ export class ContentEditComponent extends DisposableComponent implements OnInit 
 	busy: boolean = false;
 
 	constructor(
+		private router: Router,
+		private route: ActivatedRoute,
 		private storeService: StoreService,
+		private modalData: ModalData,
 	) {
 		super();
 	}
 
 	ngOnInit() {
-
+		if (!this.state && this.modalData) {
+			this.state = this.modalData as TabState;
+		}
+		/*
+		this.route.data.pipe(
+			takeUntil(this.unsubscribe),
+		).subscribe(data => {
+			console.log(data);
+			if (!this.state) {
+				this.state = data as TabState;
+			}
+		});
+		*/
 	}
 
 	onReset() {

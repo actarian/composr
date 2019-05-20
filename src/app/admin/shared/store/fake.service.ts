@@ -1,10 +1,10 @@
 
 import { Injectable } from '@angular/core';
-import { Identity, LocalStorageService } from '@designr/core';
+import { Entity, Identity, LocalStorageService } from '@designr/core';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { getIpsum } from './ipsum';
-import { Asset, Content, ContentPicture, Definition, DEFINITIONS, Field, Page, REFLECTIONS, STORE } from './store';
+import { Asset, Content, ContentPicture, Definition, DEFINITIONS, Field, Meta, Page, REFLECTIONS, STORE } from './store';
 import { some, toCamelCase, toTitleCase } from './utils';
 
 const VERSION = 1;
@@ -72,6 +72,7 @@ export class FakeService {
 		);
 	}
 
+	/*
 	getTypes$(type: string, ofType?: string): Observable<any[]> {
 		return this.get$(type, ofType).pipe(
 			// tap(x => console.log('getTypes$', x)),
@@ -82,6 +83,13 @@ export class FakeService {
 					model: x.model,
 				};
 			}))
+		);
+	}
+	*/
+
+	getDefinitionListOfType$(type: string): Observable<Entity[]> {
+		return this.getDefinitionsOfType$(type).pipe(
+			map(items => this.toList(items.filter(x => x.extend !== 'Entity')))
 		);
 	}
 
@@ -147,7 +155,7 @@ export class FakeService {
 							items = store[toCamelCase(definition.model)];
 							if (!items) {
 								items = store[toCamelCase(definition.extend)];
-								items = items.filter(x => x.type.id === id)
+								items = items.filter(x => x.type.id === id);
 							}
 							items = items.map(x => {
 								const item: any = {};
@@ -328,6 +336,7 @@ export class FakeService {
 				// store.pageType = store.definition.filter(x => x.model === 'Page' || x.extend === 'Page');
 				// this.createIds_(store.pageType);
 				store.asset = this.createAssets_(store, pictures, 500);
+				store.meta = this.createMeta_(store, 100);
 				store.content = this.createContents_(store, 100);
 				store.page = this.createPages_(store, 100);
 				/*
@@ -398,6 +407,25 @@ export class FakeService {
 		});
 	}
 
+	private createMeta_(store, count: number = 100): Meta[] {
+		return new Array(count).fill(null).map((x, i) => {
+			const id = UID++;
+			const model = 'Meta';
+			let name = `${model} ${id}`;
+			name = name.toLowerCase().replace(/\s/g, '-');
+			const title = getIpsum(5);
+			const description = getIpsum(12);
+			const keywords = getIpsum(5).toLowerCase().replace(/\s/g, ', ');
+			const item = {
+				id,
+				title: [{ code: 'en', text: title }],
+				description: [{ code: 'en', text: description }],
+				keywords: [{ code: 'en', text: keywords }],
+			};
+			return item;
+		});
+	}
+
 	private createContents_(store, count: number = 100): Content[] {
 		const types = store.definition.filter(x => x.extend === 'Content');
 		return new Array(count).fill(null).map((x, i) => {
@@ -458,6 +486,7 @@ export class FakeService {
 			const title = getIpsum(5);
 			const abstract = getIpsum(12);
 			const description = getIpsum(50);
+			const meta = store.meta[i];
 			const componentName = model + 'Component';
 			const component = store.component.find(x => x.name === componentName);
 			return {
@@ -477,6 +506,7 @@ export class FakeService {
 				title: [{ code: 'en', text: title }],
 				abstract: [{ code: 'en', text: abstract }],
 				description: [{ code: 'en', text: description }],
+				meta,
 				slug: 'slug',
 				active: Math.random() > 0.5,
 				contents: some(store.content, 4),
@@ -518,6 +548,15 @@ export class FakeService {
 
 	getListSync(store, type: string, ofType?: string): any[] {
 		return this.getSync(store, type, ofType).map(x => {
+			return {
+				id: x.id,
+				name: x.name,
+			};
+		});
+	}
+
+	toList(collection: any[]): Entity[] {
+		return collection.map(x => {
 			return {
 				id: x.id,
 				name: x.name,
