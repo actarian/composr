@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Entity, Identity, LocalStorageService } from '@designr/core';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { delay, map, shareReplay, switchMap } from 'rxjs/operators';
 import { getIpsum } from './ipsum';
 import { Asset, Content, ContentPicture, Definition, DEFINITIONS, Field, Meta, Page, REFLECTIONS, STORE } from './store';
 import { some, toCamelCase, toTitleCase } from './utils';
@@ -183,32 +183,149 @@ export class FakeService {
 		);
 	}
 
-	getDetail$(baseModel: string, model: string, id: number | string) {
+	getDetail$(typeId: number | string, id: number | string) {
 		// console.log('FakeService.getDetail$', baseModel, model, id);
 		return this.store$.pipe(
 			map(store => {
-				const collection = store[toCamelCase(model)] || store[toCamelCase(baseModel)];
-				return collection.find(x => x.id === id);
+				const data = this.getDefinitionAndCollectionById_(store, typeId);
+				return data.collection.find(x => x.id === id);
 			})
 		);
 	}
 
-	addItem$(typeId: number, model: any): Observable<any> {
+	patchItem$(typeId: number | string, item: Identity): Observable<any> {
+		return of(this.store).pipe(
+			map(store => {
+				const data = this.getDefinitionAndCollectionById_(store, typeId);
+				const current = data.collection.find(x => x.id === item.id);
+				const patched = this.patch_(current, item);
+				// console.log('FakeService.patchItem$', patched);
+				this.updateStore_(store, data, patched);
+				return patched;
+			}),
+			delay(1000),
+		);
+	}
+
+	patchDetail$(typeId: number | string, item: Identity): Observable<any> {
+		return of(this.store).pipe(
+			map(store => {
+				const data = this.getDefinitionAndCollectionById_(store, typeId);
+				const current = data.collection.find(x => x.id === item.id);
+				// console.log('FakeService.patchDetail$', typeId, item, data.definition, data.collection, current);
+				const patched = this.patch_(current, item);
+				this.updateStore_(store, data, patched);
+				return patched;
+			}),
+			delay(1000),
+		);
+	}
+
+	patchDefinition$(typeId: number | string, item: Identity): Observable<any> {
+		return of(this.store).pipe(
+			map(store => {
+				const data = this.getDefinitionById_(store, typeId);
+				const current = data.collection.find(x => x.id === item.id);
+				// console.log('FakeService.patchDefinition$', typeId, item, data.definition, data.collection, current);
+				const patched = this.patch_(current, item);
+				this.updateStore_(store, data, patched);
+				return patched;
+			}),
+			delay(1000),
+		);
+	}
+
+	patchField$(typeModel: string, id: number | string, item: Identity): Observable<Field> {
+		// console.log('patchField', typeModel, id, model);
+		return of(this.store).pipe(
+			map(store => {
+				const data = this.getDefinitionAndCollectionByName_(store, typeModel);
+				const current = data.collection.find(x => x.id === id);
+				const field = current.fields.find(x => x.id === item.id);
+				Object.assign(field, item);
+				this.store = store;
+				return field;
+			}),
+			delay(1000),
+		);
+	}
+
+	/*
+	patchItemAsset$(typeId: number | string, id: number | string, model: Identity): Observable<Field> {
+		// console.log('patchAsset', type, id, model);
+		return of(this.store).pipe(
+			map(store => {
+				const data = this.getDefinitionAndCollectionById_(store, typeId);
+				const current = data.collection.find(x => x.id === id);
+				const asset = current.assets.find(x => x.id === model.id);
+				Object.assign(asset, model);
+				this.store = store;
+				return asset;
+			}),
+			delay(1000),
+		);
+	}
+	*/
+
+	patchAsset$(typeId: number | string, item: Identity): Observable<Field> {
+		// console.log('patchAsset', type, id, model);
+		return of(this.store).pipe(
+			map(store => {
+				const data = this.getDefinitionAndCollectionById_(store, typeId);
+				const current = data.collection.find(x => x.id === item.id);
+				const patched = this.patch_(current, item);
+				this.updateStore_(store, data, patched);
+				return patched;
+			}),
+			delay(1000),
+		);
+	}
+
+	addItem$(typeId: number | string, model: any): Observable<any> {
 		// console.log('FakeService.addItem$', typeId, model);
 		return of(this.store).pipe(
 			map(store => {
-				const definition = this.store.definition.find(x => x.id === typeId);
-				// console.log(definition.model);
-				const collection = store[toCamelCase(definition.model)] || store[toCamelCase(definition.extend)];
+				const data = this.getDefinitionAndCollectionById_(store, typeId);
 				const item = Object.assign({}, model);
 				item.id = UID++;
-				item.model = definition.model;
-				collection.push(item);
+				item.model = data.definition.model;
+				data.collection.push(item);
 				store.UID[0] = UID;
 				this.store = store;
 				return item;
-			})
+			}),
+			delay(1000),
 		);
+	}
+
+	getDefinitionById_(store, typeId: number | string): { definition: Definition, collection: any[] } {
+		const definition = store.definition.find(x => x.id === typeId);
+		return { definition, collection: store.definition };
+	}
+
+	getDefinitionAndCollectionById_(store, typeId: number | string): { definition: Definition, collection: any[] } {
+		const definition = store.definition.find(x => x.id === typeId);
+		const collection = store[toCamelCase(definition.model)] || store[toCamelCase(definition.extend)];
+		return { definition, collection };
+	}
+
+	getDefinitionAndCollectionByName_(store, typeModel: string): { definition: Definition, collection: any[] } {
+		const definition = store.definition.find(x => x.model === typeModel);
+		const collection = store[toCamelCase(definition.model)] || store[toCamelCase(definition.extend)];
+		return { definition, collection };
+	}
+
+	patch_(current: any, item: any) {
+		if (Array.isArray(item)) {
+			return item.map((x, i) => this.patch_(current.length > i ? current[i] : x, x));
+		} else if (item && typeof item === 'object') {
+			Object.keys(item).forEach(x => {
+				current[x] = this.patch_(current[x], item[x]);
+			});
+			return current;
+		} else {
+			return item;
+		}
 	}
 
 	addDefinition$(definitionModel: string, typeModel: string, item: any): Observable<any> {
@@ -231,56 +348,32 @@ export class FakeService {
 		);
 	}
 
-	patch(source, target) {
-		if (Array.isArray(target)) {
-			return target.map((x, i) => this.patch(source.length > i ? source[i] : x, x));
-		} else if (target && typeof target === 'object') {
-			Object.keys(target).forEach(x => {
-				source[x] = this.patch(source[x], target[x]);
-			});
-			return source;
-		} else {
-			return target;
-		}
-	}
-
-	patchDetail$(type: string, model: Identity): Observable<any> {
-		return of(this.store).pipe(
-			map(store => {
-				const item = store[toCamelCase(type)].find(x => x.id === model.id);
-				const patched = this.patch(item, model);
-				// console.log(patched);
-				// Object.assign(item, patched);
-				this.store = store;
-				return item;
-			})
-		);
-	}
-
-	patchField$(type: string, id: number | string, model: Identity): Observable<Field> {
-		// console.log('patchField', type, id, model);
-		return of(this.store).pipe(
-			map(store => {
-				const item = store[toCamelCase(type)].find(x => x.id === id);
-				const field = item.fields.find(x => x.id === model.id);
-				Object.assign(field, model);
-				this.store = store;
-				return field;
-			})
-		);
-	}
-
-	patchAsset$(type: string, id: number | string, model: Identity): Observable<Field> {
-		// console.log('patchAsset', type, id, model);
-		return of(this.store).pipe(
-			map(store => {
-				const item = store[toCamelCase(type)].find(x => x.id === id);
-				const asset = item.assets.find(x => x.id === model.id);
-				Object.assign(asset, model);
-				this.store = store;
-				return asset;
-			})
-		);
+	updateStore_(store, data, item) {
+		Object.keys(store).forEach(key => {
+			if (store[key] !== data.collection) {
+				const definition = store.definition.find(x => toCamelCase(x.model) === key);
+				if (definition) {
+					// console.log('updateStore_.definition', definition);
+					const field = definition.fields.find(x => (x.type === 'object' || x.type === 'array') && (x.model === data.definition.model || x.model === data.definition.extend));
+					if (field) {
+						// console.log('updateStore_.field', field);
+						store[key].forEach(x => {
+							const value = x[field.key];
+							if (field.type === 'array') {
+								value.forEach((x, i) => {
+									if (x.id === item.id) {
+										value[i] = item;
+									}
+								});
+							} else if (value.id === item.id) {
+								x[field.key] = item;
+							}
+						});
+					}
+				}
+			}
+		});
+		this.store = store;
 	}
 
 	private createIds_(collection: Identity[]) {

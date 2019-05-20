@@ -52,9 +52,9 @@ export class StoreService extends FakeService {
 		return this.getIndexById$(id);
 	}
 
-	getDetail(baseModel: string, model: string, id: number | string): Observable<any> {
-		return this.getDetail$(baseModel, model, id).pipe(
-			tap(x => console.log('getDetail', baseModel, model, id, x))
+	getDetail(typeId: number | string, id: number | string): Observable<any> {
+		return this.getDetail$(typeId, id).pipe(
+			tap(x => console.log('getDetail', typeId, id, x))
 		);
 	}
 
@@ -68,21 +68,37 @@ export class StoreService extends FakeService {
 		return this.getDefinitionsOfType$(type);
 	}
 
-	patchDetail(type: string, model: Identity): Observable<any> {
+	patchItem(typeId: number | string, item: Identity): Observable<any> {
 		// console.log(type, id, this.store[type]);
-		return this.patchDetail$(type, model);
+		return this.patchItem$(typeId, item);
 	}
 
-	patchField(type: string, id: number | string, model: Identity): Observable<any> {
-		return this.patchField$(type, id, model);
+	patchDetail(typeId: number | string, item: Identity): Observable<any> {
+		// console.log(type, id, this.store[type]);
+		return this.patchDetail$(typeId, item);
 	}
 
-	patchAsset(type: string, id: number | string, model: Identity): Observable<any> {
-		return this.patchAsset$(type, id, model);
+	patchDefinition(typeId: number | string, item: Identity): Observable<any> {
+		// console.log(type, id, this.store[type]);
+		return this.patchDefinition$(typeId, item);
 	}
 
-	addItem(typeId: number, model: any): Observable<any> {
-		return this.addItem$(typeId, model);
+	patchField(typeModel: string, id: number | string, item: Identity): Observable<any> {
+		return this.patchField$(typeModel, id, item);
+	}
+
+	/*
+	patchItemAsset(typeId: number | string, id: number | string, item: Identity): Observable<any> {
+		return this.patchItemAsset$(typeId, id, item);
+	}
+	*/
+
+	patchAsset(typeId: number | string, item: Identity): Observable<any> {
+		return this.patchAsset$(typeId, item);
+	}
+
+	addItem(typeId: number | string, item: any): Observable<any> {
+		return this.addItem$(typeId, item);
 	}
 
 	addDefinition(definitionModel: string, typeModel: string, item: any): Observable<any> {
@@ -96,6 +112,10 @@ export class StoreService extends FakeService {
 
 	getFields(fields: Field[], ...names: string[]): Field[] {
 		return fields.filter(x => names.indexOf(x.key) !== -1);
+	}
+
+	getVisibleFields(fields: Field[]): Field[] {
+		return fields.filter(x => x.visible);
 	}
 
 	getScalarFields(fields: Field[]): Field[] {
@@ -172,7 +192,7 @@ export class StoreService extends FakeService {
 			}
 			if (overrides && overrides[x.key]) {
 				Object.assign(option, overrides[x.key]);
-				console.log(option);
+				// console.log(option);
 			}
 			return option;
 		});

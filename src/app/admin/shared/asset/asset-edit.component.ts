@@ -61,7 +61,7 @@ export class AssetEditComponent extends DisposableComponent implements OnInit {
 		this.error = null;
 		this.busy = true;
 		const asset = Object.assign({ id: this.asset.id }, model);
-		this.storeService.patchAsset(this.item.model, this.item.id, asset).pipe(
+		this.storeService.patchAsset(this.definition.id, asset).pipe(
 			first(),
 			finalize(() => this.busy = false),
 		).subscribe(

@@ -3,9 +3,10 @@ import { DisposableComponent } from '@designr/core';
 import { ModalCompleteEvent, ModalService } from '@designr/ui';
 import { first } from 'rxjs/operators';
 import { AssetEditComponent } from '../asset/asset-edit.component';
-import { Asset, Field } from '../store/store';
+import { EditComponent } from '../edit/edit.component';
+import { Asset, Content, Definition, Field } from '../store/store';
+import { StoreService } from '../store/store.service';
 import { TabState } from '../tabs/tab.service';
-import { ContentEditComponent } from './content-edit.component';
 
 @Component({
 	selector: 'content-item-component',
@@ -14,16 +15,30 @@ import { ContentEditComponent } from './content-edit.component';
 })
 export class ContentItemComponent extends DisposableComponent implements OnInit {
 
-	@Input() state: TabState;
+	@Input() state?: TabState;
+	@Input() item?: any;
+
+	definition: Definition;
+	fields: Field[];
 
 	constructor(
 		private modalService: ModalService,
+		private storeService: StoreService,
 	) {
 		super();
 	}
 
 	ngOnInit() {
-
+		if (!this.item && this.state) {
+			this.item = this.state.item;
+		} else {
+			this.storeService.getDefinitionById(this.item.type.id).pipe(
+				first(),
+			).subscribe(definition => {
+				this.definition = definition;
+				this.fields = this.storeService.getVisibleFields(this.definition.fields);
+			});
+		}
 	}
 
 	getSrc(asset: Asset): string {
@@ -40,7 +55,7 @@ export class ContentItemComponent extends DisposableComponent implements OnInit 
 		this.modalService.open({
 			component: AssetEditComponent,
 			data: {
-				item: this.state.item,
+				item: this.item,
 				asset: asset,
 			},
 		}).pipe(
@@ -56,14 +71,17 @@ export class ContentItemComponent extends DisposableComponent implements OnInit 
 	onEditContent() {
 		// console.log('ContentItemComponent.onEditContent', asset);
 		this.modalService.open({
-			component: ContentEditComponent,
-			data: this.state,
+			component: EditComponent,
+			data: {
+				typeId: this.item.type.id,
+				item: this.item,
+			}
 		}).pipe(
 			first()
 		).subscribe(e => {
 			if (e instanceof ModalCompleteEvent) {
 				console.log('ContentItemComponent.onEditContent.ModalCompleteEvent', e.data);
-				// Object.assign(this.state.item, e.data as Field);
+				Object.assign(this.item, e.data as Content);
 			}
 		});
 	}

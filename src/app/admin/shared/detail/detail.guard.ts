@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError, first, map, switchMap } from 'rxjs/operators';
+import { catchError, first, map } from 'rxjs/operators';
 import { StoreService } from '../store/store.service';
 
 @Injectable({
@@ -22,7 +22,20 @@ export class DetailGuard implements CanActivate {
 			const typeModel = params.typeModel;
 			const typeId = parseInt(params.typeId, 0);
 			const itemId = parseInt(params.itemId, 0);
-			console.log('DetailGuard.canActivate', typeModel, typeId, itemId);
+			// console.log('DetailGuard.canActivate', typeModel, typeId, itemId);
+			return this.storeService.getDetail(typeId, itemId).pipe(
+				map(item => {
+					if (item !== undefined) {
+						return true;
+					} else {
+						this.router.navigate(['/admin/not-found']);
+						return false;
+					}
+				}),
+				catchError(x => of(false)),
+				first(),
+			);
+			/*
 			return this.storeService.getDefinitionById(typeId).pipe(
 				switchMap(definition => {
 					console.log('DetailGuard.definition', definition.extend, definition.model, itemId);
@@ -40,6 +53,7 @@ export class DetailGuard implements CanActivate {
 					)
 				})
 			);
+			*/
 		}
 		return of(true);
 	}

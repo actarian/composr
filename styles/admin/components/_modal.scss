@@ -70,7 +70,7 @@
 
 	.btn--close,
 	.btn--back {
-		@extend %btn-icon;
+		@extend %btn-flex-center;
 		margin-left: auto;
 		font-size: 0;
 
@@ -116,6 +116,10 @@
 		&>svg+span {
 			margin-left: 12px;
 		}
+	}
+
+	.btn--busy {
+		@extend %btn--busy;
 	}
 
 }

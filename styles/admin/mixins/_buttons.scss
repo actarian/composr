@@ -39,13 +39,13 @@
 	align-items: center;
 }
 
-%btn-icon {
+%btn-flex-center {
 	@extend %btn-flex;
 	justify-content: center;
 }
 
 %btn-action {
-	@extend %btn-icon;
+	@extend %btn-flex-center;
 	justify-content: center;
 
 	width: 36px;
@@ -198,4 +198,148 @@
 	line-height: 1;
 	background: $primary;
 	color: white;
+}
+
+%center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+%ball {
+	@extend %center;
+	content: '';
+	display: block;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: #fff;
+	z-index: 2;
+	margin-top: 4px;
+	animation: ball .45s cubic-bezier(0, 0, 0.15, 1) alternate infinite;
+}
+
+%btn--icon {
+	flex: 0 0 40px;
+	@extend %btn-flex-center;
+
+	svg {
+		width: 16px;
+		height: 16px;
+		fill: $primary;
+	}
+}
+
+%btn--primary {
+	@extend %btn-primary;
+	position: relative;
+	padding: 13px 20px;
+	font-size: 13px;
+	font-weight: bold;
+
+	svg {
+		width: 16px;
+		height: 16px;
+		fill: white;
+	}
+
+	&>span+svg,
+	&>svg+span {
+		margin-left: 12px;
+	}
+}
+
+%btn--secondary {
+	@extend %btn-secondary;
+	padding: 13px 20px;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+%btn--toggle {
+	flex: 0 0 10%;
+	@extend %btn-flex;
+	justify-content: center;
+	font-weight: bold;
+	position: relative;
+	border-radius: 3px;
+	padding: 12px 8px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+
+	span {
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+
+	svg {
+		width: 16px;
+		height: 16px;
+		fill: white;
+	}
+
+	&>span+svg,
+	&>svg+span {
+		margin-left: 12px;
+	}
+
+	&,
+	&:link,
+	&:focus,
+	&:visited,
+	&:active {
+		background: #e2e6f6;
+		color: $primary;
+	}
+
+	&:hover {
+		background: darken(#e2e6f6, 5%);
+		color: $primary;
+	}
+
+	&.active {
+		background: $primary;
+		color: white;
+	}
+
+	// margin-right: 20px;
+}
+
+%btn--busy {
+	position: relative;
+	user-select: none;
+	pointer-events: none;
+	transition: none;
+
+	&,
+	&:hover,
+	&:focus,
+	&:active,
+	&.active {
+		color: rgba(0, 0, 0, 0) !important;
+	}
+
+	&:before {
+		@extend %ball;
+		animation-delay: .15s;
+	}
+
+	&>svg {
+		display: none;
+	}
+
+	&>span {
+		&::before {
+			@extend %ball;
+			margin-left: -10px;
+		}
+
+		&::after {
+			@extend %ball;
+			margin-left: 10px;
+			animation-delay: .3s;
+		}
+	}
 }

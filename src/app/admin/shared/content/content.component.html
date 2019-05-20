@@ -7,6 +7,15 @@
 	-->
 	<div class="columns">
 		<div class="content">
+			<!-- content draggable -->
+			<div class="listing listing--content" cdkDropList (cdkDropListDropped)="onDropContent($event)">
+				<div class="listing__item" *ngFor="let item of contents" cdkDrag>
+					<div class="drag__placeholder" *cdkDragPlaceholder></div>
+					<content-item-component [item]="item"></content-item-component>
+					<!--<div class="drag--hangle" cdkDragHandle><svg><use xlink:href="#drag"></use></svg></div>-->
+				</div>
+			</div>
+			<!--
 			<ul class="nav--modes">
 				<li *ngFor="let item of modes" [ngClass]="{ active: mode === item.id }" (click)="mode = item.id">
 					<span>{{item.name}}</span>
@@ -22,6 +31,7 @@
 					<content-edit-component [state]="state"></content-edit-component>
 				</ng-container>
 			</ng-container>
+			-->
 		</div>
 		<div class="sidebar">
 			<ul class="nav--content">

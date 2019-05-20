@@ -1,5 +1,6 @@
 @import 'variables';
 @import 'mixins';
+@import 'animations';
 
 // reset
 a {
@@ -14,6 +15,7 @@ a {
 	--color-primary: #2440c3;
 	--color-border: #e2e6f8;
 	--color-disabled: #e2e6f8; // eff1f8;
+	--color-disabled-light: #f1f3fa;
 	--color-foreground-disabled: #868fad;
 	--color-facebook: #3B5998;
 	--color-google: #dd4b39;
@@ -24,92 +26,24 @@ a {
 	--card-radius: 30px;
 	--bullet-size: 12px;
 
-	.btn--secondary {
-		@extend %btn-secondary;
-		padding: 13px 20px;
-		font-size: 13px;
-		font-weight: bold;
+	.btn--primary {
+		@extend %btn--primary;
 	}
 
-	.btn--primary {
-		@extend %btn-primary;
-		position: relative;
-		padding: 13px 20px;
-		font-size: 13px;
-		font-weight: bold;
-
-		svg {
-			width: 16px;
-			height: 16px;
-			fill: white;
-		}
-
-		&>span+svg,
-		&>svg+span {
-			margin-left: 12px;
-		}
+	.btn--secondary {
+		@extend %btn--secondary;
 	}
 
 	.btn--toggle {
-		flex: 0 0 10%;
-		@extend %btn-flex;
-		justify-content: center;
-		font-weight: bold;
-		position: relative;
-		border-radius: 3px;
-		padding: 12px 8px;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		overflow: hidden;
-
-		span {
-			text-overflow: ellipsis;
-			overflow: hidden;
-		}
-
-		svg {
-			width: 16px;
-			height: 16px;
-			fill: white;
-		}
-
-		&>span+svg,
-		&>svg+span {
-			margin-left: 12px;
-		}
-
-		&,
-		&:link,
-		&:focus,
-		&:visited,
-		&:active {
-			background: #e2e6f6;
-			color: $primary;
-		}
-
-		&:hover {
-			background: darken(#e2e6f6, 5%);
-			color: $primary;
-		}
-
-		&.active {
-			background: $primary;
-			color: white;
-		}
-
-		// margin-right: 20px;
-
+		@extend %btn--toggle;
 	}
 
 	.btn--icon {
-		flex: 0 0 40px;
-		@extend %btn-icon;
+		@extend %btn--icon;
+	}
 
-		svg {
-			width: 16px;
-			height: 16px;
-			fill: $primary;
-		}
+	.btn--busy {
+		@extend %btn--busy;
 	}
 
 }

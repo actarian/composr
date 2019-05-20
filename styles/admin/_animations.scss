@@ -1,0 +1,9 @@
+@keyframes ball {
+	from {
+		transform: translateY(0) scaleY(.8);
+	}
+
+	to {
+		transform: translateY(-10px);
+	}
+}

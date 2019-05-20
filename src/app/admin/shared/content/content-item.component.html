@@ -1,11 +1,17 @@
-<ng-container [formGroup]="state.form" *ngIf="state && state.form">
+<ng-container *ngIf="item">
 	<div class="fieldset--headline">
 		<div class="title">
-			<span class="name">{{state.item.name}}</span>
-			<span class="type">{{state.type}}</span>
+			{{item.type.name}}
+			<!--
+			<span class="name">{{item.name}}</span>
+			<span class="type">{{item.type.name}}</span>
+			-->
 		</div>
 		<div class="description">
-			<div>{{state.item.title | localization}}</div>
+			<div class="pill" (click)="onEditContent()">{{item.id}}</div> {{item.name}}
+			<!--
+			<div>{{item.title | localization}}</div>
+			-->
 		</div>
 		<div class="actions">
 			<button type="button" class="btn--icon" (click)="onEditContent()">
@@ -13,14 +19,31 @@
 			</button>
 		</div>
 	</div>
-	<div class="fieldset--headline">
+	<div class="fieldset--headline" [ngClass]="{ disabled: !item.active }">
 		<div class="title"></div>
 		<div class="description">
-			<div class="picture" *ngIf="state.item.assets" (click)="onEditAsset(state.item.assets[0])">
-				<img [src]="getSrc(state.item.assets[0])" />
+			<div class="field" [ngClass]="field.key" *ngFor="let field of fields">
+				<ng-container [ngSwitch]="field.model">
+					<ng-container *ngSwitchCase="'Asset'">
+						<div class="picture" *ngIf="item[field.key]" (click)="onEditAsset(item[field.key][0])">
+							<img [src]="getSrc(item[field.key][0])" />
+						</div>
+					</ng-container>
+					<ng-container *ngSwitchCase="'Localization'">
+						<span>{{item[field.key] | localization}}</span>
+					</ng-container>
+					<ng-container *ngSwitchDefault>
+						<!-- <span>{{item[field.key]}}</span> -->
+					</ng-container>
+				</ng-container>
 			</div>
-			<h4>{{state.item.abstract | localization}}</h4>
-			<p>{{state.item.description | localization}}</p>
+			<!--
+			<div class="picture" *ngIf="item.assets" (click)="onEditAsset(item.assets[0])">
+				<img [src]="getSrc(item.assets[0])" />
+			</div>
+			<h4>{{item.abstract | localization}}</h4>
+			<p>{{item.description | localization}}</p>
+			-->
 		</div>
 	</div>
 </ng-container>

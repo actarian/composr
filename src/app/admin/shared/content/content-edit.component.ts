@@ -47,17 +47,19 @@ export class ContentEditComponent extends DisposableComponent implements OnInit 
 	}
 
 	onSubmit(model: any) {
-		console.log('DefinitionComponent.onSubmit', this.state.definition.model, this.state.definition.id, model);
+		console.log('ContentEditComponent.onSubmit', this.state.definition.model, this.state.definition.id, model);
 		// model.fields = this.fields;
+		/*
 		const changedItem = this.storeService.getChangedValues(this.state.item, model);
 		console.log('onSubmit.changedItem', changedItem ? Object.assign({}, changedItem) : changedItem);
 		if (changedItem) {
 			changedItem.id = this.state.item.id;
-			this.storeService.patchDetail('definition', changedItem).subscribe(item => {
+			this.storeService.patchDetail(this.state.definition.id as number, changedItem).subscribe(item => {
 				this.state.item = item;
 				this.state.form.patchValue(item);
 			});
 		}
+		*/
 	}
 
 }

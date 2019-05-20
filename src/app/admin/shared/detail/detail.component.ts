@@ -51,7 +51,7 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 				first(),
 			).subscribe(definition => {
 				this.definition = definition;
-				console.log('DetailComponent.getDefinitionById', definition);
+				// console.log('DetailComponent.getDefinitionById', definition);
 				this.options = this.formService.getOptions(
 					this.storeService.mapOptions(
 						this.storeService.getScalarFields(this.definition.fields)
@@ -59,8 +59,8 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 				);
 				this.form = this.formService.getFormGroup(this.options);
 				this.tabFields = this.tabService.getTabs(this.definition);
-				console.log(this.definition);
-				this.storeService.getDetail(this.definition.extend, this.definition.model, this.itemId).pipe(
+				// console.log(this.definition);
+				this.storeService.getDetail(this.typeId, this.itemId).pipe(
 					takeUntil(this.unsubscribe),
 				).subscribe(item => {
 					// console.log('getDetail', this.type, this.id, item);
@@ -124,7 +124,7 @@ export class DetailComponent extends DisposableComponent implements OnInit {
 		this.error = null;
 		this.busy = true;
 		const item = Object.assign({ id: this.itemId }, model);
-		this.storeService.patchDetail(this.typeModel, item).pipe(
+		this.storeService.patchDetail(this.typeId, item).pipe(
 			first(),
 			finalize(() => this.busy = false),
 		).subscribe(

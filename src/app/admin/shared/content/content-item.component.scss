@@ -10,7 +10,12 @@
 .fieldset--headline {
 	margin-bottom: 20px;
 
-	.title {
+	&.disabled {
+		opacity: 0.5;
+
+	}
+
+	&>.title {
 		.name {
 			color: $primary;
 			font-size: 19px;
@@ -35,11 +40,37 @@
 		}
 	}
 
-	.description {
+	&>.description {
 		flex: 0 1 400px;
+
+		.pill {
+			@extend %pill;
+			cursor: pointer;
+		}
+
+		.title {
+			font-size: 19px;
+			font-weight: 100;
+			line-height: 1.2;
+			margin-bottom: 10px;
+		}
+
+		.abstract {
+			font-size: 17px;
+			font-weight: 100;
+			line-height: 1.2;
+			margin-bottom: 20px;
+		}
+
+		.description {
+			font-size: 14px;
+			font-weight: 100;
+			line-height: 1.5;
+			margin-bottom: 10px;
+		}
 	}
 
-	.actions {
+	&>.actions {
 		display: flex;
 		align-items: center;
 	}
@@ -69,4 +100,8 @@
 			transform: scale(1.1, 1.1);
 		}
 	}
+}
+
+.btn--icon {
+	@extend %btn--icon;
 }

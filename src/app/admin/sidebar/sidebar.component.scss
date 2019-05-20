@@ -47,7 +47,7 @@
 }
 
 .btn--sidebar {
-	@extend %btn-icon;
+	@extend %btn-flex-center;
 
 	svg {
 		width: 24px;
@@ -65,7 +65,7 @@
 }
 
 .btn--sidebar-secondary {
-	@extend %btn-icon;
+	@extend %btn-flex-center;
 	width: 22px;
 	height: 22px;
 	border-radius: 11px;
@@ -93,7 +93,7 @@
 }
 
 .btn--admin {
-	@extend %btn-icon;
+	@extend %btn-flex-center;
 	width: 40px;
 	height: 40px;
 	border-radius: 20px;

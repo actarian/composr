@@ -18,6 +18,7 @@ import { DefinitionAddComponent } from './definition/definition-add.component';
 import { DefinitionComponent } from './definition/definition.component';
 import { DetailAddComponent } from './detail/detail-add.component';
 import { DetailComponent } from './detail/detail.component';
+import { EditComponent } from './edit/edit.component';
 import { FieldEditComponent } from './fields/field-edit.component';
 import { FieldComponent } from './fields/field.component';
 import { IndexComponent } from './index/index.component';
@@ -50,6 +51,7 @@ const entryComponents: Type<DisposableComponent>[] = [
 	ContentEditComponent,
 	DefinitionAddComponent,
 	DetailAddComponent,
+	EditComponent,
 	FieldEditComponent,
 ];
 

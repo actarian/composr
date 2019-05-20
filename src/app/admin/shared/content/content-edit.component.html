@@ -6,7 +6,6 @@
 				<div class="title">{{state.type}}</div>
 				<div class="description">{{state.item.name}}</div>
 			</div>
-			<!-- <controls-component class="fieldset" [options]="state.options" [form]="state.form"></controls-component> -->
 			<div class="fieldset" *ngFor="let option of state.options">
 				<control-outlet class="form-group" [option]="option" [form]="state.form">
 					<ng-template #labelRef let-context>

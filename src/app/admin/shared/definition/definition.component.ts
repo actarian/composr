@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ControlOption, FormService } from '@designr/control';
 import { DisposableComponent } from '@designr/core';
-import { first, takeUntil } from 'rxjs/operators';
+import { finalize, first, takeUntil } from 'rxjs/operators';
 import { Definition, Field } from '../store/store';
 import { StoreService } from '../store/store.service';
 import { differs } from '../store/utils';
@@ -29,8 +29,9 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 
 	options: ControlOption<any>[];
 	form: FormGroup;
-	submitted: boolean = false;
+	error: any;
 	busy: boolean = false;
+	submitted: boolean = false;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -128,17 +129,44 @@ export class DefinitionComponent extends DisposableComponent implements OnInit {
 	}
 
 	onSubmit(model: any) {
+		// console.log('DetailComponent.onSubmit', this.typeModel, this.itemId, model);
+		this.submitted = true;
+		this.error = null;
+		this.busy = true;
+		const item = Object.assign({ id: this.item.id }, model);
+		this.storeService.patchDefinition(this.typeId, item).pipe(
+			first(),
+			finalize(() => this.busy = false),
+		).subscribe(
+			patched => {
+				// console.log('patched!!!', patched);
+				Object.assign(this.item, patched);
+				// console.log(this.form);
+				// this.item = item;
+				this.form.patchValue(this.item);
+			},
+			error => {
+				this.error = error;
+				this.submitted = false;
+				console.log('AssetEditComponent.onSubmit.error', this.error);
+			}
+		);
+	}
+
+	/*
+	onSubmit(model: any) {
 		console.log('DefinitionComponent.onSubmit', this.typeModel, this.typeId, model);
 		// model.fields = this.fields;
 		const changedItem = this.storeService.getChangedValues(this.item, model);
 		console.log('onSubmit.changedItem', changedItem ? Object.assign({}, changedItem) : changedItem);
 		if (changedItem) {
 			changedItem.id = this.item.id;
-			this.storeService.patchDetail('definition', changedItem).subscribe(item => {
+			this.storeService.patchDefinition(this.typeId, changedItem).subscribe(item => {
 				this.item = item;
 				this.form.patchValue(item);
 			});
 		}
 	}
+	*/
 
 }
