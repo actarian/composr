@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, Injector } from '@angular/core';
 import { AuthStrategy, EntityService, LocalStorageService, StorageService } from '@designr/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Admin, AdminAuth, AdminToken } from './admin';
@@ -12,7 +12,7 @@ import { Admin, AdminAuth, AdminToken } from './admin';
 export class AdminService extends EntityService<Admin> {
 
 	get collection(): string {
-		return 'https://pucbm-hub.wslabs.it/api/identity';
+		return 'https://pucbm-myhospital.wslabs.it/api/identity';
 	}
 
 	protected storage: StorageService;
@@ -54,6 +54,18 @@ export class AdminService extends EntityService<Admin> {
 	}
 
 	public signin(admin: AdminAuth): Observable<AdminAuth> {
+		return of({ id: '12345' }).pipe(
+			map((data: { id: string }) => {
+				// console.log('AdminService.signin', data);
+				if (data && data.id) {
+					const accessToken = { accessToken: data.id };
+					this.accessToken = accessToken;
+					return accessToken;
+				} else {
+					return null;
+				}
+			})
+		);
 		return this.post(`/signin`, admin).pipe(
 			map((data: { id: string }) => {
 				// console.log('AdminService.signin', data);
@@ -78,6 +90,16 @@ export class AdminService extends EntityService<Admin> {
 	}
 
 	public me(): Observable<Admin> {
+		return of({
+			email: 'mdipaolo@websolute.it',
+			firstName: 'Massimo',
+			id: 'd3f8fd7c-2524-4fd3-a4ed-3a2342476303',
+			lastName: 'Di Paolo'
+		}).pipe(
+			tap(x => {
+				this.admin = x;
+			})
+		);
 		return this.get(`/me`).pipe(
 			catchError(error => {
 				this.accessToken = null;

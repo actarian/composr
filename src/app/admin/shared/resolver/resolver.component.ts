@@ -11,6 +11,8 @@ import { StoreService } from '../store/store.service';
 })
 export class ResolverComponent extends DisposableComponent implements OnInit {
 
+	public definition: any;
+
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
@@ -24,6 +26,7 @@ export class ResolverComponent extends DisposableComponent implements OnInit {
 			takeUntil(this.unsubscribe),
 		).subscribe(data => {
 			const model = data.model;
+			this.definition = model;
 			this.storeService.getDefinitionsOfType(model).subscribe(types => {
 				const type = types.find(x => x.model === model);
 				this.router.navigate(['../', type.model, type.id, 'items'], { relativeTo: this.route });
